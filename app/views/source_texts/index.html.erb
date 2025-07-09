@@ -1,4 +1,10 @@
-<h1>Source Texts</h1>
+<div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+  <h1>Source Texts</h1>
+  <div style="display: flex; gap: 10px;">
+    <%= link_to "View Poems", poems_path, 
+        style: "background-color: #6f42c1; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px;" %>
+  </div>
+</div>
 
 <!-- Import from Project Gutenberg -->
 <div style="background-color: #f8f9fa; padding: 20px; margin-bottom: 20px; border-radius: 5px;">
@@ -46,4 +52,27 @@
   </ul>
 <% else %>
   <p style="color: #666; font-style: italic;">No source texts yet. Import some from Project Gutenberg above!</p>
+<% end %>
+
+<!-- Poems Summary -->
+<% if Poem.exists? %>
+  <div style="margin-top: 30px; background-color: #e9ecef; padding: 20px; border-radius: 5px;">
+    <h4>📝 Poetry Collection</h4>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 15px 0;">
+      <div>
+        <strong><%= Poem.count %></strong><br>
+        <small>Total Poems</small>
+      </div>
+      <div>
+        <strong><%= Poem.cut_up_poems.count %></strong><br>
+        <small>Cut-up Poems</small>
+      </div>
+      <div>
+        <strong><%= Poem.recent.limit(1).first&.created_at&.strftime("%m/%d") || "N/A" %></strong><br>
+        <small>Latest Poem</small>
+      </div>
+    </div>
+    <%= link_to "View All Poems →", poems_path, 
+        style: "color: #6f42c1; text-decoration: none; font-weight: bold;" %>
+  </div>
 <% end %>

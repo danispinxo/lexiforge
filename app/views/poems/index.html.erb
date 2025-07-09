@@ -1,2 +1,81 @@
-<h1>Poems#index</h1>
-<p>Find me in app/views/poems/index.html.erb</p>
+<div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+  <h1>Generated Poems</h1>
+  <%= link_to "Create New Poem", new_poem_path, 
+      style: "background-color: #28a745; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px;" %>
+</div>
+
+<div style="margin-bottom: 20px;">
+  <%= link_to "← Back to Source Texts", source_texts_path, 
+      style: "text-decoration: none; color: #666;" %>
+</div>
+
+<% if @poems.any? %>
+  <div style="display: grid; gap: 20px;">
+    <% @poems.each do |poem| %>
+      <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; background-color: #f9f9f9;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+          <div>
+            <h3 style="margin: 0 0 5px 0;">
+              <%= link_to poem.title, poem_path(poem), 
+                  style: "color: #007bff; text-decoration: none;" %>
+            </h3>
+            <p style="margin: 0; color: #666; font-size: 14px;">
+              <strong>Source:</strong> 
+              <%= link_to poem.source_text.title, source_text_path(poem.source_text), 
+                  style: "color: #666;" %>
+              • <strong>Technique:</strong> <%= poem.technique_used.titleize %>
+              • <strong>Generated:</strong> <%= poem.created_date %>
+            </p>
+          </div>
+          <div style="font-size: 12px; color: #888; text-align: right;">
+            <%= poem.word_count %> words<br>
+            <%= poem.line_count %> lines
+          </div>
+        </div>
+        
+        <div style="background-color: white; padding: 15px; border-radius: 4px; border-left: 4px solid #007bff; margin-bottom: 15px;">
+          <div style="font-family: Georgia, serif; line-height: 1.6; font-style: italic;">
+            <%= simple_format(poem.short_content(200)) %>
+          </div>
+          <% if poem.content.length > 200 %>
+            <div style="margin-top: 10px;">
+              <%= link_to "Read full poem →", poem_path(poem), 
+                  style: "color: #007bff; text-decoration: none; font-size: 14px;" %>
+            </div>
+          <% end %>
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+          <%= link_to "View", poem_path(poem), 
+              style: "color: #007bff; text-decoration: none; padding: 5px 10px; border: 1px solid #007bff; border-radius: 3px;" %>
+          <%= link_to "Edit", edit_poem_path(poem), 
+              style: "color: #ffc107; text-decoration: none; padding: 5px 10px; border: 1px solid #ffc107; border-radius: 3px;" %>
+          <%= link_to "Delete", poem_path(poem), method: :delete,
+              data: { confirm: "Are you sure you want to delete this poem?" },
+              style: "color: #dc3545; text-decoration: none; padding: 5px 10px; border: 1px solid #dc3545; border-radius: 3px;" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="margin-top: 30px; padding: 15px; background-color: #e9ecef; border-radius: 5px;">
+    <p style="margin: 0; font-size: 14px; color: #666;">
+      <strong>Total:</strong> <%= @poems.count %> poems generated
+      • <strong>Cut-up poems:</strong> <%= @poems.cut_up_poems.count %>
+    </p>
+  </div>
+
+<% else %>
+  <div style="text-align: center; padding: 40px; background-color: #f8f9fa; border-radius: 8px;">
+    <h3 style="color: #666;">No poems generated yet</h3>
+    <p style="color: #888; margin-bottom: 20px;">
+      Start by importing some source texts and generating cut-up poetry!
+    </p>
+    <div style="display: flex; gap: 15px; justify-content: center;">
+      <%= link_to "Import Source Texts", source_texts_path, 
+          style: "background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;" %>
+      <%= link_to "Create Manual Poem", new_poem_path, 
+          style: "background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;" %>
+    </div>
+  </div>
+<% end %>
