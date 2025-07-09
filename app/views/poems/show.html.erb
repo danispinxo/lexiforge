@@ -1,5 +1,5 @@
 <div style="margin-bottom: 20px;">
-  <%= link_to "← Back to Poems", poems_path, style: "text-decoration: none; color: #666;" %>
+  <%= link_to "← Back to Generated Poems", poems_path, style: "text-decoration: none; color: #666;" %>
 </div>
 
 <div style="margin-bottom: 30px;">
@@ -14,13 +14,6 @@
         <% if @source_text.gutenberg_id.present? %>
           <small style="color: #666;">(Project Gutenberg #<%= @source_text.gutenberg_id %>)</small>
         <% end %>
-      </div>
-      
-      <div>
-        <strong>Technique:</strong><br>
-        <span style="background-color: #007bff; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px;">
-          <%= @poem.technique_used.titleize %>
-        </span>
       </div>
       
       <div>
@@ -43,14 +36,14 @@
 </div>
 
 <div style="display: flex; gap: 15px; margin-bottom: 30px;">
-  <%= link_to "Edit Poem", edit_poem_path(@poem), 
-      style: "background-color: #ffc107; color: black; padding: 10px 20px; text-decoration: none; border-radius: 4px;" %>
-  
-  <%= link_to "Generate Another", generate_cut_up_source_text_path(@source_text), 
+  <%= link_to "Generate Another Cut-Up", generate_cut_up_source_text_path(@source_text), 
       style: "background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;" %>
   
+  <%= link_to "View Source Text", source_text_path(@source_text), 
+      style: "background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;" %>
+  
   <%= link_to "Delete Poem", poem_path(@poem), method: :delete,
-      data: { confirm: "Are you sure you want to delete this poem?" },
+      data: { confirm: "Are you sure you want to delete this cut-up poem?" },
       style: "background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;" %>
 </div>
 

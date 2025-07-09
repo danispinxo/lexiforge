@@ -50,9 +50,9 @@ class PoemsController < ApplicationController
       return
     end
 
-    # Generate the cut-up content
+    # Generate the cut-up content with medium size, line-based method
     generator = CutUpGenerator.new(@source_text)
-    cut_up_content = generator.generate
+    cut_up_content = generator.generate(method: 'lines', size: 'medium')
 
     # Create and save the poem
     @poem = @source_text.poems.build(
@@ -75,7 +75,7 @@ class PoemsController < ApplicationController
   end
 
   def set_source_text
-    @source_text = SourceText.find(params[:source_text_id])
+    @source_text = SourceText.find(params[:id])
   end
 
   def poem_params
