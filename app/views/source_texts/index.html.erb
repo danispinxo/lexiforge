@@ -1,0 +1,49 @@
+<h1>Source Texts</h1>
+
+<!-- Import from Project Gutenberg -->
+<div style="background-color: #f8f9fa; padding: 20px; margin-bottom: 20px; border-radius: 5px;">
+  <h3>Import from Project Gutenberg</h3>
+  
+  <%= form_with url: import_from_gutenberg_source_texts_path, method: :post, local: true do |form| %>
+    <div style="margin-bottom: 15px;">
+      <%= form.label :gutenberg_id, "Enter Gutenberg ID:" %>
+      <%= form.number_field :gutenberg_id, placeholder: "e.g., 1342 for Pride and Prejudice", style: "margin-left: 10px; padding: 5px;" %>
+      <%= form.submit "Import Text", style: "margin-left: 10px; padding: 5px 15px;" %>
+    </div>
+  <% end %>
+  
+  <details style="margin-top: 15px;">
+    <summary><strong>Popular Books to Try:</strong></summary>
+    <div style="margin-top: 10px;">
+      <% ProjectGutenbergService.new.fetch_popular_books.each do |book| %>
+        <div style="margin: 5px 0;">
+          <strong><%= book[:id] %></strong>: <%= book[:title] %>
+        </div>
+      <% end %>
+    </div>
+  </details>
+  
+  <p style="margin-top: 15px; font-size: 14px; color: #666;">
+    <strong>How to find Gutenberg IDs:</strong> Visit 
+    <a href="https://www.gutenberg.org/" target="_blank">gutenberg.org</a>, 
+    search for a book, and look for the number in the URL (e.g., /ebooks/1342)
+  </p>
+</div>
+
+<!-- Existing Source Texts -->
+<h3>Your Source Texts (<%= @source_texts.count %>)</h3>
+
+<% if @source_texts.any? %>
+  <ul>
+    <% @source_texts.each do |source_text| %>
+      <li style="margin: 10px 0;">
+        <%= link_to source_text.title, source_text_path(source_text) %>
+        <% if source_text.respond_to?(:gutenberg_id) && source_text.gutenberg_id.present? %>
+          <small style="color: #666;">(Project Gutenberg #<%= source_text.gutenberg_id %>)</small>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p style="color: #666; font-style: italic;">No source texts yet. Import some from Project Gutenberg above!</p>
+<% end %>
