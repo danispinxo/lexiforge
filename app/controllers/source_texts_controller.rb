@@ -33,7 +33,7 @@ class Api::V1::SourceTextsController < ApplicationController
     if params[:gutenberg_id].present?
       service = ProjectGutenbergService.new
       source_text = service.import_text(params[:gutenberg_id])
-      
+
       if source_text.persisted?
         render json: {
           success: true,
@@ -54,7 +54,7 @@ class Api::V1::SourceTextsController < ApplicationController
     else
       render json: {
         success: false,
-        message: "Please provide a valid Gutenberg ID"
+        message: 'Please provide a valid Gutenberg ID'
       }, status: :bad_request
     end
   end

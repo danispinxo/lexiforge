@@ -1,5 +1,5 @@
 class Api::V1::PoemsController < ApplicationController
-  before_action :set_poem, only: [:show, :edit, :update, :destroy]
+  before_action :set_poem, only: %i[show edit update destroy]
   before_action :set_source_text, only: [:generate_cut_up]
 
   def index
@@ -10,10 +10,12 @@ class Api::V1::PoemsController < ApplicationController
         title: poem.title,
         technique_used: poem.technique_used,
         content_preview: poem.content&.truncate(200) || '',
-        source_text: poem.source_text ? {
-          id: poem.source_text.id,
-          title: poem.source_text.title
-        } : nil,
+        source_text: if poem.source_text
+                       {
+                         id: poem.source_text.id,
+                         title: poem.source_text.title
+                       }
+                     end,
         created_at: poem.created_at
       }
     end
@@ -38,9 +40,13 @@ class Api::V1::PoemsController < ApplicationController
     @source_texts = SourceText.all
   end
 
+  def edit
+    @source_texts = SourceText.all
+  end
+
   def create
     @poem = Poem.new(poem_params)
-    
+
     if @poem.save
       render json: {
         success: true,
@@ -60,10 +66,6 @@ class Api::V1::PoemsController < ApplicationController
     end
   end
 
-  def edit
-    @source_texts = SourceText.all
-  end
-
   def update
     if @poem.update(poem_params)
       redirect_to @poem, notice: 'Poem was successfully updated.'
@@ -80,29 +82,29 @@ class Api::V1::PoemsController < ApplicationController
 
   def generate_cut_up
     if @source_text.content.blank?
-      redirect_to @source_text, alert: "Cannot generate poem: source text has no content."
+      redirect_to @source_text, alert: 'Cannot generate poem: source text has no content.'
       return
     end
 
     generator = CutUpGenerator.new(@source_text)
     method = params[:method] || 'cut_up'
-    
+
     options = { method: method }
-    
+
     if method == 'cut_up'
       options[:num_lines] = params[:num_lines] || 12
       options[:words_per_line] = params[:words_per_line] || 6
     else
       options[:size] = params[:size] || 'medium'
     end
-    
+
     cut_up_content = generator.generate(options)
 
     # Create and save the poem
     @poem = @source_text.poems.build(
       title: generate_poem_title(@source_text),
       content: cut_up_content,
-      technique_used: "cutup"
+      technique_used: 'cutup'
     )
 
     if @poem.save
@@ -141,7 +143,7 @@ class Api::V1::PoemsController < ApplicationController
 
   def generate_poem_title(source_text)
     base_title = source_text.title.split.first(3).join(' ') # Take first 3 words
-    timestamp = Time.current.strftime("%m/%d %H:%M")
+    timestamp = Time.current.strftime('%m/%d %H:%M')
     "Cut-Up: #{base_title} (#{timestamp})"
   end
 end
