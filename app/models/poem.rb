@@ -1,11 +1,16 @@
 class Poem < ApplicationRecord
   belongs_to :source_text
   
+  ALLOWED_TECHNIQUES = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball'].freeze
+  
   validates :title, presence: true
   validates :content, presence: true
-  validates :technique_used, presence: true
+  validates :technique_used, presence: true, inclusion: { 
+    in: ALLOWED_TECHNIQUES, 
+    message: "%{value} is not a valid technique. Allowed techniques: #{ALLOWED_TECHNIQUES.join(', ')}" 
+  }
   
-  scope :cut_up_poems, -> { where(technique_used: 'cut-up') }
+  scope :cut_up_poems, -> { where(technique_used: 'cutup') }
   scope :recent, -> { order(created_at: :desc) }
   
   def word_count
