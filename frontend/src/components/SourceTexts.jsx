@@ -149,10 +149,10 @@ function SourceTexts() {
                 <h4>
                   <Link to={`/source-texts/${text.id}`}>{text.title}</Link>
                 </h4>
-                {text.author && <p className="author">by {text.author}</p>}
+
                 <div className="text-info">
                   <span className="word-count">
-                    {text.word_count.toLocaleString()} words
+                    {(text.word_count || 0).toLocaleString()} words
                   </span>
                   {text.gutenberg_id && (
                     <span className="gutenberg-id">

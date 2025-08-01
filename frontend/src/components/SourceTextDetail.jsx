@@ -69,13 +69,10 @@ function SourceTextDetail() {
 
       <div className="text-info">
         <h1>{sourceText.title}</h1>
-        {sourceText.author && (
-          <h2 className="author">by {sourceText.author}</h2>
-        )}
 
         <div className="metadata">
           <span className="word-count">
-            {sourceText.word_count.toLocaleString()} words
+            {(sourceText.word_count || 0).toLocaleString()} words
           </span>
           {sourceText.gutenberg_id && (
             <span className="gutenberg-id">

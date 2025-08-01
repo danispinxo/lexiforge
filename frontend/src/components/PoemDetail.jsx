@@ -9,20 +9,20 @@ function PoemDetail() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const loadPoem = async () => {
+      try {
+        const response = await poemsAPI.getById(id);
+        setPoem(response.data);
+      } catch (error) {
+        console.error("Error loading poem:", error);
+        setError("Poem not found");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadPoem();
   }, [id]);
-
-  const loadPoem = async () => {
-    try {
-      const response = await poemsAPI.getById(id);
-      setPoem(response.data);
-    } catch (error) {
-      console.error("Error loading poem:", error);
-      setError("Poem not found");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) return <div className="loading">Loading poem...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -63,9 +63,6 @@ function PoemDetail() {
             >
               {poem.source_text.title}
             </Link>
-            {poem.source_text.author && (
-              <span className="author"> by {poem.source_text.author}</span>
-            )}
           </p>
         </div>
       </div>

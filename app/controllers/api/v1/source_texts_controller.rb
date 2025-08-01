@@ -7,7 +7,6 @@ class Api::V1::SourceTextsController < ApplicationController
       {
         id: text.id,
         title: text.title,
-        author: text.author,
         gutenberg_id: text.gutenberg_id,
         word_count: text.content&.split&.length || 0,
         content_preview: text.content&.truncate(200) || '',
@@ -20,7 +19,6 @@ class Api::V1::SourceTextsController < ApplicationController
     render json: {
       id: @source_text.id,
       title: @source_text.title,
-      author: @source_text.author,
       gutenberg_id: @source_text.gutenberg_id,
       content: @source_text.content,
       word_count: @source_text.content&.split&.length || 0,
@@ -41,7 +39,6 @@ class Api::V1::SourceTextsController < ApplicationController
           source_text: {
             id: source_text.id,
             title: source_text.title,
-            author: source_text.author,
             gutenberg_id: source_text.gutenberg_id
           }
         }

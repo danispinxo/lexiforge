@@ -10,11 +10,10 @@ class Api::V1::PoemsController < ApplicationController
         title: poem.title,
         technique_used: poem.technique_used,
         content_preview: poem.content&.truncate(200) || '',
-        source_text: {
+        source_text: poem.source_text ? {
           id: poem.source_text.id,
-          title: poem.source_text.title,
-          author: poem.source_text.author
-        },
+          title: poem.source_text.title
+        } : nil,
         created_at: poem.created_at
       }
     end
@@ -28,8 +27,7 @@ class Api::V1::PoemsController < ApplicationController
       technique_used: @poem.technique_used,
       source_text: {
         id: @poem.source_text.id,
-        title: @poem.source_text.title,
-        author: @poem.source_text.author
+        title: @poem.source_text.title
       },
       created_at: @poem.created_at
     }

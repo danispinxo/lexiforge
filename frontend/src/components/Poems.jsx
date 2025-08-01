@@ -64,17 +64,15 @@ function Poems() {
 
                 <div className="source-info">
                   <span>From: </span>
-                  <Link
-                    to={`/source-texts/${poem.source_text.id}`}
-                    className="source-link"
-                  >
-                    {poem.source_text.title}
-                  </Link>
-                  {poem.source_text.author && (
-                    <span className="author">
-                      {" "}
-                      by {poem.source_text.author}
-                    </span>
+                  {poem.source_text ? (
+                    <Link
+                      to={`/source-texts/${poem.source_text.id}`}
+                      className="source-link"
+                    >
+                      {poem.source_text.title}
+                    </Link>
+                  ) : (
+                    <span>Unknown source</span>
                   )}
                 </div>
 
