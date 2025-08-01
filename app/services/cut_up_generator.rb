@@ -10,7 +10,7 @@ class CutUpGenerator
     when 'cut_up'
       generate_cutup(options)
     else
-      generate_cutup(options)
+      raise "Invalid method: #{method}"
     end
   end
 
