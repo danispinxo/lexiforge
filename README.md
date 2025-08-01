@@ -19,7 +19,7 @@ LexiForge transforms classic texts into experimental poetry using the cut-up tec
 
 - Ruby 3.1.1
 - Rails 7.1
-- PostgreSQL (or SQLite for development)
+- PostgreSQL
 
 ### Installation
 
@@ -117,53 +117,8 @@ LexiForge attempts to fetch texts from multiple URL patterns:
 /cache/epub/{id}/pg{id}.txt # Alternative format
 ```
 
-### Text Cleaning Process
-
-1. Remove Project Gutenberg licensing headers
-2. Remove end-of-book metadata and footers
-3. Normalize whitespace and line breaks
-4. Preserve paragraph structure for better cut-up results
-
-## 🚀 Deployment
-
-### Docker
-
-```bash
-docker build -t lexiforge .
-docker run -p 3000:3000 lexiforge
-```
-
-### Heroku
-
-```bash
-git push heroku main
-heroku run rails db:migrate
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📚 Resources
 
 - [Project Gutenberg](https://www.gutenberg.org/) - Source of public domain texts
 - [Cut-up Technique](https://en.wikipedia.org/wiki/Cut-up_technique) - Literary background
 - [Rails Guides](https://guides.rubyonrails.org/) - Framework documentation
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Project Gutenberg for providing free access to classic literature
-- William S. Burroughs and Brion Gysin for pioneering the cut-up technique
-- The Rails community for excellent documentation and tools
-
----
-
-_Transform the classics. Forge new poetry. Welcome to LexiForge._
