@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { sourceTextsAPI, poemsAPI } from "../services/api";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { sourceTextsAPI } from "../services/api";
+import PoemGenerationModal from "./PoemGenerationModal";
 
 function SourceTextDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [sourceText, setSourceText] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
   const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     loadSourceText();
@@ -25,23 +27,13 @@ function SourceTextDetail() {
     }
   };
 
-  const handleGenerateCutUp = async () => {
-    setGenerating(true);
-    setMessage("");
+  const handlePoemGenerated = (successMessage) => {
+    setMessage(successMessage);
+    loadSourceText();
+  };
 
-    try {
-      const response = await poemsAPI.generateCutUp(id);
-      if (response.data.success) {
-        setMessage(`Successfully generated "${response.data.poem.title}"!`);
-        // Could redirect to the poem or refresh source text data
-      }
-    } catch (error) {
-      setMessage(
-        error.response?.data?.message || "Error generating cut-up poem"
-      );
-    } finally {
-      setGenerating(false);
-    }
+  const handleNavigateToPoem = (poemId) => {
+    navigate(`/poems/${poemId}`);
   };
 
   if (loading) return <div className="loading">Loading...</div>;
@@ -58,11 +50,10 @@ function SourceTextDetail() {
             View All Poems
           </Link>
           <button
-            onClick={handleGenerateCutUp}
-            disabled={generating}
+            onClick={() => setShowModal(true)}
             className="btn btn-primary"
           >
-            {generating ? "Generating..." : "Generate Cut-Up Poem"}
+            Generate Poem
           </button>
         </div>
       </div>
@@ -109,6 +100,14 @@ function SourceTextDetail() {
           )}
         </div>
       </div>
+
+      <PoemGenerationModal
+        sourceText={sourceText}
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSuccess={handlePoemGenerated}
+        onPoemGenerated={handleNavigateToPoem}
+      />
     </div>
   );
 }
