@@ -1,0 +1,392 @@
+/* App Layout */
+.app {
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app-header {
+  background-color: #6f42c1;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.app-header nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.app-header nav a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.app-header nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.app-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #5a359a;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Header sections */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.header h1 {
+  margin: 0;
+  color: #333;
+}
+
+.back-link {
+  color: #6f42c1;
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Import Section */
+.import-section {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.import-section h3 {
+  margin-top: 0;
+  color: #495057;
+}
+
+.form-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  min-width: 150px;
+}
+
+.form-group input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+.form-group button {
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-group button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.popular-books {
+  margin: 1rem 0;
+}
+
+.popular-books summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #495057;
+}
+
+.books-list {
+  margin-top: 1rem;
+  padding-left: 1rem;
+}
+
+.book-item {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.help-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 1rem;
+}
+
+.help-text a {
+  color: #6f42c1;
+}
+
+/* Messages */
+.message {
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Grid layouts */
+.texts-grid,
+.poems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.text-card,
+.poem-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.text-card:hover,
+.poem-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.text-card h4,
+.poem-card h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.text-card h4 a,
+.poem-card h3 a {
+  color: #6f42c1;
+  text-decoration: none;
+}
+
+.text-card h4 a:hover,
+.poem-card h3 a:hover {
+  text-decoration: underline;
+}
+
+.author {
+  color: #666;
+  font-style: italic;
+  margin: 0 0 1rem 0;
+}
+
+.text-info,
+.poem-meta {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.word-count,
+.gutenberg-id,
+.technique,
+.date {
+  background-color: #e9ecef;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+.preview,
+.content-preview {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Source info */
+.source-info {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.source-link {
+  color: #6f42c1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.source-link:hover {
+  text-decoration: underline;
+}
+
+/* Detail pages */
+.text-info,
+.poem-info {
+  margin-bottom: 2rem;
+}
+
+.metadata {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.text-content,
+.poem-content {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.text-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.poem-text {
+  font-family: "Georgia", "Times New Roman", serif;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.poem-line {
+  margin-bottom: 0.5rem;
+}
+
+.truncated {
+  font-style: italic;
+  color: #666;
+}
+
+/* Empty states */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.empty-state p {
+  margin: 1rem 0;
+}
+
+.empty-state a {
+  color: #6f42c1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.empty-state a:hover {
+  text-decoration: underline;
+}
+
+/* Loading and error states */
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .form-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .texts-grid,
+  .poems-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metadata {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

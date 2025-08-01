@@ -1,1 +1,7 @@
-# See https://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+# LexiForge - Cut-up Poetry Generator
+# Allow search engines to crawl and index the app
+User-agent: *
+Allow: /
+
+# Block access to API endpoints
+Disallow: /api/
