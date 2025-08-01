@@ -152,7 +152,8 @@ function SourceTexts() {
 
                 <div className="text-info">
                   <span className="word-count">
-                    {(text.word_count || 0).toLocaleString()} words
+                    {(text.content?.split(" ").length || 0).toLocaleString()}{" "}
+                    words
                   </span>
                   {text.gutenberg_id && (
                     <span className="gutenberg-id">
