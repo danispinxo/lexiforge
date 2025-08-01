@@ -84,15 +84,25 @@ class Api::V1::PoemsController < ApplicationController
       return
     end
 
-    # Generate the cut-up content with medium size, line-based method
     generator = CutUpGenerator.new(@source_text)
-    cut_up_content = generator.generate(method: 'lines', size: 'medium')
+    method = params[:method] || 'cut_up'
+    
+    options = { method: method }
+    
+    if method == 'cut_up'
+      options[:num_lines] = params[:num_lines] || 12
+      options[:words_per_line] = params[:words_per_line] || 6
+    else
+      options[:size] = params[:size] || 'medium'
+    end
+    
+    cut_up_content = generator.generate(options)
 
     # Create and save the poem
     @poem = @source_text.poems.build(
       title: generate_poem_title(@source_text),
       content: cut_up_content,
-      technique_used: "cut-up"
+      technique_used: "cutup"
     )
 
     if @poem.save
