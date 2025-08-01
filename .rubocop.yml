@@ -1,0 +1,57 @@
+plugins:
+  - rubocop-rails
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - "db/schema.rb"
+    - "db/migrate/*.rb"
+    - "bin/*"
+    - "config/boot.rb"
+    - "config/environment.rb"
+    - "config/initializers/*.rb"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - "config/**/*"
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Rails:
+  Enabled: true
+
+Rails/ApplicationRecord:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Performance:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - "config/routes.rb"
+    - "spec/**/*"
+    - "test/**/*"
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 30
+  Exclude:
+    - "db/migrate/*.rb"

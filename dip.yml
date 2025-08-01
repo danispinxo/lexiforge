@@ -41,6 +41,13 @@ interaction:
     compose:
       run_options: [no-deps]
 
+  rubocop:
+    description: Run RuboCop
+    service: api
+    command: bundle exec rubocop
+    compose:
+      run_options: [no-deps]
+
   console:
     description: Rails console
     service: api
