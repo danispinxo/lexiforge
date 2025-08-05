@@ -1,0 +1,113 @@
+@import "../variables";
+@import "../mixins";
+
+.message {
+  padding: $spacing-md $spacing-lg;
+  border-radius: $border-radius-md;
+  margin: $spacing-md 0;
+  font-family: $font-sans;
+  font-weight: $weight-medium;
+  border-left: 4px solid;
+
+  &.success {
+    background: rgba($library-green, 0.1);
+    color: lighten($library-green, 20%);
+    border-left-color: $library-green;
+  }
+
+  &.error {
+    background: rgba($accent-color, 0.1);
+    color: lighten($accent-color, 20%);
+    border-left-color: $accent-color;
+  }
+
+  &.info {
+    background: rgba($primary-color, 0.1);
+    color: $primary-color;
+    border-left-color: $primary-color;
+  }
+}
+
+.help-text {
+  font-size: $font-size-sm;
+  color: $text-muted;
+  margin-top: $spacing-md;
+  font-style: italic;
+  font-family: $font-serif;
+  line-height: 1.5;
+
+  a {
+    color: $primary-color;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: $spacing-xl * 2;
+  color: $text-muted;
+
+  h3 {
+    @include heading-serif;
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+  }
+
+  p {
+    margin: $spacing-md 0;
+    font-family: $font-serif;
+    font-style: italic;
+    font-size: $font-size-lg;
+  }
+
+  a {
+    @include button-primary;
+    margin-top: $spacing-lg;
+    text-decoration: none;
+  }
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: $spacing-xl * 2;
+  font-size: $font-size-lg;
+  font-family: $font-serif;
+
+  &.loading {
+    color: $text-muted;
+
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-left: $spacing-sm;
+      border: 2px solid rgba($primary-color, 0.3);
+      border-top: 2px solid $primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  &.error {
+    color: $accent-color;
+
+    &::before {
+      content: "⚠";
+      display: block;
+      font-size: $font-size-4xl;
+      margin-bottom: $spacing-md;
+    }
+  }
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba($primary-color, 0.3);
+  border-top: 3px solid $primary-color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}

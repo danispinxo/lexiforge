@@ -1,0 +1,64 @@
+@import "../variables";
+@import "../mixins";
+
+.texts-grid,
+.poems-grid {
+  @include grid-responsive(380px);
+  margin-top: $spacing-xl;
+}
+
+.app-main {
+  max-width: min(1400px, 95vw);
+  margin: 0 auto;
+  padding: $spacing-xl;
+  position: relative;
+}
+
+.source-info {
+  margin: $spacing-md 0;
+  font-size: $font-size-sm;
+  color: $text-muted;
+  font-family: $font-sans;
+}
+
+.source-link {
+  color: $primary-color;
+  text-decoration: none;
+  font-weight: $weight-medium;
+  @include small-caps;
+
+  &:hover {
+    @include text-glow($primary-color);
+  }
+}
+
+.text-info,
+.poem-info {
+  margin-bottom: $spacing-xl;
+}
+
+.metadata {
+  display: flex;
+  gap: $spacing-md;
+  margin: $spacing-md 0;
+  flex-wrap: wrap;
+}
+
+@include tablet {
+  .texts-grid,
+  .poems-grid {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+@include mobile {
+  .app-main {
+    padding: $spacing-md;
+  }
+
+  .metadata {
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+}

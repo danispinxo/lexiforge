@@ -1,0 +1,207 @@
+@import "../variables";
+@import "../mixins";
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.font-serif {
+  font-family: $font-serif;
+}
+.font-sans {
+  font-family: $font-sans;
+}
+.font-mono {
+  font-family: $font-mono;
+}
+.font-display {
+  font-family: $font-display;
+}
+
+.text-primary {
+  color: $text-primary;
+}
+.text-secondary {
+  color: $text-secondary;
+}
+.text-muted {
+  color: $text-muted;
+}
+.text-accent {
+  color: $text-accent;
+}
+
+.bg-primary {
+  background-color: $bg-primary;
+}
+.bg-secondary {
+  background-color: $bg-secondary;
+}
+.bg-accent {
+  background-color: $bg-accent;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+.mb-1 {
+  margin-bottom: $spacing-xs;
+}
+.mb-2 {
+  margin-bottom: $spacing-sm;
+}
+.mb-3 {
+  margin-bottom: $spacing-md;
+}
+.mb-4 {
+  margin-bottom: $spacing-lg;
+}
+.mb-5 {
+  margin-bottom: $spacing-xl;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+.mt-1 {
+  margin-top: $spacing-xs;
+}
+.mt-2 {
+  margin-top: $spacing-sm;
+}
+.mt-3 {
+  margin-top: $spacing-md;
+}
+.mt-4 {
+  margin-top: $spacing-lg;
+}
+.mt-5 {
+  margin-top: $spacing-xl;
+}
+
+.p-0 {
+  padding: 0;
+}
+.p-1 {
+  padding: $spacing-xs;
+}
+.p-2 {
+  padding: $spacing-sm;
+}
+.p-3 {
+  padding: $spacing-md;
+}
+.p-4 {
+  padding: $spacing-lg;
+}
+.p-5 {
+  padding: $spacing-xl;
+}
+
+.truncated {
+  @include text-truncate;
+  font-style: italic;
+  color: $text-muted;
+
+  &::after {
+    content: "…";
+    font-style: normal;
+  }
+}
+
+.sr-only {
+  @include visually-hidden;
+}
+
+.d-none {
+  display: none;
+}
+.d-block {
+  display: block;
+}
+.d-inline {
+  display: inline;
+}
+.d-inline-block {
+  display: inline-block;
+}
+.d-flex {
+  display: flex;
+}
+.d-grid {
+  display: grid;
+}
+
+.flex-center {
+  @include flex-center;
+}
+.flex-between {
+  @include flex-between;
+}
+.flex-column {
+  @include flex-column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.position-relative {
+  position: relative;
+}
+.position-absolute {
+  position: absolute;
+}
+.position-fixed {
+  position: fixed;
+}
+.position-sticky {
+  position: sticky;
+}
+
+.z-1 {
+  z-index: 1;
+}
+.z-2 {
+  z-index: 10;
+}
+.z-3 {
+  z-index: 100;
+}
+.z-4 {
+  z-index: 1000;
+}
+.z-5 {
+  z-index: 10000;
+}
+
+.w-100 {
+  width: 100%;
+}
+.w-75 {
+  width: 75%;
+}
+.w-50 {
+  width: 50%;
+}
+.w-25 {
+  width: 25%;
+}
+
+.h-100 {
+  height: 100%;
+}
+.min-h-100 {
+  min-height: 100%;
+}
+.min-h-screen {
+  min-height: 100vh;
+}

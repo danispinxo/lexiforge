@@ -1,0 +1,135 @@
+@import "../variables";
+@import "../mixins";
+
+.modal-overlay {
+  @include modal-overlay;
+}
+
+.modal-content {
+  @include modal-content;
+  width: min(800px, 90vw);
+  background: $bg-secondary;
+}
+
+.modal-header {
+  @include flex-between;
+  padding: $spacing-xl;
+  border-bottom: 1px solid rgba($primary-color, 0.2);
+  background: linear-gradient(
+    135deg,
+    $bg-secondary 0%,
+    lighten($bg-secondary, 3%) 100%
+  );
+
+  h2 {
+    @include heading-serif;
+    margin: 0;
+    color: $text-primary;
+    font-size: $font-size-xl;
+  }
+}
+
+.modal-close {
+  @include button-ghost;
+  font-size: $font-size-xl;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 0;
+
+  &:hover {
+    background: rgba($accent-color, 0.1);
+    color: $accent-color;
+  }
+}
+
+.modal-body {
+  padding: $spacing-xl;
+
+  .source-info {
+    @include card-paper;
+    margin-bottom: $spacing-lg;
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+  }
+
+  .form-group {
+    margin-bottom: $spacing-lg;
+
+    label {
+      display: block;
+      @include small-caps;
+      font-weight: $weight-medium;
+      margin-bottom: $spacing-sm;
+      color: $text-secondary;
+      font-family: $font-sans;
+    }
+
+    select {
+      width: 100%;
+      padding: $spacing-md;
+      border: 1px solid rgba($medium-gray, 0.5);
+      border-radius: $border-radius-sm;
+      font-size: $font-size-base;
+      background: $bg-accent;
+      color: $text-primary;
+      font-family: $font-sans;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+    }
+  }
+
+  .help-text {
+    font-size: $font-size-sm;
+    color: $text-muted;
+    margin-top: $spacing-sm;
+    font-style: italic;
+    font-family: $font-serif;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: flex-end;
+  margin-top: $spacing-xl;
+  padding-top: $spacing-lg;
+  border-top: 1px solid rgba($primary-color, 0.1);
+
+  .btn {
+    min-width: 120px;
+  }
+}
+
+@include tablet {
+  .modal-content {
+    width: 95vw;
+    margin: $spacing-md;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+@include mobile {
+  .modal-content {
+    width: 95vw;
+    margin: $spacing-md;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

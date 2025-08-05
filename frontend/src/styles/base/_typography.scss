@@ -1,0 +1,124 @@
+// Typography styles
+@import "../variables";
+@import "../mixins";
+
+// Import Google Fonts for that academic + indie vibe
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Oswald:wght@400;600;700;900&family=Kalam:wght@400;700&display=swap");
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 $spacing-md 0;
+  font-weight: $weight-semibold;
+  line-height: 1.2;
+  color: $text-primary;
+}
+
+h1 {
+  @include heading-display;
+  font-size: clamp($font-size-3xl, 5vw, $font-size-5xl);
+  margin-bottom: $spacing-lg;
+  @include text-glow($primary-color);
+}
+
+h2 {
+  @include heading-serif;
+  font-size: clamp($font-size-xl, 3vw, $font-size-3xl);
+}
+
+h3 {
+  @include heading-serif;
+  font-size: $font-size-xl;
+}
+
+h4,
+h5,
+h6 {
+  font-family: $font-sans;
+  font-size: $font-size-lg;
+  color: $text-secondary;
+}
+
+// Paragraphs
+p {
+  @include body-text;
+  margin: 0 0 $spacing-md 0;
+  color: $text-secondary;
+}
+
+// Links with that indie rock flair
+a {
+  color: $link-color;
+  text-decoration: none;
+  font-weight: $weight-medium;
+  transition: all $transition-normal;
+  position: relative;
+
+  // Subtle underline animation
+  &::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg, $link-color, $link-hover);
+    transition: width $transition-normal $ease-out-expo;
+  }
+
+  &:hover {
+    color: $link-hover;
+    @include text-glow($link-color);
+
+    &::after {
+      width: 100%;
+    }
+  }
+
+  &:visited {
+    color: $link-visited;
+  }
+}
+
+// Code blocks - perfect for poems
+code,
+pre {
+  font-family: $font-mono;
+  background: rgba($black, 0.3);
+  border-radius: $border-radius-sm;
+  border: 1px solid rgba($primary-color, 0.1);
+}
+
+code {
+  padding: $spacing-xs $spacing-sm;
+  font-size: 0.9em;
+  color: $primary-color;
+}
+
+pre {
+  padding: $spacing-md;
+  overflow-x: auto;
+  line-height: 1.5;
+
+  code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: $text-secondary;
+  }
+}
+
+// Responsive text sizes
+@include mobile {
+  :root {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: $font-size-3xl;
+  }
+}

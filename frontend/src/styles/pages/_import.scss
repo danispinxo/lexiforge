@@ -1,0 +1,66 @@
+// Import page specific styles
+@import "../variables";
+@import "../mixins";
+
+// Import section - Academic paper style
+.import-section {
+  @include card-paper;
+  margin-bottom: $spacing-xl;
+  color: $ink-blue;
+
+  h3 {
+    @include heading-serif;
+    margin-top: 0;
+    color: $ink-blue;
+    font-size: $font-size-xl;
+  }
+}
+
+// Popular books section
+.popular-books {
+  margin: $spacing-lg 0;
+
+  details {
+    background: rgba($bg-secondary, 0.5);
+    border-radius: $border-radius-md;
+    padding: $spacing-md;
+    border: 1px solid rgba($primary-color, 0.1);
+  }
+
+  summary {
+    @include small-caps;
+    cursor: pointer;
+    font-weight: $weight-medium;
+    color: $text-secondary;
+    font-family: $font-sans;
+    padding: $spacing-sm;
+    border-radius: $border-radius-sm;
+    transition: all $transition-normal;
+
+    &:hover {
+      color: $primary-color;
+      background: rgba($primary-color, 0.05);
+    }
+  }
+}
+
+.books-list {
+  margin-top: $spacing-md;
+  padding-left: $spacing-lg;
+
+  .book-item {
+    margin: $spacing-sm 0;
+    color: $text-muted;
+    font-family: $font-serif;
+    font-style: italic;
+    padding: $spacing-xs;
+    border-left: 2px solid transparent;
+    transition: all $transition-fast;
+
+    &:hover {
+      color: $text-secondary;
+      border-left-color: $primary-color;
+      padding-left: $spacing-sm;
+    }
+  }
+}

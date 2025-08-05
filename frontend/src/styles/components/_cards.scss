@@ -1,0 +1,97 @@
+@import "../variables";
+@import "../mixins";
+
+.text-card,
+.poem-card {
+  @include card;
+  transition: all $transition-normal $ease-out-expo;
+  border: 1px solid rgba($primary-color, 0.1);
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: $shadow-dramatic;
+    border-color: rgba($primary-color, 0.3);
+
+    &::before {
+      opacity: 0.8;
+    }
+  }
+
+  h4,
+  h3 {
+    @include heading-serif;
+    margin: 0 0 $spacing-sm 0;
+    font-size: $font-size-lg;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      transition: all $transition-normal;
+
+      &:hover {
+        color: $link-hover;
+        @include text-glow($primary-color);
+      }
+    }
+  }
+}
+
+.author {
+  color: $text-muted;
+  font-style: italic;
+  margin: 0 0 $spacing-md 0;
+  font-family: $font-serif;
+  font-size: $font-size-sm;
+
+  &::before {
+    content: "by ";
+    @include small-caps;
+    font-style: normal;
+    font-family: $font-sans;
+    color: $text-muted;
+    opacity: 0.7;
+  }
+}
+
+.text-info,
+.poem-meta {
+  display: flex;
+  gap: $spacing-md;
+  margin: $spacing-md 0;
+  font-size: $font-size-sm;
+  flex-wrap: wrap;
+}
+
+.word-count,
+.gutenberg-id,
+.technique,
+.date {
+  @include library-label;
+}
+
+.preview,
+.content-preview {
+  color: $text-muted;
+  font-size: $font-size-sm;
+  line-height: 1.5;
+  font-family: $font-serif;
+  font-style: italic;
+  border-left: 2px solid rgba($primary-color, 0.2);
+  padding-left: $spacing-md;
+  margin: $spacing-md 0;
+}
+
+.poem-type-display {
+  @include card;
+  background: rgba($primary-color, 0.05);
+  border: 1px solid rgba($primary-color, 0.2);
+  text-align: center;
+
+  strong {
+    @include heading-serif;
+    color: $primary-color;
+    font-size: $font-size-lg;
+    display: block;
+    margin-bottom: $spacing-sm;
+  }
+}

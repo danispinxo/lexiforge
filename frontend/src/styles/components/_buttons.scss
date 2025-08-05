@@ -1,0 +1,64 @@
+@import "../variables";
+@import "../mixins";
+
+button {
+  @include button-base;
+
+  &:focus-visible {
+    @include focus-outline;
+  }
+}
+
+.btn {
+  @include button-base;
+
+  &-primary {
+    @include button-primary;
+  }
+
+  &-secondary {
+    @include button-secondary;
+  }
+
+  &-danger {
+    @include button-danger;
+  }
+
+  &-ghost {
+    @include button-ghost;
+  }
+
+  &-academic {
+    @include button-base;
+    background: $paper-bg;
+    color: $ink-blue;
+    font-family: $font-serif;
+    font-weight: $weight-semibold;
+    border: 1px solid rgba($ink-blue, 0.2);
+
+    &:hover:not(:disabled) {
+      background: darken($paper-bg, 5%);
+      color: darken($ink-blue, 10%);
+      box-shadow: $shadow-medium;
+      transform: translateY(-2px);
+    }
+  }
+
+  &-rock {
+    @include button-base;
+    background: linear-gradient(45deg, $charcoal, $dark-gray);
+    color: $primary-color;
+    font-family: $font-display;
+    font-weight: $weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 2px solid $primary-color;
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(45deg, $dark-gray, $medium-gray);
+      color: $warm-white;
+      box-shadow: $shadow-heavy, $glow-gold;
+      transform: translateY(-3px) scale(1.02);
+    }
+  }
+}

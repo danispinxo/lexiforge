@@ -1,0 +1,152 @@
+@import "../variables";
+@import "../mixins";
+
+.app-header {
+  background: linear-gradient(
+    135deg,
+    darken($bg-primary, 5%) 0%,
+    $bg-secondary 100%
+  );
+  color: $warm-white;
+  padding: $spacing-lg $spacing-xl;
+  @include flex-between;
+  box-shadow: $shadow-heavy;
+  border-bottom: 3px solid $primary-color;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 50px,
+      rgba($primary-color, 0.02) 50px,
+      rgba($primary-color, 0.02) 52px
+    );
+    pointer-events: none;
+  }
+
+  h1 {
+    @include heading-display;
+    margin: 0;
+    font-size: clamp($font-size-2xl, 4vw, $font-size-4xl);
+    color: $primary-color;
+    @include text-glow($primary-color);
+    letter-spacing: -0.03em;
+
+    background: linear-gradient(45deg, $primary-color 30%, $warm-white 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  nav {
+    display: flex;
+    gap: $spacing-lg;
+    align-items: center;
+
+    a {
+      @include small-caps;
+      color: $text-secondary;
+      text-decoration: none;
+      padding: $spacing-sm $spacing-md;
+      border-radius: $border-radius-sm;
+      transition: all $transition-normal $ease-out-expo;
+      font-family: $font-sans;
+      font-weight: $weight-medium;
+      font-size: $font-size-sm;
+      letter-spacing: 0.1em;
+      position: relative;
+      border: 1px solid transparent;
+
+      &:hover {
+        color: $primary-color;
+        background: rgba($primary-color, 0.05);
+        border-color: rgba($primary-color, 0.2);
+        transform: translateY(-2px);
+        @include text-glow($primary-color);
+      }
+
+      &.active {
+        color: $primary-color;
+        background: rgba($primary-color, 0.1);
+        border-color: rgba($primary-color, 0.3);
+      }
+    }
+  }
+}
+
+.header {
+  @include flex-between;
+  margin-bottom: $spacing-xl;
+  padding-bottom: $spacing-lg;
+  border-bottom: 2px solid rgba($primary-color, 0.2);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: $primary-color;
+  }
+
+  h1 {
+    @include heading-serif;
+    margin: 0;
+    color: $text-primary;
+    font-size: clamp($font-size-xl, 3vw, $font-size-3xl);
+  }
+}
+
+.back-link {
+  color: $primary-color;
+  text-decoration: none;
+  font-weight: $weight-medium;
+  margin-bottom: $spacing-lg;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-family: $font-sans;
+  @include small-caps;
+  font-size: $font-size-sm;
+  transition: all $transition-normal;
+
+  &:hover {
+    color: $link-hover;
+    transform: translateX(-4px);
+    @include text-glow($primary-color);
+  }
+
+  &::before {
+    content: "←";
+    font-size: $font-size-lg;
+  }
+}
+
+@include tablet {
+  .app-header {
+    flex-direction: column;
+    gap: $spacing-md;
+    text-align: center;
+    padding: $spacing-lg;
+
+    nav {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+
+  .header {
+    flex-direction: column;
+    gap: $spacing-md;
+    text-align: center;
+  }
+}
