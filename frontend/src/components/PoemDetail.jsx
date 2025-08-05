@@ -69,12 +69,38 @@ function PoemDetail() {
 
       <div className="poem-content">
         <h3>Poem</h3>
-        <div className="poem-text">
-          {poem.content.split("\n").map((line, index) => (
-            <div key={index} className="poem-line">
-              {line || "\u00A0"} {/* Non-breaking space for empty lines */}
+        <div
+          className={`poem-text ${
+            poem.technique_used === "erasure" ? "erasure-poem" : "lineated-poem"
+          }`}
+        >
+          {poem.technique_used === "erasure" ? (
+            <div className="erasure-pages-container">
+              {(() => {
+                try {
+                  const parsedContent = JSON.parse(poem.content);
+                  if (parsedContent.type === "erasure_pages") {
+                    return parsedContent.pages.map((page) => (
+                      <div key={page.number} className="erasure-page">
+                        <div className="page-number">Page {page.number}</div>
+                        <pre className="page-content">{page.content}</pre>
+                      </div>
+                    ));
+                  }
+                } catch {
+                  // Fallback for old format or malformed JSON
+                  return <pre className="erasure-text">{poem.content}</pre>;
+                }
+                return <pre className="erasure-text">{poem.content}</pre>;
+              })()}
             </div>
-          ))}
+          ) : (
+            poem.content.split("\n").map((line, index) => (
+              <div key={index} className="poem-line">
+                {line || "\u00A0"}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
