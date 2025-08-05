@@ -60,20 +60,19 @@
 }
 
 .erasure-pages-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: $spacing-xl;
-  justify-content: center;
-  margin: $spacing-xl 0;
+  margin: 0 $spacing-lg $spacing-xl 80px;
 }
 
 .erasure-page {
-  width: 320px;
+  width: 100%;
   min-height: 240px;
-  background: linear-gradient(145deg, $paper-bg 0%, darken($paper-bg, 3%) 100%);
-  border: 1px solid rgba($ink-blue, 0.2);
+  background: $warm-white;
+  border: 1px solid rgba($ink-blue, 0.1);
   border-radius: $border-radius-md;
-  box-shadow: $shadow-medium;
+  box-shadow: none;
   overflow: hidden;
   transition: all $transition-normal $ease-out-expo;
   position: relative;
@@ -95,25 +94,8 @@
     pointer-events: none;
   }
 
-  &:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: $shadow-heavy;
-  }
-
   .page-number {
-    background: linear-gradient(
-      135deg,
-      $ink-blue 0%,
-      darken($ink-blue, 10%) 100%
-    );
-    color: $warm-white;
-    padding: $spacing-sm $spacing-md;
-    font-size: $font-size-xs;
-    font-weight: $weight-bold;
-    text-align: center;
-    font-family: $font-sans;
-    @include small-caps;
-    letter-spacing: 0.1em;
+    display: none;
   }
 
   .page-content {
@@ -122,12 +104,13 @@
     word-wrap: break-word;
     font-size: $font-size-sm;
     line-height: 1.4;
-    padding: $spacing-lg;
+    padding: 4rem;
     margin: 0;
-    height: calc(100% - 40px);
+    height: 100%;
     overflow-y: auto;
     color: $ink-blue;
     text-align: justify;
+    background: transparent !important;
   }
 }
 
@@ -151,14 +134,14 @@
 }
 
 @include tablet {
-  .erasure-page {
-    width: 100%;
-    max-width: 400px;
+  .erasure-pages-container {
+    gap: $spacing-lg;
   }
 }
 
 @include mobile {
   .erasure-pages-container {
+    grid-template-columns: 1fr;
     gap: $spacing-md;
   }
 }
