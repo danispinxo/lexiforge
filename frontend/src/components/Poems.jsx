@@ -48,37 +48,57 @@ function Poems() {
         <>
           <p className="poems-count">Found {poems.length} generated poems</p>
 
-          <div className="poems-grid">
-            {poems.map((poem) => (
-              <div key={poem.id} className="poem-card">
-                <h3>
-                  <Link to={`/poems/${poem.id}`}>{poem.title}</Link>
-                </h3>
-
-                <div className="poem-meta">
-                  <span className="technique">{poem.technique_used}</span>
-                  <span className="date">
-                    {new Date(poem.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-
-                <div className="source-info">
-                  <span>From: </span>
-                  {poem.source_text ? (
-                    <Link
-                      to={`/source-texts/${poem.source_text.id}`}
-                      className="source-link"
-                    >
-                      {poem.source_text.title}
-                    </Link>
-                  ) : (
-                    <span>Unknown source</span>
-                  )}
-                </div>
-
-                <div className="content-preview">{poem.content_preview}</div>
-              </div>
-            ))}
+          <div className="poems-table-container">
+            <table className="poems-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Technique</th>
+                  <th>Source Text</th>
+                  <th>Date Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {poems.map((poem) => (
+                  <tr key={poem.id}>
+                    <td className="title-cell">
+                      <Link to={`/poems/${poem.id}`} className="title-link">
+                        {poem.title}
+                      </Link>
+                    </td>
+                    <td className="technique-cell">
+                      <span className="technique-badge">
+                        {poem.technique_used}
+                      </span>
+                    </td>
+                    <td className="source-cell">
+                      {poem.source_text ? (
+                        <Link
+                          to={`/source-texts/${poem.source_text.id}`}
+                          className="source-link"
+                        >
+                          {poem.source_text.title}
+                        </Link>
+                      ) : (
+                        <span className="unknown-source">Unknown source</span>
+                      )}
+                    </td>
+                    <td className="date-cell">
+                      {new Date(poem.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="actions-cell">
+                      <Link
+                        to={`/poems/${poem.id}`}
+                        className="btn btn-ghost btn-sm"
+                      >
+                        View Poem
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}

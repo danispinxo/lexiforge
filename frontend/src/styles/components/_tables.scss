@@ -164,17 +164,19 @@
   }
 }
 
-// Technique cell for poems table
 .technique-cell {
   width: 15%;
 
   .technique-badge {
     @include library-label;
-    background: rgba($secondary-color, 0.2);
-    color: $secondary-color;
-    border-color: rgba($secondary-color, 0.3);
+    background: rgba($primary-color, 0.15);
+    color: $primary-color;
+    border-color: rgba($primary-color, 0.4);
     font-size: $font-size-xs;
     padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-sm;
+    display: inline-block;
+    font-weight: $weight-medium;
   }
 }
 
@@ -183,26 +185,33 @@
   font-family: $font-mono;
   font-size: $font-size-xs;
   color: $text-muted;
-  text-align: center;
+  text-align: left;
 }
 
 .source-cell {
   width: 25%;
 
   .source-link {
-    color: $accent-muted;
+    color: $text-secondary;
     text-decoration: none;
     font-style: italic;
-    font-size: $font-size-xs;
+    font-size: $font-size-sm;
+    font-family: $font-serif;
+    font-weight: $weight-medium;
 
     &:hover {
-      color: $accent-color;
+      color: $primary-color;
       text-decoration: underline;
     }
   }
+
+  .unknown-source {
+    color: $text-muted;
+    font-style: italic;
+    font-size: $font-size-xs;
+  }
 }
 
-// Empty state for tables
 .table-empty {
   text-align: center;
   padding: $spacing-xl * 2;
@@ -232,13 +241,11 @@
   }
 }
 
-// Responsive table design
 @include tablet {
   .texts-table-container,
   .poems-table-container {
     overflow-x: scroll;
 
-    // Show scrollbar hint
     &::after {
       content: "← Scroll horizontally to see more →";
       display: block;
@@ -256,7 +263,6 @@
     min-width: 600px;
   }
 
-  // Adjust cell widths for mobile
   .title-cell {
     width: 35%;
   }
@@ -293,7 +299,6 @@
   }
 }
 
-// Table loading state
 .table-loading {
   display: flex;
   justify-content: center;
