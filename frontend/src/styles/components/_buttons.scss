@@ -28,6 +28,18 @@ button {
     @include button-ghost;
   }
 
+  &-sm {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+    border-radius: $border-radius-sm;
+  }
+
+  &-lg {
+    padding: $spacing-md $spacing-xl;
+    font-size: $font-size-lg;
+    border-radius: $border-radius-md;
+  }
+
   &-academic {
     @include button-base;
     background: $paper-bg;

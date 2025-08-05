@@ -1,0 +1,313 @@
+@import "../variables";
+@import "../mixins";
+
+.texts-table-container,
+.poems-table-container {
+  margin-top: $spacing-lg;
+  overflow-x: auto;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-medium;
+  background: $bg-secondary;
+  border: 1px solid rgba($primary-color, 0.1);
+}
+
+.texts-table,
+.poems-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: $font-sans;
+  background: transparent;
+
+  thead {
+    background: linear-gradient(
+      135deg,
+      $bg-accent 0%,
+      darken($bg-accent, 5%) 100%
+    );
+    border-bottom: 2px solid rgba($primary-color, 0.3);
+
+    th {
+      padding: $spacing-md $spacing-lg;
+      text-align: left;
+      font-weight: $weight-semibold;
+      color: $text-primary;
+      font-size: $font-size-sm;
+      @include small-caps;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba($primary-color, 0.2);
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: $spacing-lg;
+        right: $spacing-lg;
+        height: 1px;
+        background: $primary-color;
+        opacity: 0.6;
+      }
+
+      &:first-child::after {
+        left: $spacing-lg;
+      }
+
+      &:last-child::after {
+        right: $spacing-lg;
+      }
+    }
+  }
+
+  // Table body
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba($medium-gray, 0.2);
+      transition: all $transition-fast;
+
+      &:hover {
+        background: rgba($primary-color, 0.03);
+        transform: translateX(2px);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: $spacing-md $spacing-lg;
+      color: $text-secondary;
+      font-size: $font-size-sm;
+      line-height: 1.5;
+      vertical-align: top;
+    }
+  }
+}
+
+// Table cell specific styling
+.title-cell {
+  width: 40%;
+  font-weight: $weight-medium;
+
+  .title-link {
+    color: $primary-color;
+    text-decoration: none;
+    font-family: $font-serif;
+    font-size: $font-size-base;
+    font-weight: $weight-semibold;
+    transition: all $transition-normal;
+
+    &:hover {
+      color: $link-hover;
+      @include text-glow($primary-color);
+    }
+  }
+}
+
+.word-count-cell {
+  width: 15%;
+  text-align: left;
+  font-family: $font-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+
+  &::after {
+    content: " words";
+    font-family: $font-sans;
+    color: $text-muted;
+    font-size: $font-size-xs;
+  }
+}
+
+.gutenberg-id-cell {
+  width: 15%;
+  text-align: left;
+  font-family: $font-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+
+  &:not(:empty):not([data-empty])::before {
+    content: "#";
+    color: rgba($primary-color, 0.6);
+  }
+}
+
+.actions-cell {
+  width: 20%;
+  text-align: left;
+
+  .btn {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+    min-width: auto;
+
+    &.btn-sm {
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-xs;
+      border-radius: $border-radius-sm;
+    }
+
+    // Consistent styling for table action buttons
+    &.btn-ghost {
+      color: $primary-color;
+      border-color: rgba($primary-color, 0.3);
+      background: transparent;
+
+      &:hover:not(:disabled) {
+        color: $warm-white;
+        background: $primary-color;
+        border-color: $primary-color;
+        transform: translateY(-1px);
+        box-shadow: $shadow-soft;
+      }
+    }
+  }
+}
+
+// Technique cell for poems table
+.technique-cell {
+  width: 15%;
+
+  .technique-badge {
+    @include library-label;
+    background: rgba($secondary-color, 0.2);
+    color: $secondary-color;
+    border-color: rgba($secondary-color, 0.3);
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+  }
+}
+
+.date-cell {
+  width: 15%;
+  font-family: $font-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  text-align: center;
+}
+
+.source-cell {
+  width: 25%;
+
+  .source-link {
+    color: $accent-muted;
+    text-decoration: none;
+    font-style: italic;
+    font-size: $font-size-xs;
+
+    &:hover {
+      color: $accent-color;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Empty state for tables
+.table-empty {
+  text-align: center;
+  padding: $spacing-xl * 2;
+  color: $text-muted;
+  font-style: italic;
+  background: rgba($bg-secondary, 0.5);
+  border-radius: $border-radius-md;
+  border: 2px dashed rgba($medium-gray, 0.3);
+
+  .empty-icon {
+    font-size: $font-size-4xl;
+    margin-bottom: $spacing-md;
+    opacity: 0.5;
+  }
+
+  h4 {
+    color: $text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    margin-bottom: $spacing-lg;
+  }
+
+  .btn {
+    margin-top: $spacing-md;
+  }
+}
+
+// Responsive table design
+@include tablet {
+  .texts-table-container,
+  .poems-table-container {
+    overflow-x: scroll;
+
+    // Show scrollbar hint
+    &::after {
+      content: "← Scroll horizontally to see more →";
+      display: block;
+      text-align: center;
+      padding: $spacing-sm;
+      font-size: $font-size-xs;
+      color: $text-muted;
+      font-style: italic;
+      background: rgba($bg-accent, 0.5);
+    }
+  }
+
+  .texts-table,
+  .poems-table {
+    min-width: 600px;
+  }
+
+  // Adjust cell widths for mobile
+  .title-cell {
+    width: 35%;
+  }
+  .word-count-cell {
+    width: 20%;
+  }
+  .gutenberg-id-cell {
+    width: 15%;
+  }
+  .actions-cell {
+    width: 25%;
+  }
+}
+
+@include mobile {
+  .texts-table,
+  .poems-table {
+    min-width: 500px;
+    font-size: $font-size-xs;
+
+    thead th,
+    tbody td {
+      padding: $spacing-sm;
+    }
+  }
+
+  .title-cell .title-link {
+    font-size: $font-size-sm;
+  }
+
+  .btn.btn-sm {
+    padding: $spacing-xs;
+    font-size: $font-size-xs;
+  }
+}
+
+// Table loading state
+.table-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background: rgba($bg-secondary, 0.5);
+  border-radius: $border-radius-md;
+
+  .loading-spinner {
+    margin-right: $spacing-md;
+  }
+
+  .loading-text {
+    color: $text-muted;
+    font-style: italic;
+  }
+}
