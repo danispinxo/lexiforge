@@ -1,8 +1,6 @@
-// Import page specific styles
 @import "../variables";
 @import "../mixins";
 
-// Import section - Academic paper style
 .import-section {
   @include card-paper;
   margin-bottom: $spacing-xl;
@@ -14,9 +12,84 @@
     color: $ink-blue;
     font-size: $font-size-xl;
   }
+
+  .form-group {
+    label {
+      color: $ink-blue;
+    }
+
+    input {
+      background: white;
+      color: $ink-blue;
+      border: 1px solid rgba($ink-blue, 0.3);
+
+      &:focus {
+        border-color: $ink-blue;
+        box-shadow: 0 0 0 2px rgba($ink-blue, 0.2);
+        background: white;
+      }
+
+      &::placeholder {
+        color: rgba($ink-blue, 0.6);
+        font-style: italic;
+      }
+    }
+
+    button {
+      background: $ink-blue;
+      color: white;
+      border: none;
+
+      &:hover:not(:disabled) {
+        background: darken($ink-blue, 10%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba($ink-blue, 0.3);
+      }
+    }
+  }
+
+  .popular-books {
+    details {
+      background: rgba($ink-blue, 0.05);
+      border: 1px solid rgba($ink-blue, 0.2);
+    }
+
+    summary {
+      color: $ink-blue;
+
+      &:hover {
+        color: darken($ink-blue, 15%);
+        background: rgba($ink-blue, 0.1);
+      }
+    }
+
+    .book-item {
+      color: rgba($ink-blue, 0.8);
+
+      &:hover {
+        color: $ink-blue;
+        border-left-color: $ink-blue;
+      }
+    }
+  }
+
+  .help-text {
+    color: rgba($ink-blue, 0.7);
+
+    a {
+      color: $ink-blue;
+      text-decoration: underline;
+      text-decoration-style: solid;
+      text-decoration-color: $ink-blue;
+
+      &:hover {
+        color: darken($ink-blue, 15%);
+        text-decoration-color: darken($ink-blue, 15%);
+      }
+    }
+  }
 }
 
-// Popular books section
 .popular-books {
   margin: $spacing-lg 0;
 
