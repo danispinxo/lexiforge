@@ -4,7 +4,9 @@
 .text-content,
 .poem-content {
   @include manuscript-style;
+
   margin-top: $spacing-xl;
+  padding-left: 100px;
 
   p {
     margin-bottom: $spacing-md;
@@ -20,12 +22,6 @@
 
   .poem-line {
     margin-bottom: $spacing-sm;
-    transition: all $transition-fast;
-
-    &:hover {
-      color: darken($ink-blue, 10%);
-      padding-left: $spacing-xs;
-    }
   }
 }
 
@@ -103,8 +99,8 @@
     white-space: pre-wrap;
     word-wrap: break-word;
     font-size: $font-size-sm;
-    line-height: 1.4;
-    padding: 4rem;
+    line-height: 1.5;
+    padding: 2.5rem;
     margin: 0;
     height: 100%;
     overflow-y: auto;
