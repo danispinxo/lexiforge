@@ -4,35 +4,11 @@ class Api::PoemsController < ApplicationController
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
-    render json: @poems.map do |poem|
-      {
-        id: poem.id,
-        title: poem.title,
-        technique_used: poem.technique_used,
-        content_preview: poem.content&.truncate(200) || '',
-        source_text: if poem.source_text
-                       {
-                         id: poem.source_text.id,
-                         title: poem.source_text.title
-                       }
-                     end,
-        created_at: poem.created_at
-      }
-    end
+    render json: @poems, each_serializer: PoemSerializer
   end
 
   def show
-    render json: {
-      id: @poem.id,
-      title: @poem.title,
-      content: @poem.content,
-      technique_used: @poem.technique_used,
-      source_text: {
-        id: @poem.source_text.id,
-        title: @poem.source_text.title
-      },
-      created_at: @poem.created_at
-    }
+    render json: @poem, serializer: PoemDetailSerializer
   end
 
   def new

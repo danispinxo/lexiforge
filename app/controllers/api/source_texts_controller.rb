@@ -3,28 +3,11 @@ class Api::SourceTextsController < ApplicationController
 
   def index
     @source_texts = SourceText.all
-    render json: @source_texts.map do |text|
-      {
-        id: text.id,
-        title: text.title,
-        gutenberg_id: text.gutenberg_id,
-        word_count: text.content&.split&.length || 0,
-        content_preview: text.content&.truncate(200) || '',
-        created_at: text.created_at
-      }
-    end
+    render json: @source_texts, each_serializer: SourceTextSerializer
   end
 
   def show
-    render json: {
-      id: @source_text.id,
-      title: @source_text.title,
-      gutenberg_id: @source_text.gutenberg_id,
-      content: @source_text.content,
-      word_count: @source_text.content&.split&.length || 0,
-      created_at: @source_text.created_at,
-      poems_count: @source_text.poems.count
-    }
+    render json: @source_text, serializer: SourceTextDetailSerializer
   end
 
   def import_from_gutenberg
