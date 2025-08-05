@@ -79,7 +79,6 @@ class Api::PoemsController < ApplicationController
 
     cut_up_content = generator.generate(options)
 
-    # Create and save the poem
     @poem = @source_text.poems.build(
       title: generate_poem_title(@source_text, 'cutup'),
       content: cut_up_content,

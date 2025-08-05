@@ -10,15 +10,12 @@ class ProjectGutenbergService
   end
 
   def import_text(gutenberg_id)
-    # Fetch metadata first
     metadata = fetch_metadata(gutenberg_id)
     return SourceText.new unless metadata
 
-    # Fetch the plain text content
     content = fetch_text_content(gutenberg_id)
     return SourceText.new unless content
 
-    # Create and save the source text
     source_text = SourceText.new(
       title: metadata[:title],
       content: content,

@@ -9,7 +9,6 @@ compose:
   project_name: lexiforge
 
 interaction:
-  # Rails commands
   rails:
     description: Run Rails commands
     service: api

@@ -41,7 +41,6 @@ class ErasureGenerator
       pages << erased_page
     end
 
-    # Format pages for frontend display
     result = {
       type: 'erasure_pages',
       is_blackout: is_blackout,
