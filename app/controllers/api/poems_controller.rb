@@ -1,4 +1,4 @@
-class Api::V1::PoemsController < ApplicationController
+class Api::PoemsController < ApplicationController
   before_action :set_poem, only: %i[show edit update destroy]
   before_action :set_source_text, only: [:generate_cut_up, :generate_erasure]
 
@@ -82,7 +82,10 @@ class Api::V1::PoemsController < ApplicationController
 
   def generate_cut_up
     if @source_text.content.blank?
-      redirect_to @source_text, alert: 'Cannot generate poem: source text has no content.'
+      render json: {
+        success: false,
+        message: 'Cannot generate poem: source text has no content.'
+      }, status: :unprocessable_entity
       return
     end
 
@@ -129,7 +132,10 @@ class Api::V1::PoemsController < ApplicationController
 
   def generate_erasure
     if @source_text.content.blank?
-      redirect_to @source_text, alert: 'Cannot generate poem: source text has no content.'
+      render json: {
+        success: false,
+        message: 'Cannot generate poem: source text has no content.'
+      }, status: :unprocessable_entity
       return
     end
 
