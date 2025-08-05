@@ -139,7 +139,6 @@
   }
 }
 
-// Card mixin - Academic paper meets concert poster
 @mixin card {
   background: $bg-secondary;
   border-radius: $border-radius-md;
@@ -149,7 +148,6 @@
   position: relative;
   border: 1px solid rgba($primary-color, 0.1);
 
-  // Subtle paper texture
   &::before {
     content: "";
     position: absolute;
@@ -170,16 +168,11 @@
     border-radius: inherit;
     pointer-events: none;
   }
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: $shadow-heavy;
-    border-color: rgba($primary-color, 0.2);
-  }
 }
 
 @mixin card-paper {
   @include card;
+
   background: linear-gradient(145deg, $paper-bg 0%, darken($paper-bg, 5%) 100%);
   color: $ink-blue;
 
@@ -370,7 +363,6 @@
   outline-offset: 2px;
 }
 
-// Animations
 @keyframes fadeIn {
   from {
     opacity: 0;
