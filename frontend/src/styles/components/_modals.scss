@@ -51,6 +51,10 @@
     margin-bottom: $spacing-lg;
     padding: $spacing-md;
     font-size: $font-size-sm;
+
+    &:hover {
+      transform: none !important;
+    }
   }
 
   .form-group {
@@ -63,6 +67,12 @@
       margin-bottom: $spacing-sm;
       color: $text-secondary;
       font-family: $font-sans;
+
+      &.checkbox-label {
+        display: flex !important;
+        align-items: center;
+        width: auto !important;
+      }
     }
 
     select {
@@ -79,6 +89,14 @@
         border-color: $primary-color;
         box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
       }
+    }
+
+    // Force checkbox to stay square in modals
+    input[type="checkbox"] {
+      width: 20px !important;
+      min-width: 20px !important;
+      max-width: 20px !important;
+      flex: none !important;
     }
   }
 
