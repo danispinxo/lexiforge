@@ -3,7 +3,7 @@ import SourceTexts from "./components/SourceTexts";
 import SourceTextDetail from "./components/SourceTextDetail";
 import Poems from "./components/Poems";
 import PoemDetail from "./components/PoemDetail";
-import "./App.css";
+import "./styles/App.scss";
 
 function App() {
   return (
