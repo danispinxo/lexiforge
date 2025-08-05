@@ -66,6 +66,7 @@ function SourceTexts() {
     },
   ];
 
+  console.log(sourceTexts);
   return (
     <div className="source-texts">
       <div className="header">
@@ -75,7 +76,6 @@ function SourceTexts() {
         </Link>
       </div>
 
-      {/* Import Section */}
       <div className="import-section">
         <h3>Import from Project Gutenberg</h3>
 
@@ -133,7 +133,6 @@ function SourceTexts() {
         </p>
       </div>
 
-      {/* Source Texts List */}
       <div className="texts-section">
         <h3>Your Source Texts ({sourceTexts.length})</h3>
 
@@ -143,27 +142,45 @@ function SourceTexts() {
             above!
           </p>
         ) : (
-          <div className="texts-grid">
-            {sourceTexts.map((text) => (
-              <div key={text.id} className="text-card">
-                <h4>
-                  <Link to={`/source-texts/${text.id}`}>{text.title}</Link>
-                </h4>
-
-                <div className="text-info">
-                  <span className="word-count">
-                    {(text.content?.split(" ").length || 0).toLocaleString()}{" "}
-                    words
-                  </span>
-                  {text.gutenberg_id && (
-                    <span className="gutenberg-id">
-                      ID: {text.gutenberg_id}
-                    </span>
-                  )}
-                </div>
-                <p className="preview">{text.content_preview}</p>
-              </div>
-            ))}
+          <div className="texts-table-container">
+            <table className="texts-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Word Count</th>
+                  <th>Gutenberg ID</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sourceTexts.map((text) => (
+                  <tr key={text.id}>
+                    <td className="title-cell">
+                      <Link
+                        to={`/source-texts/${text.id}`}
+                        className="title-link"
+                      >
+                        {text.title}
+                      </Link>
+                    </td>
+                    <td className="word-count-cell">
+                      {(text.word_count || 0).toLocaleString()}
+                    </td>
+                    <td className="gutenberg-id-cell">
+                      {text.gutenberg_id || "—"}
+                    </td>
+                    <td className="actions-cell">
+                      <Link
+                        to={`/source-texts/${text.id}`}
+                        className="btn btn-ghost btn-sm"
+                      >
+                        View Details
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
