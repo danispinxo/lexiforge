@@ -1,6 +1,6 @@
 class Api::V1::PoemsController < ApplicationController
   before_action :set_poem, only: %i[show edit update destroy]
-  before_action :set_source_text, only: [:generate_cut_up]
+  before_action :set_source_text, only: [:generate_cut_up, :generate_erasure]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
@@ -102,7 +102,7 @@ class Api::V1::PoemsController < ApplicationController
 
     # Create and save the poem
     @poem = @source_text.poems.build(
-      title: generate_poem_title(@source_text),
+      title: generate_poem_title(@source_text, 'cutup'),
       content: cut_up_content,
       technique_used: 'cutup'
     )
@@ -111,6 +111,51 @@ class Api::V1::PoemsController < ApplicationController
       render json: {
         success: true,
         message: "Cut-up poem successfully generated from '#{@source_text.title}'!",
+        poem: {
+          id: @poem.id,
+          title: @poem.title,
+          content: @poem.content,
+          technique_used: @poem.technique_used,
+          source_text_id: @poem.source_text_id
+        }
+      }
+    else
+      render json: {
+        success: false,
+        message: "Failed to generate poem: #{@poem.errors.full_messages.join(', ')}"
+      }, status: :unprocessable_entity
+    end
+  end
+
+  def generate_erasure
+    if @source_text.content.blank?
+      redirect_to @source_text, alert: 'Cannot generate poem: source text has no content.'
+      return
+    end
+
+    generator = ErasureGenerator.new(@source_text)
+    method = params[:method] || 'erasure'
+
+    options = { method: method }
+
+    if method == 'erasure'
+      options[:num_pages] = params[:num_pages] || 3
+      options[:words_per_page] = params[:words_per_page] || 50
+      options[:words_to_keep] = params[:words_to_keep] || 8
+    end
+
+    erasure_content = generator.generate(options)
+
+    @poem = @source_text.poems.build(
+      title: generate_poem_title(@source_text, 'erasure'),
+      content: erasure_content,
+      technique_used: 'erasure'
+    )
+
+    if @poem.save
+      render json: {
+        success: true,
+        message: "Erasure poem successfully generated from '#{@source_text.title}'!",
         poem: {
           id: @poem.id,
           title: @poem.title,
@@ -141,9 +186,10 @@ class Api::V1::PoemsController < ApplicationController
     params.require(:poem).permit(:title, :content, :technique_used, :source_text_id)
   end
 
-  def generate_poem_title(source_text)
-    base_title = source_text.title.split.first(3).join(' ') # Take first 3 words
+  def generate_poem_title(source_text, technique)
+    base_title = source_text.title.split.first(3).join(' ')
     timestamp = Time.current.strftime('%m/%d %H:%M')
-    "Cut-Up: #{base_title} (#{timestamp})"
+    technique_label = technique.capitalize.gsub('_', '-')
+    "#{technique_label}: #{base_title} (#{timestamp})"
   end
 end
