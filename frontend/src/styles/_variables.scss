@@ -1,61 +1,88 @@
-// Color Variables
-$primary-color: #6f42c1;
-$primary-light: rgba(111, 66, 193, 0.1);
-$white: #ffffff;
-$black: #000000;
-$gray-light: #f8f9fa;
-$gray-medium: #6c757d;
-$gray-dark: #343a40;
+$primary-color: #d4af37;
+$primary-dark: #b8941f;
+$secondary-color: #8b4513;
+$accent-color: #dc143c;
+$accent-muted: #a0522d;
 
-// Color scheme variables
-$light-text: #213547;
-$light-bg: #ffffff;
-$dark-text: rgba(255, 255, 255, 0.87);
-$dark-bg: #242424;
+$black: #0d0d0d;
+$charcoal: #1a1a1a;
+$dark-gray: #2d2d2d;
+$medium-gray: #4a4a4a;
+$light-gray: #6d6d6d;
+$warm-white: #f5f4f0;
+$cream: #faf8f3;
+$parchment: #f0ead6;
 
-// Link colors
-$link-color: #646cff;
-$link-hover: #535bf2;
-$link-hover-light: #747bff;
+$bg-primary: $charcoal;
+$bg-secondary: $dark-gray;
+$bg-accent: #252525;
+$bg-overlay: rgba(13, 13, 13, 0.95);
 
-// Button colors
-$button-bg-light: #f9f9f9;
-$button-bg-dark: #1a1a1a;
+$text-primary: $warm-white;
+$text-secondary: #c9c7c4;
+$text-muted: #a8a6a3;
+$text-accent: $primary-color;
 
-// Spacing
+$link-color: $primary-color;
+$link-hover: lighten($primary-color, 15%);
+$link-visited: darken($primary-color, 10%);
+
+$paper-bg: #f4f1eb;
+$ink-blue: #1e3a5f;
+$vintage-red: #8b0000;
+$library-green: #355e3b;
+
 $spacing-xs: 0.25rem;
 $spacing-sm: 0.5rem;
 $spacing-md: 1rem;
 $spacing-lg: 1.5rem;
 $spacing-xl: 2rem;
 
-// Font sizes
+$font-size-xs: 0.75rem;
 $font-size-sm: 0.875rem;
 $font-size-base: 1rem;
 $font-size-lg: 1.125rem;
 $font-size-xl: 1.25rem;
 $font-size-2xl: 1.5rem;
 $font-size-3xl: 1.875rem;
-$font-size-4xl: 2.25rem;
+$font-size-4xl: 2.5rem;
+$font-size-5xl: 3rem;
 
-// Font families
-$font-family-base: system-ui, Avenir, Helvetica, Arial, sans-serif;
-$font-family-ui: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+$font-serif: "Crimson Text", "Playfair Display", "EB Garamond", Georgia, serif;
+$font-sans: "Inter", "Source Sans Pro", system-ui, sans-serif;
+$font-mono: "JetBrains Mono", "Fira Code", "Source Code Pro", monospace;
+$font-display: "Oswald", "Bebas Neue", "Anton", Impact, sans-serif;
+$font-handwriting: "Kalam", "Caveat", cursive;
 
-// Border radius
-$border-radius-sm: 4px;
-$border-radius-md: 8px;
+$weight-light: 300;
+$weight-normal: 400;
+$weight-medium: 500;
+$weight-semibold: 600;
+$weight-bold: 700;
+$weight-black: 900;
 
-// Shadows
-$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-$shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+$border-radius-sm: 2px;
+$border-radius-md: 6px;
+$border-radius-lg: 12px;
+$border-radius-xl: 20px;
 
-// Transitions
-$transition-fast: 0.2s;
-$transition-normal: 0.25s;
+$shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+$shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.4);
+$shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.5);
+$shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.6);
+$shadow-dramatic: 0 16px 64px rgba(0, 0, 0, 0.7);
 
-// Breakpoints
+$glow-gold: 0 0 20px rgba(212, 175, 55, 0.3);
+$glow-red: 0 0 20px rgba(220, 20, 60, 0.3);
+$glow-warm: 0 0 15px rgba(245, 244, 240, 0.1);
+
+$transition-fast: 0.15s ease-out;
+$transition-normal: 0.3s ease-out;
+$transition-slow: 0.5s ease-out;
+
+$ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+$ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;

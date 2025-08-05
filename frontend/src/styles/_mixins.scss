@@ -1,67 +1,200 @@
-// Button mixin
+@import "variables";
+
+@mixin heading-display {
+  font-family: $font-display;
+  font-weight: $weight-black;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+@mixin heading-serif {
+  font-family: $font-serif;
+  font-weight: $weight-semibold;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+@mixin body-text {
+  font-family: $font-serif;
+  font-weight: $weight-normal;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+@mixin small-caps {
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  font-weight: $weight-medium;
+}
+
 @mixin button-base {
-  padding: $spacing-sm $spacing-md;
+  font-family: $font-sans;
+  font-weight: $weight-medium;
+  font-size: $font-size-sm;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  padding: $spacing-sm $spacing-lg;
   border: none;
   border-radius: $border-radius-sm;
-  text-decoration: none;
-  display: inline-block;
   cursor: pointer;
-  transition: all $transition-fast ease;
-  font-size: $font-size-base;
-  font-weight: 500;
-  font-family: inherit;
-  text-align: center;
-  
+  transition: all $transition-normal $ease-out-expo;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.03) 50%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
+    transform: none !important;
   }
 }
 
-// Button variants
 @mixin button-primary {
   @include button-base;
-  background-color: $primary-color;
-  color: $white;
-  
+  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+  color: $black;
+  box-shadow: $shadow-medium;
+
   &:hover:not(:disabled) {
-    background-color: darken($primary-color, 10%);
-    transform: translateY(-1px);
+    background: linear-gradient(
+      135deg,
+      lighten($primary-color, 10%) 0%,
+      $primary-color 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: $shadow-heavy, $glow-gold;
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }
 
 @mixin button-secondary {
   @include button-base;
-  background-color: transparent;
+  background: transparent;
   color: $primary-color;
   border: 1px solid $primary-color;
-  
+  box-shadow: $shadow-subtle;
+
   &:hover:not(:disabled) {
-    background-color: $primary-color;
-    color: $white;
+    background: $primary-color;
+    color: $black;
+    transform: translateY(-1px);
+    box-shadow: $shadow-medium, $glow-gold;
   }
 }
 
 @mixin button-danger {
   @include button-base;
-  background-color: #dc3545;
-  color: $white;
-  
+  background: linear-gradient(
+    135deg,
+    $accent-color 0%,
+    darken($accent-color, 15%) 100%
+  );
+  color: $warm-white;
+  box-shadow: $shadow-medium;
+
   &:hover:not(:disabled) {
-    background-color: darken(#dc3545, 10%);
+    background: linear-gradient(
+      135deg,
+      lighten($accent-color, 10%) 0%,
+      $accent-color 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: $shadow-heavy, $glow-red;
   }
 }
 
-// Card mixin
-@mixin card {
-  background: $white;
-  border-radius: $border-radius-md;
-  box-shadow: $shadow-md;
-  padding: $spacing-xl;
-  margin-bottom: $spacing-lg;
+@mixin button-ghost {
+  @include button-base;
+  background: transparent;
+  color: $text-secondary;
+  border: 1px solid $medium-gray;
+
+  &:hover:not(:disabled) {
+    color: $text-primary;
+    border-color: $primary-color;
+    box-shadow: $glow-warm;
+  }
 }
 
-// Flex utilities
+// Card mixin - Academic paper meets concert poster
+@mixin card {
+  background: $bg-secondary;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-medium;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-lg;
+  position: relative;
+  border: 1px solid rgba($primary-color, 0.1);
+
+  // Subtle paper texture
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 20% 80%,
+        rgba($primary-color, 0.03) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba($accent-color, 0.02) 0%,
+        transparent 50%
+      );
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-heavy;
+    border-color: rgba($primary-color, 0.2);
+  }
+}
+
+@mixin card-paper {
+  @include card;
+  background: linear-gradient(145deg, $paper-bg 0%, darken($paper-bg, 5%) 100%);
+  color: $ink-blue;
+
+  &::before {
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 1px,
+      rgba($ink-blue, 0.03) 1px,
+      rgba($ink-blue, 0.03) 2px
+    );
+  }
+}
+
+// Layout utilities
 @mixin flex-center {
   display: flex;
   justify-content: center;
@@ -74,7 +207,133 @@
   align-items: center;
 }
 
-// Media query mixins
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin grid-responsive($min-width: 300px) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
+  gap: $spacing-lg;
+}
+
+// Text effects
+@mixin text-glow($color: $primary-color) {
+  text-shadow: 0 0 10px rgba($color, 0.5);
+}
+
+@mixin text-shadow-heavy {
+  text-shadow: 2px 2px 4px rgba($black, 0.8);
+}
+
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-fade-in {
+  animation: fadeInText 0.8s $ease-out-expo;
+}
+
+// Academic elements
+@mixin manuscript-style {
+  font-family: $font-serif;
+  line-height: 1.8;
+  font-size: $font-size-lg;
+  color: $ink-blue;
+  background: $paper-bg;
+  padding: $spacing-xl;
+  border-radius: $border-radius-sm;
+  box-shadow: inset 0 0 0 1px rgba($ink-blue, 0.1);
+
+  // Vintage paper effect
+  background-image: linear-gradient(
+      90deg,
+      transparent 79px,
+      rgba($ink-blue, 0.1) 81px,
+      transparent 82px
+    ),
+    linear-gradient(rgba($ink-blue, 0.05) 1px, transparent 1px);
+  background-size: 100% 1.5em;
+  background-position: 0 0;
+}
+
+@mixin library-label {
+  @include small-caps;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  background: rgba($medium-gray, 0.2);
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-sm;
+  border: 1px solid rgba($medium-gray, 0.3);
+}
+
+// Indie rock elements
+@mixin concert-poster {
+  background: linear-gradient(45deg, $charcoal 0%, $dark-gray 100%);
+  color: $warm-white;
+  padding: $spacing-xl;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-dramatic;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      rgba($primary-color, 0.1) 0%,
+      transparent 70%
+    );
+    animation: rotate 20s linear infinite;
+  }
+}
+
+@mixin vinyl-texture {
+  background: radial-gradient(
+      circle at center,
+      transparent 20%,
+      rgba($black, 0.1) 21%,
+      rgba($black, 0.1) 22%,
+      transparent 23%
+    ),
+    conic-gradient(from 0deg, $charcoal, $dark-gray, $charcoal, $dark-gray);
+  border-radius: 50%;
+}
+
+// Modal styling
+@mixin modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $bg-overlay;
+  backdrop-filter: blur(8px);
+  @include flex-center;
+  z-index: 1000;
+  animation: fadeIn 0.3s $ease-out-expo;
+}
+
+@mixin modal-content {
+  background: $bg-secondary;
+  border-radius: $border-radius-lg;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: $shadow-dramatic;
+  border: 1px solid rgba($primary-color, 0.2);
+  animation: slideUpFadeIn 0.4s $ease-out-expo;
+}
+
+// Responsive design mixins
 @mixin mobile {
   @media (max-width: #{$breakpoint-sm - 1px}) {
     @content;
@@ -93,13 +352,7 @@
   }
 }
 
-// Text utilities
-@mixin text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+// Accessibility
 @mixin visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -110,4 +363,60 @@
   clip: rect(0, 0, 0, 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
+}
+
+@mixin focus-outline {
+  outline: 2px solid $primary-color;
+  outline-offset: 2px;
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInText {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba($primary-color, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba($primary-color, 0.8);
+  }
 }
