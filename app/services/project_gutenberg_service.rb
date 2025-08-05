@@ -44,9 +44,9 @@ class ProjectGutenbergService
 
   def fetch_text_content(gutenberg_id)
     text_urls = [
-      "/files/#{gutenberg_id}/#{gutenberg_id}-0.txt",  # UTF-8
-      "/files/#{gutenberg_id}/#{gutenberg_id}.txt",    # ASCII
-      "/cache/epub/#{gutenberg_id}/pg#{gutenberg_id}.txt" # Alternative format
+      "/files/#{gutenberg_id}/#{gutenberg_id}-0.txt",
+      "/files/#{gutenberg_id}/#{gutenberg_id}.txt",
+      "/cache/epub/#{gutenberg_id}/pg#{gutenberg_id}.txt"
     ]
 
     text_urls.each do |url|
