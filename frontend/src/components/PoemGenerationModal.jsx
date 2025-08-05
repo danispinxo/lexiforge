@@ -219,7 +219,9 @@ function PoemGenerationModal({
                       onChange={(e) => setIsBlackout(e.target.checked)}
                       disabled={generating}
                     />
-                    <span className="checkbox-text">Blackout</span>
+                    <span className="checkbox-text">
+                      Use blackout style (█ blocks instead of spaces)
+                    </span>
                   </label>
                 </div>
               </>

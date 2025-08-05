@@ -87,7 +87,8 @@ function PoemDetail() {
                     return parsedContent.pages.map((page) => (
                       <div key={page.number} className="erasure-page">
                         <div className="page-number">Page {page.number}</div>
-                        {parsedContent.is_blackout ? (
+                        {poem.technique_used === "blackout" ||
+                        parsedContent.is_blackout ? (
                           <div
                             className="page-content blackout-content"
                             dangerouslySetInnerHTML={{ __html: page.content }}
