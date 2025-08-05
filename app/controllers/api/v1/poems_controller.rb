@@ -142,14 +142,16 @@ class Api::V1::PoemsController < ApplicationController
       options[:num_pages] = params[:num_pages] || 3
       options[:words_per_page] = params[:words_per_page] || 50
       options[:words_to_keep] = params[:words_to_keep] || 8
+      options[:is_blackout] = params[:is_blackout] || false
     end
 
     erasure_content = generator.generate(options)
 
+    technique_name = options[:is_blackout] ? 'blackout' : 'erasure'
     @poem = @source_text.poems.build(
-      title: generate_poem_title(@source_text, 'erasure'),
+      title: generate_poem_title(@source_text, technique_name),
       content: erasure_content,
-      technique_used: 'erasure'
+      technique_used: technique_name
     )
 
     if @poem.save

@@ -20,6 +20,7 @@ class ErasureGenerator
     num_pages = options[:num_pages] || 3
     words_per_page = options[:words_per_page] || 50
     words_to_keep = options[:words_to_keep] || 8
+    is_blackout = options[:is_blackout] || false
 
     original_text = @source_text.content.strip
     
@@ -36,13 +37,14 @@ class ErasureGenerator
       excerpt = extract_text_excerpt(original_text, start_pos, words_per_page)
       next if excerpt.strip.empty?
       
-      erased_page = create_prose_erasure(excerpt, words_to_keep)
+      erased_page = create_prose_erasure(excerpt, words_to_keep, is_blackout)
       pages << erased_page
     end
 
     # Format pages for frontend display
     result = {
       type: 'erasure_pages',
+      is_blackout: is_blackout,
       pages: pages.map.with_index(1) do |page, index|
         {
           number: index,
@@ -89,7 +91,7 @@ class ErasureGenerator
     excerpt
   end
 
-  def create_prose_erasure(text, words_to_keep)
+  def create_prose_erasure(text, words_to_keep, is_blackout = false)
     words_with_spacing = extract_words_with_spacing(text)
     
     return text if words_with_spacing.length < 2
@@ -111,7 +113,11 @@ class ErasureGenerator
       elsif keep_indices.include?(index)
         result += item[:text]
       else
-        result += " " * item[:text].length
+        if is_blackout
+          result += "<span class='blackout-word'>#{'█' * item[:text].length}</span>"
+        else
+          result += " " * item[:text].length
+        end
       end
     end
     
@@ -125,14 +131,12 @@ class ErasureGenerator
     
     text.each_char do |char|
       if char =~ /\s/
-        # We hit whitespace
         if !current_word.empty?
           result << { type: :word, text: current_word }
           current_word = ""
         end
         current_space += char
       else
-        # We hit a non-whitespace character
         if !current_space.empty?
           result << { type: :space, text: current_space }
           current_space = ""
@@ -141,7 +145,6 @@ class ErasureGenerator
       end
     end
     
-    # Don't forget the last word or space
     result << { type: :word, text: current_word } if !current_word.empty?
     result << { type: :space, text: current_space } if !current_space.empty?
     
