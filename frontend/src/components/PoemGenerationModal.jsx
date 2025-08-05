@@ -14,6 +14,7 @@ function PoemGenerationModal({
   const [numPages, setNumPages] = useState(3);
   const [wordsPerPage, setWordsPerPage] = useState(50);
   const [wordsToKeep, setWordsToKeep] = useState(8);
+  const [isBlackout, setIsBlackout] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -36,6 +37,7 @@ function PoemGenerationModal({
           num_pages: numPages,
           words_per_page: wordsPerPage,
           words_to_keep: wordsToKeep,
+          is_blackout: isBlackout,
         });
       }
 
@@ -207,6 +209,18 @@ function PoemGenerationModal({
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={isBlackout}
+                      onChange={(e) => setIsBlackout(e.target.checked)}
+                      disabled={generating}
+                    />
+                    <span className="checkbox-text">Blackout</span>
+                  </label>
                 </div>
               </>
             )}

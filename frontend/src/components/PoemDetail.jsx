@@ -71,10 +71,14 @@ function PoemDetail() {
         <h3>Poem</h3>
         <div
           className={`poem-text ${
-            poem.technique_used === "erasure" ? "erasure-poem" : "lineated-poem"
+            poem.technique_used === "erasure" ||
+            poem.technique_used === "blackout"
+              ? "erasure-poem"
+              : "lineated-poem"
           }`}
         >
-          {poem.technique_used === "erasure" ? (
+          {poem.technique_used === "erasure" ||
+          poem.technique_used === "blackout" ? (
             <div className="erasure-pages-container">
               {(() => {
                 try {
@@ -83,12 +87,18 @@ function PoemDetail() {
                     return parsedContent.pages.map((page) => (
                       <div key={page.number} className="erasure-page">
                         <div className="page-number">Page {page.number}</div>
-                        <pre className="page-content">{page.content}</pre>
+                        {parsedContent.is_blackout ? (
+                          <div
+                            className="page-content blackout-content"
+                            dangerouslySetInnerHTML={{ __html: page.content }}
+                          />
+                        ) : (
+                          <pre className="page-content">{page.content}</pre>
+                        )}
                       </div>
                     ));
                   }
                 } catch {
-                  // Fallback for old format or malformed JSON
                   return <pre className="erasure-text">{poem.content}</pre>;
                 }
                 return <pre className="erasure-text">{poem.content}</pre>;
