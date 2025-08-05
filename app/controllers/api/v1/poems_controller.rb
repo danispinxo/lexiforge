@@ -92,8 +92,8 @@ class Api::V1::PoemsController < ApplicationController
     options = { method: method }
 
     if method == 'cut_up'
-      options[:num_lines] = params[:num_lines] || 12
-      options[:words_per_line] = params[:words_per_line] || 6
+      options[:num_lines] = (params[:num_lines] || 12).to_i
+      options[:words_per_line] = (params[:words_per_line] || 6).to_i
     else
       options[:size] = params[:size] || 'medium'
     end
@@ -139,10 +139,10 @@ class Api::V1::PoemsController < ApplicationController
     options = { method: method }
 
     if method == 'erasure'
-      options[:num_pages] = params[:num_pages] || 3
-      options[:words_per_page] = params[:words_per_page] || 50
-      options[:words_to_keep] = params[:words_to_keep] || 8
-      options[:is_blackout] = params[:is_blackout] || false
+      options[:num_pages] = (params[:num_pages] || 3).to_i
+      options[:words_per_page] = (params[:words_per_page] || 50).to_i
+      options[:words_to_keep] = (params[:words_to_keep] || 8).to_i
+      options[:is_blackout] = params[:is_blackout] == 'true' || params[:is_blackout] == true
     end
 
     erasure_content = generator.generate(options)
