@@ -77,20 +77,30 @@ select {
   font-weight: normal;
   font-family: $font-sans;
   color: $text-secondary;
-  transition: all $transition-fast;
-
-  &:hover {
-    color: $text-primary;
-  }
+  border-radius: $border-radius-sm;
+  position: relative;
 
   input[type="checkbox"] {
-    margin-right: $spacing-sm;
-    transform: scale(1.2);
+    margin-right: $spacing-md;
+    cursor: pointer;
     accent-color: $primary-color;
+
+    &:focus,
+    &:focus-visible,
+    &:active,
+    &:focus-within {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
   }
 }
 
 .checkbox-text {
-  font-size: $font-size-sm;
   @include small-caps;
+
+  font-size: $font-size-sm;
+  letter-spacing: 0.03em;
+  font-weight: $weight-medium;
+  user-select: none;
 }
