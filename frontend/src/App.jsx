@@ -10,7 +10,7 @@ function App() {
     <Router>
       <div className="app">
         <header className="app-header">
-          <h1>📚 LexiForge</h1>
+          <h1>LexiForge</h1>
           <nav>
             <Link to="/source-texts">Source Texts</Link>
             <Link to="/poems">Poems</Link>

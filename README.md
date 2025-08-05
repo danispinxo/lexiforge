@@ -1,4 +1,4 @@
-# 📚 LexiForge
+# LexiForge
 
 **A digital cut-up poetry generator powered by classic literature from Project Gutenberg**
 
@@ -6,12 +6,12 @@ LexiForge transforms classic texts into experimental poetry using the cut-up tec
 
 ## ✨ Features
 
-- 🌐 **Project Gutenberg Integration** - Import any of 60,000+ free books directly via API
-- ✂️ **Cut-Up Poetry Generation** - Transform prose into experimental poetry using randomization
-- 📖 **Source Text Management** - Store and organize your literary collection
-- 🎨 **Clean, Modern Interface** - Intuitive web interface for seamless text manipulation
-- 🔍 **Popular Classics** - Quick access to beloved works like Pride & Prejudice, Alice in Wonderland
-- 📊 **Text Analytics** - View word counts and content previews
+- **Project Gutenberg Integration** - Import any of 60,000+ free books directly via API
+- **Cut-Up Poetry Generation** - Transform prose into experimental poetry using randomization
+- **Source Text Management** - Store and organize your literary collection
+- **Clean, Modern Interface** - Intuitive web interface for seamless text manipulation
+- **Popular Classics** - Quick access to beloved works like Pride & Prejudice, Alice in Wonderland
+- **Text Analytics** - View word counts and content previews
 
 ## 🚀 Quick Start
 
@@ -40,7 +40,7 @@ rails server
 
 Visit `http://localhost:3000/source_texts` to begin importing texts!
 
-## 📖 Usage
+## Usage
 
 ### Importing from Project Gutenberg
 
@@ -67,7 +67,7 @@ Visit `http://localhost:3000/source_texts` to begin importing texts!
 3. Watch as lines are shuffled to create experimental verse
 4. Save your favorite generated poems
 
-## 🛠️ Technical Architecture
+## Technical Architecture
 
 ### Services
 
@@ -94,7 +94,7 @@ Visit `http://localhost:3000/source_texts` to begin importing texts!
   - Links to source text for traceability
   - Preserves creative output for review
 
-## 🎨 The Cut-Up Technique
+## The Cut-Up Technique
 
 The cut-up technique is a literary method in which written text is cut up and rearranged to create new text. Originally developed by artist Brion Gysin and popularized by writer William S. Burroughs, this method reveals hidden meanings and creates unexpected juxtapositions.
 
@@ -105,7 +105,7 @@ LexiForge automates this process digitally, allowing you to:
 - Create unique poetic compositions from prose
 - Explore the intersection of tradition and avant-garde
 
-## 🔧 API Integration Details
+## API Integration Details
 
 ### Project Gutenberg URLs
 
@@ -117,7 +117,7 @@ LexiForge attempts to fetch texts from multiple URL patterns:
 /cache/epub/{id}/pg{id}.txt # Alternative format
 ```
 
-## 📚 Resources
+## Resources
 
 - [Project Gutenberg](https://www.gutenberg.org/) - Source of public domain texts
 - [Cut-up Technique](https://en.wikipedia.org/wiki/Cut-up_technique) - Literary background
