@@ -32,7 +32,7 @@ function PoemDetail() {
     <div className="poem-detail">
       <div className="header">
         <Link to="/poems" className="back-link">
-          ← Back to All Poems
+          Back to All Poems
         </Link>
         <div className="actions">
           <Link
