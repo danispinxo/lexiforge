@@ -13,7 +13,7 @@ function SourceTextDetail() {
 
   useEffect(() => {
     loadSourceText();
-  }, [id]);
+  });
 
   const loadSourceText = async () => {
     try {
@@ -32,9 +32,7 @@ function SourceTextDetail() {
     loadSourceText();
   };
 
-  const handleNavigateToPoem = (poemId) => {
-    navigate(`/poems/${poemId}`);
-  };
+  const handleNavigateToPoem = (poemId) => navigate(`/poems/${poemId}`);
 
   if (loading) return <div className="loading">Loading...</div>;
   if (!sourceText) return <div className="error">Source text not found</div>;
@@ -43,7 +41,7 @@ function SourceTextDetail() {
     <div className="source-text-detail">
       <div className="header">
         <Link to="/source-texts" className="back-link">
-          ← Back to Source Texts
+          Back to Source Texts
         </Link>
         <div className="actions">
           <Link to="/poems" className="btn btn-secondary">
@@ -89,15 +87,32 @@ function SourceTextDetail() {
       <div className="content">
         <h3>Content Preview</h3>
         <div className="text-content">
-          {sourceText.content
-            .split("\n\n")
-            .slice(0, 10)
-            .map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          {sourceText.content.split("\n\n").length > 10 && (
-            <p className="truncated">... (content truncated)</p>
-          )}
+          {(() => {
+            const truncatedText = sourceText.content.substring(0, 9990) + "...";
+            let paragraphs = truncatedText.split("\n\n");
+
+            if (paragraphs.length === 1) {
+              paragraphs = truncatedText
+                .split("\n")
+                .filter((p) => p.trim().length > 0);
+            }
+
+            if (paragraphs.length === 1) {
+              paragraphs = truncatedText
+                .split(/\.\s+(?=[A-Z])/)
+                .map((p) => p + ".");
+            }
+
+            return paragraphs.map((paragraph, index) => {
+              const cleanParagraph = paragraph.trim();
+              const truncatedParagraph =
+                cleanParagraph.length > 500
+                  ? cleanParagraph.substring(0, 500) + "..."
+                  : cleanParagraph;
+              return <p key={index}>{truncatedParagraph}</p>;
+            });
+          })()}
+          <p className="truncated">... (content preview truncated)</p>
         </div>
       </div>
 

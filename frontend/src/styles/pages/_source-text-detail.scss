@@ -1,0 +1,115 @@
+@import "../variables";
+@import "../mixins";
+
+.source-text-detail {
+  .content {
+    margin-top: $spacing-xl;
+
+    h3 {
+      color: $text-primary;
+      margin-bottom: $spacing-lg;
+    }
+
+    .text-content {
+      @include manuscript-style;
+      color: $ink-blue;
+      background: $paper-bg;
+      padding: $spacing-xl $spacing-xl $spacing-xl 120px;
+      margin-left: 0;
+      position: relative;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 80px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(
+          to bottom,
+          transparent 0%,
+          rgba($accent-color, 0.3) 10%,
+          rgba($accent-color, 0.3) 90%,
+          transparent 100%
+        );
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 78px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: rgba($accent-color, 0.6);
+      }
+
+      p {
+        color: $ink-blue;
+        margin-bottom: $spacing-md;
+        line-height: 1.7;
+        text-align: justify;
+        text-indent: $spacing-lg;
+
+        &:first-child {
+          text-indent: 0;
+        }
+      }
+
+      .truncated {
+        color: rgba($ink-blue, 0.6);
+        font-style: italic;
+        text-align: center;
+        margin-top: $spacing-lg;
+        padding-top: $spacing-md;
+        border-top: 1px solid rgba($ink-blue, 0.2);
+        text-indent: 0;
+      }
+    }
+  }
+
+  .text-info {
+    h1 {
+      color: $text-primary;
+    }
+
+    .metadata {
+      .word-count,
+      .gutenberg-id,
+      .poems-count {
+        @include library-label;
+        background: rgba($medium-gray, 0.2);
+        color: $text-secondary;
+        border-color: rgba($medium-gray, 0.3);
+      }
+    }
+  }
+
+  .message {
+    &.success {
+      background: rgba($library-green, 0.1);
+      color: lighten($library-green, 20%);
+      border-left-color: $library-green;
+    }
+
+    &.error {
+      background: rgba($accent-color, 0.1);
+      color: lighten($accent-color, 20%);
+      border-left-color: $accent-color;
+    }
+  }
+}
+
+@include mobile {
+  .source-text-detail .content .text-content {
+    padding: $spacing-lg $spacing-md $spacing-lg 60px;
+
+    &::before {
+      left: 40px;
+    }
+
+    &::after {
+      left: 38px;
+    }
+  }
+}
