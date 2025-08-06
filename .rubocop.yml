@@ -43,7 +43,11 @@ Rails/FilePath:
 Performance:
   Enabled: true
 
+Metrics/AbcSize:
+  Max: 25
+
 Metrics/BlockLength:
+  Max: 150
   Exclude:
     - "config/routes.rb"
     - "spec/**/*"
@@ -52,7 +56,11 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 180
 
+Metrics/CyclomaticComplexity:
+  Max: 10
+
 Metrics/MethodLength:
   Max: 50
-  Exclude:
-    - "db/migrate/*.rb"
+
+Metrics/PerceivedComplexity:
+  Max: 10
