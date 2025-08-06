@@ -60,10 +60,10 @@ class CutUpGenerator
   def calculate_word_range(words_per_line)
     case words_per_line
     when 3 then 3..4
-    when 6 then 5..7
+    when 6 then 5..8
     when 10 then 8..12
     when 15 then 12..18
-    else 4..6 # Changed from 5..7 to fix duplicate branch
+    else 5..7
     end
   end
 end

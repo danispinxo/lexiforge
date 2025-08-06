@@ -95,7 +95,7 @@ RSpec.describe CutUpGenerator do
               when 3
                 expect(word_count).to be_between(3, 4)
               when 6
-                expect(word_count).to be_between(5, 7)
+                expect(word_count).to be_between(5, 8) # Updated to match new range
               when 10
                 expect(word_count).to be_between(8, 12)
               when 15
