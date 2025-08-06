@@ -15,8 +15,7 @@ function Poems() {
     try {
       const response = await poemsAPI.getAll();
       setPoems(response.data);
-    } catch (error) {
-      console.error("Error loading poems:", error);
+    } catch {
       setError("Error loading poems");
     } finally {
       setLoading(false);
