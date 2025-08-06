@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       member do
         post :generate_cut_up, to: 'poems#generate_cut_up'
         post :generate_erasure, to: 'poems#generate_erasure'
+        post :generate_snowball, to: 'poems#generate_snowball'
       end
     end
     

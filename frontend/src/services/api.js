@@ -26,6 +26,8 @@ export const poemsAPI = {
     api.post(`/source_texts/${sourceTextId}/generate_cut_up`, options),
   generateErasure: (sourceTextId, options = {}) =>
     api.post(`/source_texts/${sourceTextId}/generate_erasure`, options),
+  generateSnowball: (sourceTextId, options = {}) =>
+    api.post(`/source_texts/${sourceTextId}/generate_snowball`, options),
 };
 
 export default api;
