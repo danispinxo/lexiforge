@@ -107,6 +107,23 @@
     font-style: italic;
     font-family: $font-serif;
   }
+
+  .form-description {
+    margin-top: $spacing-md;
+    
+    .technique-description {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      font-style: italic;
+      font-family: $font-serif;
+      line-height: 1.5;
+      background: rgba($primary-color, 0.05);
+      padding: $spacing-md;
+      border-radius: $border-radius-sm;
+      border-left: 3px solid $primary-color;
+      margin: 0;
+    }
+  }
 }
 
 .modal-actions {

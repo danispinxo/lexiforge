@@ -1,6 +1,6 @@
 class Api::PoemsController < ApplicationController
   before_action :set_poem, only: %i[show edit update destroy]
-  before_action :set_source_text, only: [:generate_cut_up, :generate_erasure]
+  before_action :set_source_text, only: [:generate_cut_up, :generate_erasure, :generate_snowball]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
@@ -139,6 +139,53 @@ class Api::PoemsController < ApplicationController
       render json: {
         success: true,
         message: "Erasure poem successfully generated from '#{@source_text.title}'!",
+        poem: {
+          id: @poem.id,
+          title: @poem.title,
+          content: @poem.content,
+          technique_used: @poem.technique_used,
+          source_text_id: @poem.source_text_id
+        }
+      }
+    else
+      render json: {
+        success: false,
+        message: "Failed to generate poem: #{@poem.errors.full_messages.join(', ')}"
+      }, status: :unprocessable_entity
+    end
+  end
+
+  def generate_snowball
+    if @source_text.content.blank?
+      render json: {
+        success: false,
+        message: 'Cannot generate poem: source text has no content.'
+      }, status: :unprocessable_entity
+      return
+    end
+
+    generator = SnowballGenerator.new(@source_text)
+    method = params[:method] || 'snowball'
+
+    options = { method: method }
+
+    if method == 'snowball'
+      options[:num_lines] = (params[:num_lines] || 10).to_i
+      options[:min_word_length] = (params[:min_word_length] || 1).to_i
+    end
+
+    snowball_content = generator.generate(options)
+
+    @poem = @source_text.poems.build(
+      title: generate_poem_title(@source_text, 'snowball'),
+      content: snowball_content,
+      technique_used: 'snowball'
+    )
+
+    if @poem.save
+      render json: {
+        success: true,
+        message: "Snowball poem successfully generated from '#{@source_text.title}'!",
         poem: {
           id: @poem.id,
           title: @poem.title,
