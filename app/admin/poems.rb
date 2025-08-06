@@ -16,7 +16,6 @@ ActiveAdmin.register Poem do
     actions
   end
 
-  # Customize the show page (detail view)
   show do
     attributes_table do
       row :id
@@ -34,9 +33,10 @@ ActiveAdmin.register Poem do
       row :updated_at
     end
 
-    # Show full content in a separate panel
     panel 'Full Poem Content' do
-      div style: 'max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: serif; font-size: 14px; line-height: 1.6; padding: 15px; background: #f9f9f9; border-radius: 5px;' do
+      div style: 'max-height: 400px; overflow-y: auto; white-space: pre-wrap; ' \
+                 'font-family: serif; font-size: 14px; line-height: 1.6; ' \
+                 'padding: 15px; background: #f9f9f9; border-radius: 5px;' do
         poem.content
       end
     end

@@ -28,7 +28,8 @@ ActiveAdmin.register SourceText do
     end
 
     panel 'Full Content' do
-      div style: 'max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: monospace; font-size: 12px;' do
+      div style: 'max-height: 400px; overflow-y: auto; white-space: pre-wrap; ' \
+                 'font-family: monospace; font-size: 12px;' do
         source_text.content
       end
     end
