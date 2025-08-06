@@ -17,12 +17,12 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
 
     it 'returns all poems in JSON format' do
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
       expect(json_response.length).to eq(3)
     end
 
     it 'includes required poem attributes' do
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
       poem_data = json_response.first
 
       expect(poem_data).to have_key('id')
@@ -34,7 +34,7 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
 
     it 'includes source text information' do
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
       poem_data = json_response.first
 
       expect(poem_data['source_text']).to have_key('id')
@@ -46,16 +46,16 @@ RSpec.describe Api::PoemsController, type: :controller do
       long_poem = create(:poem, content: 'word ' * 100, source_text: source_text)
       get :index
 
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
       long_poem_data = json_response.find { |p| p['id'] == long_poem.id }
-      
+
       expect(long_poem_data['content_preview'].length).to be <= 200
     end
 
     it 'orders poems by creation date descending' do
-      json_response = JSON.parse(response.body)
-      created_dates = json_response.map { |p| Time.parse(p['created_at']) }
-      
+      json_response = response.parsed_body
+      created_dates = json_response.map { |p| Time.zone.parse(p['created_at']) }
+
       expect(created_dates).to eq(created_dates.sort.reverse)
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'returns poem details in JSON format' do
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['id']).to eq(poem.id)
         expect(json_response['title']).to eq(poem.title)
@@ -78,7 +78,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'includes full source text information' do
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['source_text']['id']).to eq(source_text.id)
         expect(json_response['source_text']['title']).to eq(source_text.title)
@@ -87,7 +87,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
     context 'with invalid poem id' do
       it 'raises ActiveRecord::RecordNotFound' do
-        expect { get :show, params: { id: 99999 } }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { get :show, params: { id: 99_999 } }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -114,7 +114,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'returns success message and poem data' do
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['success']).to be true
         expect(json_response['message']).to eq('Poem was successfully created.')
@@ -133,7 +133,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'returns error message and validation errors' do
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['success']).to be false
         expect(json_response['errors']).to be_an(Array)
@@ -163,10 +163,10 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'returns success response' do
         post :generate_cut_up, params: valid_params
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['success']).to be true
-        expect(json_response['message']).to include("Cut-up poem successfully generated")
+        expect(json_response['message']).to include('Cut-up poem successfully generated')
         expect(json_response['poem']).to have_key('id')
         expect(json_response['poem']['technique_used']).to eq('cutup')
       end
@@ -188,7 +188,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'generates appropriate poem title' do
         post :generate_cut_up, params: valid_params
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['poem']['title']).to include('Cutup:')
         expect(json_response['poem']['title']).to include(source_text.title.split.first(3).join(' '))
@@ -196,16 +196,16 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
 
     context 'with source text without content' do
-      let(:empty_source_text) { 
+      let(:empty_source_text) do
         text = build(:source_text, content: '')
         text.save(validate: false)
         text
-      }
+      end
 
       it 'returns error response' do
         post :generate_cut_up, params: { id: empty_source_text.id }
-        json_response = JSON.parse(response.body)
-        
+        json_response = response.parsed_body
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_response['success']).to be false
         expect(json_response['message']).to include('Cannot generate poem')
@@ -238,7 +238,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'returns error response' do
         post :generate_cut_up, params: valid_params
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_response['success']).to be false
@@ -266,10 +266,10 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'returns success response' do
         post :generate_erasure, params: valid_params
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['success']).to be true
-        expect(json_response['message']).to include("Erasure poem successfully generated")
+        expect(json_response['message']).to include('Erasure poem successfully generated')
         expect(json_response['poem']).to have_key('id')
       end
 
@@ -292,7 +292,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'sets technique_used to "blackout" when is_blackout is true' do
         post :generate_erasure, params: valid_params
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['poem']['technique_used']).to eq('blackout')
       end
@@ -300,7 +300,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       it 'sets technique_used to "erasure" when is_blackout is false' do
         params = valid_params.merge(is_blackout: false)
         post :generate_erasure, params: params
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['poem']['technique_used']).to eq('erasure')
       end
@@ -325,16 +325,16 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
 
     context 'with source text without content' do
-      let(:empty_source_text) { 
+      let(:empty_source_text) do
         text = build(:source_text, content: '')
         text.save(validate: false)
         text
-      }
+      end
 
       it 'returns error response' do
         post :generate_erasure, params: { id: empty_source_text.id }
-        json_response = JSON.parse(response.body)
-        
+        json_response = response.parsed_body
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_response['success']).to be false
         expect(json_response['message']).to include('Cannot generate poem')
@@ -344,11 +344,11 @@ RSpec.describe Api::PoemsController, type: :controller do
 
   describe 'private methods' do
     describe '#generate_poem_title' do
-      let(:timestamp_regex) { /\d{2}\/\d{2} \d{2}:\d{2}/ }
+      let(:timestamp_regex) { %r{\d{2}/\d{2} \d{2}:\d{2}} }
 
       it 'generates appropriate title for cutup technique' do
         title = controller.send(:generate_poem_title, source_text, 'cutup')
-        
+
         expect(title).to include('Cutup:')
         expect(title).to match(timestamp_regex)
         expect(title).to include(source_text.title.split.first(3).join(' '))
@@ -356,14 +356,14 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'generates appropriate title for erasure technique' do
         title = controller.send(:generate_poem_title, source_text, 'erasure')
-        
+
         expect(title).to include('Erasure:')
         expect(title).to match(timestamp_regex)
       end
 
       it 'handles technique names with underscores' do
         title = controller.send(:generate_poem_title, source_text, 'blackout_poetry')
-        
+
         expect(title).to include('Blackout-poetry:')
       end
     end
@@ -372,7 +372,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       it 'sets @poem instance variable' do
         controller.params = { id: poem.id }
         controller.send(:set_poem)
-        
+
         expect(controller.instance_variable_get(:@poem)).to eq(poem)
       end
     end
@@ -381,7 +381,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       it 'sets @source_text instance variable' do
         controller.params = { id: source_text.id }
         controller.send(:set_source_text)
-        
+
         expect(controller.instance_variable_get(:@source_text)).to eq(source_text)
       end
     end
@@ -402,7 +402,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       it 'permits only allowed parameters' do
         controller.params = params
         permitted = controller.send(:poem_params)
-        
+
         expect(permitted.keys).to contain_exactly('title', 'content', 'technique_used', 'source_text_id')
         expect(permitted).not_to have_key('forbidden_param')
       end

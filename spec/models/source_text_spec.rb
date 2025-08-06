@@ -7,7 +7,7 @@ RSpec.describe SourceText, type: :model do
     it { should have_many(:poems).dependent(:destroy) }
 
     it 'destroys associated poems when source text is deleted' do
-      poem = create(:poem, source_text: source_text)
+      create(:poem, source_text: source_text)
       expect { source_text.destroy }.to change(Poem, :count).by(-1)
     end
   end
@@ -21,14 +21,14 @@ RSpec.describe SourceText, type: :model do
       it 'allows multiple source texts with nil gutenberg_id' do
         create(:source_text, gutenberg_id: nil)
         source_text2 = build(:source_text, gutenberg_id: nil)
-        
+
         expect(source_text2).to be_valid
       end
 
       it 'prevents duplicate gutenberg_ids' do
         create(:source_text, :with_gutenberg_id, gutenberg_id: 1234)
         duplicate = build(:source_text, :with_gutenberg_id, gutenberg_id: 1234)
-        
+
         expect(duplicate).not_to be_valid
         expect(duplicate.errors[:gutenberg_id]).to include('has already been taken')
       end
@@ -36,7 +36,7 @@ RSpec.describe SourceText, type: :model do
       it 'allows different gutenberg_ids' do
         create(:source_text, :with_gutenberg_id, gutenberg_id: 1234)
         different = build(:source_text, :with_gutenberg_id, gutenberg_id: 5678)
-        
+
         expect(different).to be_valid
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe SourceText, type: :model do
     describe '.from_gutenberg' do
       it 'returns only source texts with gutenberg_id' do
         gutenberg_texts = SourceText.from_gutenberg
-        
+
         expect(gutenberg_texts).to include(gutenberg_text)
         expect(gutenberg_texts).not_to include(custom_text)
       end
@@ -62,7 +62,7 @@ RSpec.describe SourceText, type: :model do
     describe '.custom' do
       it 'returns only source texts without gutenberg_id' do
         custom_texts = SourceText.custom
-        
+
         expect(custom_texts).to include(custom_text)
         expect(custom_texts).not_to include(gutenberg_text)
       end
@@ -78,7 +78,7 @@ RSpec.describe SourceText, type: :model do
       it 'can have multiple poems' do
         poem1 = create(:poem, source_text: source_text)
         poem2 = create(:poem, source_text: source_text)
-        
+
         expect(source_text.poems).to include(poem1, poem2)
         expect(source_text.poems.count).to eq(2)
       end
@@ -104,22 +104,22 @@ RSpec.describe SourceText, type: :model do
       it 'preserves exact content including formatting' do
         formatted_content = "Line 1\n\nLine 3 with   spaces\tand\ttabs"
         formatted_text = create(:source_text, content: formatted_content)
-        
+
         expect(formatted_text.content).to eq(formatted_content)
       end
     end
 
     describe 'gutenberg integration' do
       it 'can store gutenberg metadata' do
-        gutenberg_text = create(:source_text, :with_gutenberg_id, gutenberg_id: 12345)
-        
-        expect(gutenberg_text.gutenberg_id).to eq(12345)
+        gutenberg_text = create(:source_text, :with_gutenberg_id, gutenberg_id: 12_345)
+
+        expect(gutenberg_text.gutenberg_id).to eq(12_345)
         expect(gutenberg_text).to be_valid
       end
 
       it 'handles custom texts without gutenberg_id' do
         custom_text = create(:source_text, gutenberg_id: nil)
-        
+
         expect(custom_text.gutenberg_id).to be_nil
         expect(custom_text).to be_valid
       end
@@ -159,23 +159,23 @@ RSpec.describe SourceText, type: :model do
 
   describe 'edge cases' do
     it 'handles very large gutenberg_id values' do
-      large_id_text = create(:source_text, gutenberg_id: 999999999)
+      large_id_text = create(:source_text, gutenberg_id: 999_999_999)
       expect(large_id_text).to be_valid
-      expect(large_id_text.gutenberg_id).to eq(999999999)
+      expect(large_id_text.gutenberg_id).to eq(999_999_999)
     end
 
     it 'handles titles with special characters' do
-      special_title = "Title with émojis 🎭 and spëcial chars!@#$%"
+      special_title = "Title with émojis 🎭 and spëcial chars!@\#$%"
       special_text = create(:source_text, title: special_title)
-      
+
       expect(special_text).to be_valid
       expect(special_text.title).to eq(special_title)
     end
 
     it 'handles content with unicode characters' do
-      unicode_content = "Content with émojis 🌟 and unicode: café, naïve, résumé"
+      unicode_content = 'Content with émojis 🌟 and unicode: café, naïve, résumé'
       unicode_text = create(:source_text, content: unicode_content)
-      
+
       expect(unicode_text).to be_valid
       expect(unicode_text.content).to eq(unicode_content)
     end
@@ -183,7 +183,7 @@ RSpec.describe SourceText, type: :model do
     it 'handles very long titles' do
       long_title = 'A' * 1000
       long_title_text = create(:source_text, title: long_title)
-      
+
       expect(long_title_text).to be_valid
       expect(long_title_text.title).to eq(long_title)
     end

@@ -1,6 +1,6 @@
 class Api::PoemsController < ApiController
   before_action :set_poem, only: %i[show edit update destroy]
-  before_action :set_source_text, only: [:generate_cut_up, :generate_erasure, :generate_snowball]
+  before_action :set_source_text, only: %i[generate_cut_up generate_erasure generate_snowball]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
@@ -123,7 +123,7 @@ class Api::PoemsController < ApiController
       options[:num_pages] = (params[:num_pages] || 3).to_i
       options[:words_per_page] = (params[:words_per_page] || 50).to_i
       options[:words_to_keep] = (params[:words_to_keep] || 8).to_i
-      options[:is_blackout] = params[:is_blackout] == 'true' || params[:is_blackout] == true
+      options[:is_blackout] = ['true', true].include?(params[:is_blackout])
     end
 
     erasure_content = generator.generate(options)
@@ -219,7 +219,7 @@ class Api::PoemsController < ApiController
   def generate_poem_title(source_text, technique)
     base_title = source_text.title.split.first(3).join(' ')
     timestamp = Time.current.strftime('%m/%d %H:%M')
-    technique_label = technique.capitalize.gsub('_', '-')
+    technique_label = technique.capitalize.tr('_', '-')
     "#{technique_label}: #{base_title} (#{timestamp})"
   end
 end
