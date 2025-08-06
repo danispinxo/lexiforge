@@ -15,6 +15,8 @@ function PoemGenerationModal({
   const [wordsPerPage, setWordsPerPage] = useState(50);
   const [wordsToKeep, setWordsToKeep] = useState(8);
   const [isBlackout, setIsBlackout] = useState(false);
+  const [snowballLines, setSnowballLines] = useState(10);
+  const [minWordLength, setMinWordLength] = useState(1);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -38,6 +40,12 @@ function PoemGenerationModal({
           words_per_page: wordsPerPage,
           words_to_keep: wordsToKeep,
           is_blackout: isBlackout,
+        });
+      } else if (technique === "snowball") {
+        response = await poemsAPI.generateSnowball(sourceText.id, {
+          method: "snowball",
+          num_lines: snowballLines,
+          min_word_length: minWordLength,
         });
       }
 
@@ -96,6 +104,23 @@ function PoemGenerationModal({
     { value: 20, label: "20 words" },
   ];
 
+  const snowballLineOptions = [
+    { value: 5, label: "5 lines" },
+    { value: 8, label: "8 lines" },
+    { value: 10, label: "10 lines" },
+    { value: 12, label: "12 lines" },
+    { value: 15, label: "15 lines" },
+    { value: 20, label: "20 lines" },
+  ];
+
+  const minWordLengthOptions = [
+    { value: 1, label: "1 character" },
+    { value: 2, label: "2 characters" },
+    { value: 3, label: "3 characters" },
+    { value: 4, label: "4 characters" },
+    { value: 5, label: "5 characters" },
+  ];
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -122,6 +147,7 @@ function PoemGenerationModal({
               >
                 <option value="cut_up">Cut-Up Poetry</option>
                 <option value="erasure">Erasure Poetry</option>
+                <option value="snowball">Snowball Poetry</option>
               </select>
             </div>
 
@@ -157,6 +183,15 @@ function PoemGenerationModal({
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    Cut-up poetry randomly selects and rearranges words from the
+                    source text to create new verse combinations. This
+                    technique, popularized by William S. Burroughs, generates
+                    unexpected juxtapositions and fresh meanings.
+                  </p>
                 </div>
               </>
             )}
@@ -223,6 +258,61 @@ function PoemGenerationModal({
                       Use blackout style (█ blocks instead of spaces)
                     </span>
                   </label>
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    Erasure poetry removes most words from existing text,
+                    leaving behind only select words that form new poems.
+                    Blackout style visually shows the erased words as solid
+                    blocks, mimicking the original erasure technique of marking
+                    out text with black ink.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {technique === "snowball" && (
+              <>
+                <div className="form-group">
+                  <label htmlFor="snowball-lines">Number of Lines:</label>
+                  <select
+                    id="snowball-lines"
+                    value={snowballLines}
+                    onChange={(e) => setSnowballLines(parseInt(e.target.value))}
+                    disabled={generating}
+                  >
+                    {snowballLineOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="min-word-length">Starting Word Length:</label>
+                  <select
+                    id="min-word-length"
+                    value={minWordLength}
+                    onChange={(e) => setMinWordLength(parseInt(e.target.value))}
+                    disabled={generating}
+                  >
+                    {minWordLengthOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    Snowball poems start with a word of your chosen length and
+                    each subsequent line contains a word that's one character
+                    longer. Perfect for creating poems with a sense of building
+                    momentum and growth.
+                  </p>
                 </div>
               </>
             )}

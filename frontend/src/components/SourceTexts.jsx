@@ -16,8 +16,7 @@ function SourceTexts() {
     try {
       const response = await sourceTextsAPI.getAll();
       setSourceTexts(response.data);
-    } catch (error) {
-      console.error("Error loading source texts:", error);
+    } catch {
       setMessage("Error loading source texts");
     }
   };
@@ -66,7 +65,6 @@ function SourceTexts() {
     },
   ];
 
-  console.log(sourceTexts);
   return (
     <div className="source-texts">
       <div className="header">

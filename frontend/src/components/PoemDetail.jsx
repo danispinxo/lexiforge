@@ -13,8 +13,7 @@ function PoemDetail() {
       try {
         const response = await poemsAPI.getById(id);
         setPoem(response.data);
-      } catch (error) {
-        console.error("Error loading poem:", error);
+      } catch {
         setError("Poem not found");
       } finally {
         setLoading(false);
