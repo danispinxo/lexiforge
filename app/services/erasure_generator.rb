@@ -17,30 +17,51 @@ class ErasureGenerator
   private
 
   def generate_erasure(options = {})
-    num_pages = options[:num_pages] || 3
-    words_per_page = options[:words_per_page] || 50
-    words_to_keep = options[:words_to_keep] || 8
-    is_blackout = options[:is_blackout] || false
-
+    config = extract_erasure_config(options)
     original_text = @source_text.content.strip
 
     return 'Not enough content in source text' if original_text.length < 100
 
+    pages = generate_erasure_pages(original_text, config)
+    format_erasure_result(pages, config[:is_blackout])
+  end
+
+  def extract_erasure_config(options)
+    {
+      num_pages: options[:num_pages] || 3,
+      words_per_page: options[:words_per_page] || 50,
+      words_to_keep: options[:words_to_keep] || 8,
+      is_blackout: options[:is_blackout] || false
+    }
+  end
+
+  def generate_erasure_pages(original_text, config)
     pages = []
 
-    num_pages.times do |_page_num|
-      max_start = [original_text.length - (words_per_page * 8), 0].max
-      start_pos = rand(max_start + 1)
-
-      start_pos = find_word_boundary(original_text, start_pos, :start)
-
-      excerpt = extract_text_excerpt(original_text, start_pos, words_per_page)
-      next if excerpt.strip.empty?
-
-      erased_page = create_prose_erasure(excerpt, words_to_keep, is_blackout)
-      pages << erased_page
+    config[:num_pages].times do
+      page = create_single_erasure_page(original_text, config)
+      pages << page if page
     end
 
+    pages
+  end
+
+  def create_single_erasure_page(original_text, config)
+    start_pos = calculate_random_start_position(original_text, config[:words_per_page])
+    start_pos = find_word_boundary(original_text, start_pos, :start)
+
+    excerpt = extract_text_excerpt(original_text, start_pos, config[:words_per_page])
+    return nil if excerpt.strip.empty?
+
+    create_prose_erasure(excerpt, words_to_keep: config[:words_to_keep], is_blackout: config[:is_blackout])
+  end
+
+  def calculate_random_start_position(text, words_per_page)
+    max_start = [text.length - (words_per_page * 8), 0].max
+    rand(max_start + 1)
+  end
+
+  def format_erasure_result(pages, is_blackout)
     {
       type: 'erasure_pages',
       is_blackout: is_blackout,
@@ -54,15 +75,38 @@ class ErasureGenerator
   end
 
   def find_word_boundary(text, pos, direction)
+    return boundary_edge_case(text, pos) if pos_at_edge?(text, pos)
+
+    direction == :start ? find_start_boundary(text, pos) : pos
+  end
+
+  def pos_at_edge?(text, pos)
+    pos <= 0 || pos >= text.length
+  end
+
+  def boundary_edge_case(text, pos)
     return 0 if pos <= 0
-    return text.length if pos >= text.length
 
-    if direction == :start
-      pos -= 1 while pos.positive? && text[pos] !~ /\s/
-      pos += 1 while pos < text.length && text[pos] =~ /\s/
-    end
+    text.length
+  end
 
+  def find_start_boundary(text, pos)
+    pos = move_to_word_start(text, pos)
+    skip_leading_whitespace(text, pos)
+  end
+
+  def move_to_word_start(text, pos)
+    pos -= 1 while pos.positive? && !whitespace_char?(text[pos])
     pos
+  end
+
+  def skip_leading_whitespace(text, pos)
+    pos += 1 while pos < text.length && whitespace_char?(text[pos])
+    pos
+  end
+
+  def whitespace_char?(char)
+    char =~ /\s/
   end
 
   def extract_text_excerpt(text, start_pos, target_word_count)
@@ -82,35 +126,52 @@ class ErasureGenerator
     excerpt
   end
 
-  def create_prose_erasure(text, words_to_keep, is_blackout = false)
+  def create_prose_erasure(text, words_to_keep:, is_blackout: false)
     words_with_spacing = extract_words_with_spacing(text)
 
     return text if words_with_spacing.length < 2
 
-    total_words = words_with_spacing.count { |item| item[:type] == :word }
+    keep_indices = select_words_to_keep(words_with_spacing, words_to_keep)
+    build_erasure_result(words_with_spacing, keep_indices, is_blackout)
+  end
+
+  def select_words_to_keep(words_with_spacing, words_to_keep)
+    word_indices = find_word_indices(words_with_spacing)
+    total_words = word_indices.length
     words_to_keep_actual = [words_to_keep, total_words].min
 
+    word_indices.sample(words_to_keep_actual)
+  end
+
+  def find_word_indices(words_with_spacing)
     word_indices = []
     words_with_spacing.each_with_index do |item, index|
       word_indices << index if item[:type] == :word
     end
+    word_indices
+  end
 
-    keep_indices = word_indices.sample(words_to_keep_actual)
-
+  def build_erasure_result(words_with_spacing, keep_indices, is_blackout)
     result = ''
     words_with_spacing.each_with_index do |item, index|
-      result += if item[:type] == :space
-                  item[:text]
-                elsif keep_indices.include?(index)
-                  item[:text]
-                elsif is_blackout
-                  "<span class='blackout-word'>#{'█' * item[:text].length}</span>"
-                else
-                  ' ' * item[:text].length
-                end
+      result += format_item_for_erasure(item, index, keep_indices, is_blackout)
     end
-
     result
+  end
+
+  def format_item_for_erasure(item, index, keep_indices, is_blackout)
+    case item[:type]
+    when :space
+      item[:text]
+    when :word
+      if keep_indices.include?(index)
+        item[:text]
+      elsif is_blackout
+        "<span class='blackout-word'>#{'█' * item[:text].length}</span>"
+      else
+        ' ' * item[:text].length
+      end
+    end
   end
 
   def extract_words_with_spacing(text)
