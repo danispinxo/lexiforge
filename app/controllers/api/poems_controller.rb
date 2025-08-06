@@ -44,7 +44,7 @@ class Api::PoemsController < ApiController
 
   def update
     if @poem.update(poem_params)
-      redirect_to @poem, notice: 'Poem was successfully updated.'
+      redirect_to @poem, notice: t('poems.notices.updated')
     else
       @source_texts = SourceText.all
       render :edit, status: :unprocessable_entity
@@ -53,7 +53,7 @@ class Api::PoemsController < ApiController
 
   def destroy
     @poem.destroy
-    redirect_to poems_url, notice: 'Poem was successfully deleted.'
+    redirect_to poems_url, notice: t('poems.notices.deleted')
   end
 
   def generate_cut_up

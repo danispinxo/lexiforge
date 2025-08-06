@@ -29,3 +29,8 @@
 
 en:
   hello: "Hello world"
+  
+  poems:
+    notices:
+      updated: "Poem was successfully updated."
+      deleted: "Poem was successfully deleted."
