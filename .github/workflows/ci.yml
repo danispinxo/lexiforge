@@ -7,7 +7,24 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  rubocop:
+    name: RuboCop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.1
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+  rspec:
+    name: RSpec
     runs-on: ubuntu-latest
 
     services:
@@ -38,6 +55,21 @@ jobs:
           ruby-version: 3.1.1
           bundler-cache: true
 
+      - name: Set up database
+        run: |
+          bin/rails db:create
+          bin/rails db:migrate
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -49,17 +81,6 @@ jobs:
         run: |
           cd frontend
           npm ci
-
-      - name: Set up database
-        run: |
-          bin/rails db:create
-          bin/rails db:migrate
-
-      - name: Run RuboCop
-        run: bundle exec rubocop
-
-      - name: Run RSpec
-        run: bundle exec rspec
 
       - name: Run ESLint
         run: |
