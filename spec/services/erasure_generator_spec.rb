@@ -141,7 +141,7 @@ RSpec.describe ErasureGenerator do
     let(:text) { 'Hello world this is a test' }
 
     context 'normal erasure' do
-      let(:result) { generator.send(:create_prose_erasure, text, 2, false) }
+      let(:result) { generator.send(:create_prose_erasure, text, words_to_keep: 2, is_blackout: false) }
 
       it 'keeps approximately the requested number of words' do
         # Count words that aren't just spaces
@@ -156,7 +156,7 @@ RSpec.describe ErasureGenerator do
     end
 
     context 'blackout erasure' do
-      let(:result) { generator.send(:create_prose_erasure, text, 2, true) }
+      let(:result) { generator.send(:create_prose_erasure, text, words_to_keep: 2, is_blackout: true) }
 
       it 'uses blackout spans for removed words' do
         expect(result).to include("<span class='blackout-word'>")
@@ -173,7 +173,7 @@ RSpec.describe ErasureGenerator do
 
     context 'with very short text' do
       let(:short_text) { 'Hi' }
-      let(:result) { generator.send(:create_prose_erasure, short_text, 5, false) }
+      let(:result) { generator.send(:create_prose_erasure, short_text, words_to_keep: 5, is_blackout: false) }
 
       it 'returns original text when too few words' do
         expect(result).to eq(short_text)
@@ -181,7 +181,7 @@ RSpec.describe ErasureGenerator do
     end
 
     context 'when keeping more words than available' do
-      let(:result) { generator.send(:create_prose_erasure, text, 20, false) }
+      let(:result) { generator.send(:create_prose_erasure, text, words_to_keep: 20, is_blackout: false) }
 
       it 'keeps all words when requested count exceeds available' do
         word_count = text.split.length
