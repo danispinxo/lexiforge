@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { sourceTextsAPI } from "../services/api";
 import PoemGenerationModal from "./PoemGenerationModal";
@@ -11,11 +11,7 @@ function SourceTextDetail() {
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    loadSourceText();
-  });
-
-  const loadSourceText = async () => {
+  const loadSourceText = useCallback(async () => {
     try {
       const response = await sourceTextsAPI.getById(id);
       setSourceText(response.data);
@@ -25,7 +21,11 @@ function SourceTextDetail() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadSourceText();
+  }, [loadSourceText]);
 
   const handlePoemGenerated = (successMessage) => {
     setMessage(successMessage);
