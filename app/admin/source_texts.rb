@@ -36,7 +36,7 @@ ActiveAdmin.register SourceText do
     panel "Generated Poems" do
       table_for source_text.poems do
         column :title
-        column :poem_type
+        column :technique_used
         column :created_at
         column "Actions" do |poem|
           link_to "View", admin_poem_path(poem), class: "button"
