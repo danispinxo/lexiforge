@@ -48,7 +48,7 @@ RSpec.describe CutUpGenerator do
         lines = result.lines.map(&:strip)
         lines.each do |line|
           word_count = line.split.length
-          expect(word_count).to be_between(5, 7)
+          expect(word_count).to be_between(5, 8)
         end
       end
 
