@@ -30,4 +30,12 @@ class Poem < ApplicationRecord
 
     content.truncate(limit, separator: ' ')
   end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["source_text"]
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["content", "created_at", "id", "id_value", "source_text_id", "technique_used", "title", "updated_at"]
+  end
 end

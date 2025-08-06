@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :exception, unless: -> { request.path.start_with?('/api') }
   
   def handle_options_request
     head :ok
