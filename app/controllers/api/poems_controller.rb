@@ -57,17 +57,24 @@ class Api::PoemsController < ApiController
   end
 
   def generate_cut_up
-    if @source_text.content.blank?
-      render json: {
-        success: false,
-        message: 'Cannot generate poem: source text has no content.'
-      }, status: :unprocessable_entity
-      return
+    return render_blank_content_error if @source_text.content.blank?
+
+    options = build_cut_up_options
+    cut_up_content = generate_cut_up_content(options)
+
+    @poem = build_cut_up_poem(cut_up_content)
+
+    if @poem.save
+      render_cut_up_success
+    else
+      render_poem_save_error
     end
+  end
 
-    generator = CutUpGenerator.new(@source_text)
+  private
+
+  def build_cut_up_options
     method = params[:method] || 'cut_up'
-
     options = { method: method }
 
     if method == 'cut_up'
@@ -77,46 +84,73 @@ class Api::PoemsController < ApiController
       options[:size] = params[:size] || 'medium'
     end
 
-    cut_up_content = generator.generate(options)
+    options
+  end
 
-    @poem = @source_text.poems.build(
+  def generate_cut_up_content(options)
+    generator = CutUpGenerator.new(@source_text)
+    generator.generate(options)
+  end
+
+  def build_cut_up_poem(content)
+    @source_text.poems.build(
       title: generate_poem_title(@source_text, 'cutup'),
-      content: cut_up_content,
+      content: content,
       technique_used: 'cutup'
     )
+  end
+
+  def render_cut_up_success
+    render json: {
+      success: true,
+      message: "Cut-up poem successfully generated from '#{@source_text.title}'!",
+      poem: poem_json_data
+    }
+  end
+
+  def poem_json_data
+    {
+      id: @poem.id,
+      title: @poem.title,
+      content: @poem.content,
+      technique_used: @poem.technique_used,
+      source_text_id: @poem.source_text_id
+    }
+  end
+
+  def render_blank_content_error
+    render json: {
+      success: false,
+      message: 'Cannot generate poem: source text has no content.'
+    }, status: :unprocessable_entity
+  end
+
+  def render_poem_save_error
+    render json: {
+      success: false,
+      message: "Failed to generate poem: #{@poem.errors.full_messages.join(', ')}"
+    }, status: :unprocessable_entity
+  end
+
+  public
+
+  def generate_erasure
+    return render_blank_content_error if @source_text.content.blank?
+
+    options = build_erasure_options
+    erasure_content = generate_erasure_content(options)
+
+    @poem = build_erasure_poem(erasure_content, options)
 
     if @poem.save
-      render json: {
-        success: true,
-        message: "Cut-up poem successfully generated from '#{@source_text.title}'!",
-        poem: {
-          id: @poem.id,
-          title: @poem.title,
-          content: @poem.content,
-          technique_used: @poem.technique_used,
-          source_text_id: @poem.source_text_id
-        }
-      }
+      render_erasure_success
     else
-      render json: {
-        success: false,
-        message: "Failed to generate poem: #{@poem.errors.full_messages.join(', ')}"
-      }, status: :unprocessable_entity
+      render_poem_save_error
     end
   end
 
-  def generate_erasure
-    if @source_text.content.blank?
-      render json: {
-        success: false,
-        message: 'Cannot generate poem: source text has no content.'
-      }, status: :unprocessable_entity
-      return
-    end
-
-    generator = ErasureGenerator.new(@source_text)
+  def build_erasure_options
     method = params[:method] || 'erasure'
-
     options = { method: method }
 
     if method == 'erasure'
@@ -126,47 +160,48 @@ class Api::PoemsController < ApiController
       options[:is_blackout] = ['true', true].include?(params[:is_blackout])
     end
 
-    erasure_content = generator.generate(options)
+    options
+  end
 
+  def generate_erasure_content(options)
+    generator = ErasureGenerator.new(@source_text)
+    generator.generate(options)
+  end
+
+  def build_erasure_poem(content, options)
     technique_name = options[:is_blackout] ? 'blackout' : 'erasure'
-    @poem = @source_text.poems.build(
+    @source_text.poems.build(
       title: generate_poem_title(@source_text, technique_name),
-      content: erasure_content,
+      content: content,
       technique_used: technique_name
     )
+  end
 
-    if @poem.save
-      render json: {
-        success: true,
-        message: "Erasure poem successfully generated from '#{@source_text.title}'!",
-        poem: {
-          id: @poem.id,
-          title: @poem.title,
-          content: @poem.content,
-          technique_used: @poem.technique_used,
-          source_text_id: @poem.source_text_id
-        }
-      }
-    else
-      render json: {
-        success: false,
-        message: "Failed to generate poem: #{@poem.errors.full_messages.join(', ')}"
-      }, status: :unprocessable_entity
-    end
+  def render_erasure_success
+    render json: {
+      success: true,
+      message: "Erasure poem successfully generated from '#{@source_text.title}'!",
+      poem: poem_json_data
+    }
   end
 
   def generate_snowball
-    if @source_text.content.blank?
-      render json: {
-        success: false,
-        message: 'Cannot generate poem: source text has no content.'
-      }, status: :unprocessable_entity
-      return
+    return render_blank_content_error if @source_text.content.blank?
+
+    options = build_snowball_options
+    snowball_content = generate_snowball_content(options)
+
+    @poem = build_snowball_poem(snowball_content)
+
+    if @poem.save
+      render_snowball_success
+    else
+      render_poem_save_error
     end
+  end
 
-    generator = SnowballGenerator.new(@source_text)
+  def build_snowball_options
     method = params[:method] || 'snowball'
-
     options = { method: method }
 
     if method == 'snowball'
@@ -174,32 +209,28 @@ class Api::PoemsController < ApiController
       options[:min_word_length] = (params[:min_word_length] || 1).to_i
     end
 
-    snowball_content = generator.generate(options)
+    options
+  end
 
-    @poem = @source_text.poems.build(
+  def generate_snowball_content(options)
+    generator = SnowballGenerator.new(@source_text)
+    generator.generate(options)
+  end
+
+  def build_snowball_poem(content)
+    @source_text.poems.build(
       title: generate_poem_title(@source_text, 'snowball'),
-      content: snowball_content,
+      content: content,
       technique_used: 'snowball'
     )
+  end
 
-    if @poem.save
-      render json: {
-        success: true,
-        message: "Snowball poem successfully generated from '#{@source_text.title}'!",
-        poem: {
-          id: @poem.id,
-          title: @poem.title,
-          content: @poem.content,
-          technique_used: @poem.technique_used,
-          source_text_id: @poem.source_text_id
-        }
-      }
-    else
-      render json: {
-        success: false,
-        message: "Failed to generate poem: #{@poem.errors.full_messages.join(', ')}"
-      }, status: :unprocessable_entity
-    end
+  def render_snowball_success
+    render json: {
+      success: true,
+      message: "Snowball poem successfully generated from '#{@source_text.title}'!",
+      poem: poem_json_data
+    }
   end
 
   private
