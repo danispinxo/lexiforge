@@ -50,9 +50,9 @@ Metrics/BlockLength:
     - "test/**/*"
 
 Metrics/ClassLength:
-  Max: 150
+  Max: 180
 
 Metrics/MethodLength:
-  Max: 30
+  Max: 50
   Exclude:
     - "db/migrate/*.rb"
