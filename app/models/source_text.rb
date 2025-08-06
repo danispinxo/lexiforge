@@ -8,11 +8,11 @@ class SourceText < ApplicationRecord
   scope :from_gutenberg, -> { where.not(gutenberg_id: nil) }
   scope :custom, -> { where(gutenberg_id: nil) }
 
-  def self.ransackable_associations(auth_object = nil)
-    ["poems"]
+  def self.ransackable_associations(_auth_object = nil)
+    ['poems']
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["content", "created_at", "gutenberg_id", "id", "id_value", "title", "updated_at"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[content created_at gutenberg_id id id_value title updated_at]
   end
 end

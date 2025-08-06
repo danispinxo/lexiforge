@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, unless: -> { request.path.start_with?('/api') }
-  
+
   def handle_options_request
     if request.path.start_with?('/api')
       response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'

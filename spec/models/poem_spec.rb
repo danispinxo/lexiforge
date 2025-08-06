@@ -12,7 +12,7 @@ RSpec.describe Poem, type: :model do
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:content) }
     it { should validate_presence_of(:technique_used) }
-    
+
     it 'validates technique_used inclusion' do
       should validate_inclusion_of(:technique_used)
         .in_array(Poem::ALLOWED_TECHNIQUES)
@@ -54,8 +54,8 @@ RSpec.describe Poem, type: :model do
       it 'orders poems by creation date descending' do
         recent_poems = Poem.recent.limit(10) # Limit to avoid interference from other tests
         poems_created_in_test = [old_poem, recent_poem, cutup_poem, erasure_poem]
-        ordered_by_date = poems_created_in_test.sort_by(&:created_at).reverse
-        
+        poems_created_in_test.sort_by(&:created_at).reverse
+
         expect(recent_poems.first.created_at).to be >= recent_poems.last.created_at
       end
     end
@@ -110,7 +110,7 @@ RSpec.describe Poem, type: :model do
 
     describe '#created_date' do
       it 'returns formatted creation date' do
-        travel_to Time.new(2023, 12, 25, 14, 30, 0) do
+        travel_to Time.zone.local(2023, 12, 25, 14, 30, 0) do
           poem = create(:poem)
           expect(poem.created_date).to eq('December 25, 2023 at  2:30 PM')
         end
@@ -125,20 +125,20 @@ RSpec.describe Poem, type: :model do
         end
 
         it 'truncates content when over limit' do
-          long_content = 'word ' * 50  # More than 100 characters
+          long_content = 'word ' * 50 # More than 100 characters
           poem = create(:poem, content: long_content)
           short = poem.short_content
-          
+
           expect(short.length).to be <= 100
           expect(short).to end_with('...')
         end
 
         it 'truncates at word boundaries' do
           # Create content that would be truncated mid-word without separator
-          long_content = 'word ' * 30 + 'verylongwordthatwouldbecutoff'
+          long_content = "#{'word ' * 30}verylongwordthatwouldbecutoff"
           poem = create(:poem, content: long_content)
           short = poem.short_content
-          
+
           expect(short).not_to include('verylongwordthatwouldbecutoff')
         end
       end
@@ -147,7 +147,7 @@ RSpec.describe Poem, type: :model do
         it 'respects custom limit' do
           poem = create(:poem, content: 'This is a longer content string for testing')
           short = poem.short_content(20)
-          
+
           expect(short.length).to be <= 20
         end
 
