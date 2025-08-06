@@ -1,4 +1,4 @@
-class Api::PoemsController < ApplicationController
+class Api::PoemsController < ApiController
   before_action :set_poem, only: %i[show edit update destroy]
   before_action :set_source_text, only: [:generate_cut_up, :generate_erasure, :generate_snowball]
 

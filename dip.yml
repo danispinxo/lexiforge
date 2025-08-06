@@ -12,12 +12,12 @@ interaction:
   rails:
     description: Run Rails commands
     service: api
-    command: rails
+    command: ./bin/rails
 
   rake:
     description: Run Rake commands
     service: api
-    command: rake
+    command: ./bin/rake
 
   bundle:
     description: Run Bundle commands
@@ -47,14 +47,14 @@ interaction:
   test-setup:
     description: Setup test database
     service: api
-    command: sh -c "rails db:create db:migrate RAILS_ENV=test"
+    command: sh -c "./bin/rails db:create db:migrate RAILS_ENV=test"
     environment:
       RAILS_ENV: test
 
   rails-test:
     description: Run Rails tests
     service: api
-    command: rails test
+    command: ./bin/rails test
     compose:
       run_options: [no-deps]
 
@@ -68,7 +68,7 @@ interaction:
   console:
     description: Rails console
     service: api
-    command: rails console
+    command: ./bin/rails console
 
   # Database commands
   psql:
@@ -79,24 +79,24 @@ interaction:
   createdb:
     description: Create database
     service: api
-    command: rails db:create
+    command: ./bin/rails db:create
     compose:
       run_options: [no-deps]
 
   migrate:
     description: Run migrations
     service: api
-    command: rails db:migrate
+    command: ./bin/rails db:migrate
 
   seed:
     description: Seed database
     service: api
-    command: rails db:seed
+    command: ./bin/rails db:seed
 
   reset:
     description: Reset database
     service: api
-    command: rails db:reset
+    command: ./bin/rails db:reset
 
   # Frontend commands
   npm:
@@ -110,7 +110,7 @@ interaction:
   server:
     description: Start Rails server
     service: api
-    command: rails server -b 0.0.0.0
+    command: ./bin/rails server -b 0.0.0.0
     compose:
       run_options: [service-ports, use-aliases]
 

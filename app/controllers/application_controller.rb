@@ -1,4 +1,12 @@
-class ApplicationController < ActionController::API
+class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
+  
+  def handle_options_request
+    head :ok
+  end
+end
+
+class ApiController < ActionController::API
   before_action :set_cors_headers
 
   def handle_options_request

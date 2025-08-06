@@ -1,4 +1,4 @@
-class Api::SourceTextsController < ApplicationController
+class Api::SourceTextsController < ApiController
   before_action :set_source_text, only: [:show]
 
   def index
