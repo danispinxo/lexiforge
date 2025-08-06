@@ -24,6 +24,18 @@ class SnowballGenerator
 
     words = extract_clean_words(@source_text.content, min_word_length)
 
+    validation_error = validate_words_for_snowball(words)
+    return validation_error if validation_error
+
+    words_by_length = words.group_by(&:length)
+    lines = build_snowball_lines(words_by_length, num_lines, min_word_length)
+
+    return 'Could not generate enough lines for snowball poem' if lines.length < 3
+
+    lines.join("\n")
+  end
+
+  def validate_words_for_snowball(words)
     return 'Not enough words in source text' if words.length < 10
 
     words_by_length = words.group_by(&:length)
@@ -31,29 +43,35 @@ class SnowballGenerator
 
     return 'Not enough word variety for snowball poem' if available_lengths.length < 3
 
+    nil
+  end
+
+  def build_snowball_lines(words_by_length, num_lines, min_word_length)
     lines = []
     current_length = min_word_length
     used_words = Set.new
 
     num_lines.times do
-      available_words = (words_by_length[current_length] || []).reject { |word| used_words.include?(word) }
+      word = select_word_for_length(words_by_length[current_length], used_words)
 
-      if available_words.empty?
+      if word
+        lines << word
+        used_words.add(word)
+      else
         lines << ''
-        current_length += 1
-        next
       end
-
-      selected_word = available_words.sample
-      lines << selected_word
-      used_words.add(selected_word)
 
       current_length += 1
     end
 
-    return 'Could not generate enough lines for snowball poem' if lines.length < 3
+    lines
+  end
 
-    lines.join("\n")
+  def select_word_for_length(available_words, used_words)
+    return nil unless available_words
+
+    unused_words = available_words.reject { |word| used_words.include?(word) }
+    unused_words.sample
   end
 
   def extract_clean_words(content, min_length)
