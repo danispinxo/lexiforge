@@ -91,7 +91,27 @@
       }
     }
 
-    // Force checkbox to stay square in modals
+    input[type="text"] {
+      width: 100%;
+      padding: $spacing-md;
+      border: 1px solid rgba($medium-gray, 0.5);
+      border-radius: $border-radius-sm;
+      font-size: $font-size-base;
+      background: $bg-accent;
+      color: $text-primary;
+      font-family: $font-sans;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+
+      &::placeholder {
+        color: $text-muted;
+        font-style: italic;
+      }
+    }
+
     input[type="checkbox"] {
       width: 20px !important;
       min-width: 20px !important;
@@ -110,7 +130,7 @@
 
   .form-description {
     margin-top: $spacing-md;
-    
+
     .technique-description {
       font-size: $font-size-sm;
       color: $text-secondary;
