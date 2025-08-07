@@ -28,17 +28,33 @@ LexiForge transforms classic texts into experimental poetry using the cut-up tec
 git clone https://github.com/danispinxo/lexiforge.git
 cd lexiforge
 
+# Copy environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
 # Install dependencies
 bundle install
 
 # Set up the database
-rails db:create db:migrate
+rails db:create db:migrate db:seed
 
 # Start the server
 rails server
 ```
 
 Visit `http://localhost:3000/source_texts` to begin importing texts!
+
+### Environment Variables
+
+Copy `env.example` to `.env` and configure the following variables:
+
+- **Database**: `DATABASE_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
+- **API**: `API_BASE_URL`, `FRONTEND_URL`
+- **CORS**: `ALLOWED_ORIGINS` (comma-separated list)
+- **Admin**: `ADMIN_EMAIL`, `ADMIN_PASSWORD`
+- **Security**: `SECRET_KEY_BASE`, `RAILS_MASTER_KEY`
+
+For production deployment, ensure all environment variables are properly set in your hosting platform.
 
 ## Usage
 
@@ -117,8 +133,30 @@ LexiForge attempts to fetch texts from multiple URL patterns:
 /cache/epub/{id}/pg{id}.txt # Alternative format
 ```
 
+## Deployment
+
+### Production Setup
+
+1. Set all required environment variables in your hosting platform
+2. Ensure PostgreSQL and Redis are available
+3. Run database migrations: `rails db:migrate`
+4. Seed the database: `rails db:seed`
+5. Set up SSL certificates for HTTPS
+6. Configure your web server (nginx, Apache) to proxy to the Rails app
+
+### Docker Deployment
+
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Or build production images
+docker build -t lexiforge-api .
+docker build -t lexiforge-frontend ./frontend
+```
+
 ## Resources
 
 - [Project Gutenberg](https://www.gutenberg.org/) - Source of public domain texts
-- [Cut-up Technique](https://en.wikipedia.org/wiki/Cut-up_technique) - Literary background
-- [Rails Guides](https://guides.rubyonrails.org/) - Framework documentation
+- [Cut-up Technique](https://en.wikipedia.org/wiki/Cut-up_technique) - Literary method background
+- [William S. Burroughs](https://en.wikipedia.org/wiki/William_S._Burroughs) - Cut-up technique pioneer
