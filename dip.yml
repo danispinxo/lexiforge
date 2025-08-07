@@ -70,7 +70,6 @@ interaction:
     service: api
     command: ./bin/rails console
 
-  # Database commands
   psql:
     description: Connect to PostgreSQL database
     service: db
@@ -98,7 +97,6 @@ interaction:
     service: api
     command: ./bin/rails db:reset
 
-  # Frontend commands
   npm:
     description: Run NPM commands for frontend
     service: frontend
@@ -106,7 +104,6 @@ interaction:
     compose:
       run_options: [no-deps]
 
-  # Development shortcuts
   server:
     description: Start Rails server
     service: api
@@ -114,7 +111,6 @@ interaction:
     compose:
       run_options: [service-ports, use-aliases]
 
-  # Utility commands
   bash:
     description: Open bash in API container
     service: api

@@ -11,6 +11,7 @@
   color: variables.$warm-white;
   padding: variables.$spacing-lg variables.$spacing-xl;
   @include mixins.flex-between;
+  gap: variables.$spacing-xl * 2;
   box-shadow: variables.$shadow-heavy;
   border-bottom: 3px solid variables.$primary-color;
   position: relative;
@@ -39,8 +40,13 @@
     color: variables.$primary-color;
     @include mixins.text-glow(variables.$primary-color);
     letter-spacing: -0.03em;
+    flex-shrink: 0;
 
-    background: linear-gradient(45deg, variables.$primary-color 30%, variables.$warm-white 70%);
+    background: linear-gradient(
+      45deg,
+      variables.$primary-color 30%,
+      variables.$warm-white 70%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -50,6 +56,7 @@
     display: flex;
     gap: variables.$spacing-lg;
     align-items: center;
+    margin-left: auto;
 
     a {
       @include mixins.small-caps;

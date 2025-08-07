@@ -27,11 +27,11 @@ services:
       - "${PORT:-3000}:3000"
     environment:
       RAILS_ENV: ${RAILS_ENV:-development}
-      DATABASE_URL: postgres://${POSTGRES_USER:-lexiforge}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-lexiforge_development}
+      DATABASE_URL: postgres://${POSTGRES_USER:-lexiforge}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-lexiforge_${RAILS_ENV:-development}}
       BUNDLE_PATH: /usr/local/bundle
       GUTENBERG_BASE_URL: ${GUTENBERG_BASE_URL:-https://www.gutenberg.org}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3001}
-      POSTGRES_DB: ${POSTGRES_DB:-lexiforge_development}
+      POSTGRES_DB: ${POSTGRES_DB:-lexiforge_${RAILS_ENV:-development}}
       POSTGRES_USER: ${POSTGRES_USER:-lexiforge}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
     volumes:

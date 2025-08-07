@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { sourceTextsAPI } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
 function SourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
   const [gutenbergId, setGutenbergId] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
     loadSourceTexts();
@@ -35,7 +37,7 @@ function SourceTexts() {
           `Successfully imported "${response.data.source_text.title}"`
         );
         setGutenbergId("");
-        loadSourceTexts(); // Refresh the list
+        loadSourceTexts();
       }
     } catch (error) {
       setMessage(error.response?.data?.message || "Error importing text");
@@ -74,70 +76,73 @@ function SourceTexts() {
         </Link>
       </div>
 
-      <div className="import-section">
-        <h3>Import from Project Gutenberg</h3>
+      {user?.admin && (
+        <div className="import-section">
+          <h3>Import from Project Gutenberg</h3>
 
-        <form onSubmit={handleImport}>
-          <div className="form-group">
-            <label htmlFor="gutenberg-id">Enter Gutenberg ID:</label>
-            <input
-              id="gutenberg-id"
-              type="number"
-              value={gutenbergId}
-              onChange={(e) => setGutenbergId(e.target.value)}
-              placeholder="e.g., 1342 for Pride and Prejudice"
-              disabled={loading}
-            />
-            <button type="submit" disabled={loading || !gutenbergId}>
-              {loading ? "Importing..." : "Import Text"}
-            </button>
-          </div>
-        </form>
+          <form onSubmit={handleImport}>
+            <div className="form-group">
+              <label htmlFor="gutenberg-id">Enter Gutenberg ID:</label>
+              <input
+                id="gutenberg-id"
+                type="number"
+                value={gutenbergId}
+                onChange={(e) => setGutenbergId(e.target.value)}
+                placeholder="e.g., 1342 for Pride and Prejudice"
+                disabled={loading}
+              />
+              <button type="submit" disabled={loading || !gutenbergId}>
+                {loading ? "Importing..." : "Import Text"}
+              </button>
+            </div>
+          </form>
 
-        {message && (
-          <div
-            className={`message ${
-              message.includes("Error") ? "error" : "success"
-            }`}
-          >
-            {message}
-          </div>
-        )}
+          {message && (
+            <div
+              className={`message ${
+                message.includes("Error") ? "error" : "success"
+              }`}
+            >
+              {message}
+            </div>
+          )}
 
-        <details className="popular-books">
-          <summary>
-            <strong>Popular Books to Try:</strong>
-          </summary>
-          <div className="books-list">
-            {popularBooks.map((book) => (
-              <div key={book.id} className="book-item">
-                <strong>{book.id}</strong>: {book.title} by {book.author}
-              </div>
-            ))}
-          </div>
-        </details>
+          <details className="popular-books">
+            <summary>
+              <strong>Popular Books to Try:</strong>
+            </summary>
+            <div className="books-list">
+              {popularBooks.map((book) => (
+                <div key={book.id} className="book-item">
+                  <strong>{book.id}</strong>: {book.title} by {book.author}
+                </div>
+              ))}
+            </div>
+          </details>
 
-        <p className="help-text">
-          <strong>How to find Gutenberg IDs:</strong> Visit{" "}
-          <a
-            href="https://www.gutenberg.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            gutenberg.org
-          </a>
-          , search for a book, and look for the number in the URL (e.g.,
-          /ebooks/1342)
-        </p>
-      </div>
+          <p className="help-text">
+            <strong>How to find Gutenberg IDs:</strong> Visit{" "}
+            <a
+              href="https://www.gutenberg.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              gutenberg.org
+            </a>
+            , search for a book, and look for the number in the URL (e.g.,
+            /ebooks/1342)
+          </p>
+        </div>
+      )}
 
       <div className="texts-section">
-        <h3>Your Source Texts ({sourceTexts.length})</h3>
+        <h3>Available Source Texts ({sourceTexts.length})</h3>
 
         {sourceTexts.length === 0 ? (
           <p>
-            No source texts imported yet. Import one from Project Gutenberg
-            above!
+            {user?.admin
+              ? "No source texts imported yet. Import one from Project Gutenberg above!"
+              : "No source texts available yet."}
           </p>
         ) : (
           <div className="texts-table-container">

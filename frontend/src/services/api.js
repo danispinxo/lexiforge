@@ -8,6 +8,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 export const sourceTextsAPI = {
@@ -22,15 +23,21 @@ export const sourceTextsAPI = {
 export const poemsAPI = {
   getAll: () => api.get("/poems"),
   getById: (id) => api.get(`/poems/${id}`),
-  create: (poemData) => api.post("/poems", poemData),
-  generateCutUp: (sourceTextId, options = {}) =>
+  generateCutUp: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_cut_up`, options),
-  generateErasure: (sourceTextId, options = {}) =>
+  generateErasure: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_erasure`, options),
-  generateSnowball: (sourceTextId, options = {}) =>
+  generateSnowball: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_snowball`, options),
-  generateMesostic: (sourceTextId, options = {}) =>
+  generateMesostic: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_mesostic`, options),
+};
+
+export const authAPI = {
+  register: (userData) => api.post("/users", userData),
+  login: (credentials) => api.post("/users/sign_in", credentials),
+  logout: () => api.delete("/users/sign_out"),
+  getCurrentUser: () => api.get("/user/current"),
 };
 
 export default api;

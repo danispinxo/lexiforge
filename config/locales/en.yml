@@ -34,3 +34,7 @@ en:
     notices:
       updated: "Poem was successfully updated."
       deleted: "Poem was successfully deleted."
+
+  admin:
+    users:
+      password_reset_sent: "Password reset instructions sent to user."

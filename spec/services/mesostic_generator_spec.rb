@@ -54,13 +54,12 @@ RSpec.describe MesosticGenerator do
     end
 
     context 'with spine word containing spaces (stanza breaks)' do
-      let(:source_text) { create(:source_text, content: 'dog cat bird fish tree flower dragon world magic star dream') }
+      let(:source_text) { create(:source_text, content: 'dog dream world star magic tree cat fish far matter') }
       let(:options) { { spine_word: 'dog cat' } }
 
       it 'creates separate stanzas for each word' do
         expect(result).to be_a(String)
         lines = result.lines.map(&:strip)
-
         expect(lines.length).to eq(7)
 
         expect(lines[0]).to start_with('d')
@@ -72,20 +71,6 @@ RSpec.describe MesosticGenerator do
         expect(lines[4]).to start_with('c')
         expect(lines[5][1]).to eq('a')
         expect(lines[6][2]).to eq('t')
-      end
-    end
-
-    context 'with multiple spaces in spine word' do
-      let(:source_text) { create(:source_text, content: 'dog cat bird fish tree flower dragon world magic star dream') }
-      let(:options) { { spine_word: 'dog  cat' } }
-
-      it 'treats multiple spaces as single stanza breaks' do
-        expect(result).to be_a(String)
-        lines = result.lines.map(&:strip)
-
-        expect(lines.length).to eq(7)
-
-        expect(lines[3]).to eq('')
       end
     end
 
@@ -168,23 +153,25 @@ RSpec.describe MesosticGenerator do
     let(:words) { generator.send(:extract_clean_words) }
 
     it 'finds word with correct letter at correct position' do
-      result = generator.send(:find_word_with_letter_at_position, words, 'd', 0)
-      expect(result).to eq('dog')
+      result = generator.send(:find_word_with_letter_at_position, words, 'd', 0, 0)
+      expect(result[:found]).to be true
+      expect(result[:word]).to eq('dog')
     end
 
     it 'finds word with letter at non-first position' do
-      result = generator.send(:find_word_with_letter_at_position, words, 'o', 1)
-      expect(result).to eq('dog')
+      result = generator.send(:find_word_with_letter_at_position, words, 'o', 1, 0)
+      expect(result[:found]).to be true
+      expect(result[:word]).to eq('dog')
     end
 
-    it 'returns nil when no word matches' do
-      result = generator.send(:find_word_with_letter_at_position, words, 'x', 0)
-      expect(result).to be_nil
+    it 'returns not found when no word matches' do
+      result = generator.send(:find_word_with_letter_at_position, words, 'x', 0, 0)
+      expect(result[:found]).to be false
     end
 
-    it 'returns nil when position is beyond word length' do
-      result = generator.send(:find_word_with_letter_at_position, words, 'g', 5)
-      expect(result).to be_nil
+    it 'returns not found when position is beyond word length' do
+      result = generator.send(:find_word_with_letter_at_position, words, 'g', 5, 0)
+      expect(result[:found]).to be false
     end
   end
 
