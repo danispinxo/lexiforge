@@ -41,7 +41,7 @@ class MesosticGenerator
 
       spine_word_part.each_char.with_index do |target_letter, position|
         result = find_word_with_letter_at_position(words, target_letter, position, current_word_index)
-        
+
         break unless result[:found]
 
         stanza_lines << result[:word]
@@ -59,11 +59,9 @@ class MesosticGenerator
   def find_word_with_letter_at_position(words, target_letter, position, start_index)
     (start_index...words.length).each do |i|
       word = words[i]
-      if word.length > position && word[position] == target_letter
-        return { found: true, word: word, next_index: i + 1 }
-      end
+      return { found: true, word: word, next_index: i + 1 } if word.length > position && word[position] == target_letter
     end
-    
+
     { found: false, word: nil, next_index: start_index }
   end
 
