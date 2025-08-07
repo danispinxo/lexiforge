@@ -1,0 +1,415 @@
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
+
+.auth-section {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.auth-dropdown {
+  position: relative;
+
+  .auth-dropdown-toggle {
+    background: variables.$bg-accent;
+    border: 1px solid rgba(variables.$primary-color, 0.2);
+    border-radius: variables.$border-radius-sm;
+    padding: variables.$spacing-sm variables.$spacing-md;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: variables.$spacing-sm;
+    font-size: variables.$font-size-sm;
+    color: variables.$text-secondary;
+    font-family: variables.$font-sans;
+    @include mixins.small-caps;
+    transition: all variables.$transition-normal variables.$ease-out-expo;
+
+    &:hover {
+      background: rgba(variables.$primary-color, 0.05);
+      border-color: rgba(variables.$primary-color, 0.4);
+      color: variables.$primary-color;
+      transform: translateY(-2px);
+      @include mixins.text-glow(variables.$primary-color);
+    }
+
+    .user-email {
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: inherit;
+    }
+
+    .dropdown-arrow {
+      font-size: variables.$font-size-xs;
+      transition: transform variables.$transition-normal;
+      color: inherit;
+    }
+  }
+
+  .auth-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: variables.$bg-secondary;
+    border: 1px solid rgba(variables.$primary-color, 0.2);
+    border-radius: variables.$border-radius-sm;
+    box-shadow: variables.$shadow-heavy;
+    min-width: 200px;
+    z-index: 1000;
+    margin-top: variables.$spacing-xs;
+
+    .dropdown-header {
+      padding: variables.$spacing-md;
+      border-bottom: 1px solid rgba(variables.$primary-color, 0.1);
+      font-size: variables.$font-size-sm;
+      color: variables.$text-muted;
+      background: rgba(variables.$primary-color, 0.02);
+      @include mixins.small-caps;
+    }
+
+    .dropdown-item {
+      width: 100%;
+      padding: variables.$spacing-md;
+      border: none;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      font-size: variables.$font-size-sm;
+      color: variables.$text-secondary;
+      font-family: variables.$font-sans;
+      @include mixins.small-caps;
+      transition: all variables.$transition-normal;
+
+      &:hover {
+        background: rgba(variables.$primary-color, 0.05);
+        color: variables.$primary-color;
+        @include mixins.text-glow(variables.$primary-color);
+      }
+
+      &:first-child {
+        border-radius: variables.$border-radius-sm variables.$border-radius-sm 0
+          0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 variables.$border-radius-sm
+          variables.$border-radius-sm;
+      }
+    }
+  }
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: variables.$bg-primary;
+  padding: variables.$spacing-xl;
+  padding-top: variables.$spacing-xl * 2;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        ellipse at top left,
+        rgba(variables.$primary-color, 0.02) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at bottom right,
+        rgba(variables.$accent-color, 0.01) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 700px;
+}
+
+.auth-form {
+  @include mixins.card;
+  background: variables.$bg-secondary;
+  border: 1px solid rgba(variables.$primary-color, 0.2);
+  padding: variables.$spacing-xl;
+  border-radius: variables.$border-radius-lg;
+  box-shadow: variables.$shadow-dramatic;
+  width: 100%;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 50px,
+      rgba(variables.$primary-color, 0.02) 50px,
+      rgba(variables.$primary-color, 0.02) 52px
+    );
+    border-radius: variables.$border-radius-lg;
+    pointer-events: none;
+  }
+
+  .auth-header {
+    margin-bottom: variables.$spacing-xl;
+    position: relative;
+    z-index: 1;
+
+    .back-link {
+      color: variables.$primary-color;
+      text-decoration: none;
+      font-weight: variables.$weight-medium;
+      margin-bottom: variables.$spacing-lg;
+      display: inline-flex;
+      align-items: center;
+      gap: variables.$spacing-sm;
+      font-family: variables.$font-sans;
+      @include mixins.small-caps;
+      font-size: variables.$font-size-sm;
+      transition: all variables.$transition-normal;
+
+      &:hover {
+        color: variables.$link-hover;
+        transform: translateX(-4px);
+        @include mixins.text-glow(variables.$primary-color);
+      }
+
+      &::before {
+        content: "←";
+        font-size: variables.$font-size-lg;
+      }
+    }
+
+    h2 {
+      margin: 0;
+      text-align: center;
+      color: variables.$text-primary;
+      font-size: variables.$font-size-3xl;
+      font-weight: variables.$weight-bold;
+      @include mixins.heading-serif;
+      @include mixins.text-glow(variables.$primary-color);
+    }
+  }
+
+  .form-group {
+    margin-bottom: variables.$spacing-lg;
+    position: relative;
+    z-index: 1;
+
+    label {
+      display: block;
+      margin-bottom: variables.$spacing-sm;
+      font-weight: variables.$weight-medium;
+      color: variables.$text-secondary;
+      font-size: variables.$font-size-sm;
+      font-family: variables.$font-sans;
+      @include mixins.small-caps;
+    }
+
+    input {
+      width: 100%;
+      padding: variables.$spacing-md;
+      border: 1px solid variables.$medium-gray;
+      border-radius: variables.$border-radius-sm;
+      background: variables.$bg-accent;
+      color: variables.$text-primary;
+      font-family: variables.$font-sans;
+      font-size: variables.$font-size-base;
+      transition: all variables.$transition-normal;
+
+      &:focus {
+        outline: none;
+        border-color: variables.$primary-color;
+        box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
+        background: color.adjust(variables.$bg-accent, $lightness: 2%);
+      }
+
+      &:disabled {
+        background: color.adjust(variables.$bg-accent, $lightness: -5%);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+
+    .password-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      input {
+        width: 100%;
+        padding-right: 3rem;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: variables.$spacing-sm;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: variables.$spacing-xs;
+        border-radius: variables.$border-radius-sm;
+        font-size: variables.$font-size-base;
+        color: variables.$text-muted;
+        transition: all variables.$transition-normal;
+        z-index: 2;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: variables.$primary-color;
+          background: rgba(variables.$primary-color, 0.1);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .btn {
+    width: 100%;
+    padding: variables.$spacing-md;
+    border: none;
+    border-radius: variables.$border-radius-sm;
+    font-size: variables.$font-size-base;
+    font-weight: variables.$weight-semibold;
+    cursor: pointer;
+    transition: all variables.$transition-normal variables.$ease-out-expo;
+    font-family: variables.$font-sans;
+    @include mixins.small-caps;
+    position: relative;
+    z-index: 1;
+
+    &.btn-primary {
+      background: linear-gradient(
+        135deg,
+        variables.$primary-color 0%,
+        variables.$primary-dark 100%
+      );
+      color: variables.$charcoal;
+      border: 1px solid rgba(variables.$primary-color, 0.3);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: variables.$shadow-medium, variables.$glow-gold;
+        background: linear-gradient(
+          135deg,
+          variables.$link-hover 0%,
+          variables.$primary-color 100%
+        );
+      }
+
+      &:disabled {
+        background: variables.$medium-gray;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .error-message {
+    background: rgba(variables.$accent-color, 0.1);
+    color: variables.$accent-color;
+    padding: variables.$spacing-md;
+    border-radius: variables.$border-radius-sm;
+    margin-bottom: variables.$spacing-lg;
+    border: 1px solid rgba(variables.$accent-color, 0.2);
+    font-size: variables.$font-size-sm;
+    font-family: variables.$font-sans;
+    position: relative;
+    z-index: 1;
+  }
+
+  .auth-switch {
+    margin-top: variables.$spacing-xl;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+
+    p {
+      margin: 0;
+      color: variables.$text-muted;
+      font-size: variables.$font-size-sm;
+      font-family: variables.$font-serif;
+    }
+
+    .btn-link {
+      background: none;
+      border: none;
+      color: variables.$primary-color;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+      font-weight: variables.$weight-medium;
+      font-family: variables.$font-sans;
+      @include mixins.small-caps;
+
+      &:hover {
+        color: variables.$link-hover;
+        @include mixins.text-glow(variables.$primary-color);
+      }
+    }
+  }
+}
+
+@include mixins.tablet {
+  .auth-section {
+    margin-left: 0;
+    margin-top: variables.$spacing-md;
+    width: 100%;
+  }
+
+  .auth-dropdown {
+    width: 100%;
+
+    .auth-dropdown-toggle {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .auth-dropdown-menu {
+      width: 100%;
+      right: 0;
+    }
+  }
+
+  .auth-page {
+    padding: variables.$spacing-lg;
+  }
+
+  .auth-form {
+    padding: variables.$spacing-lg;
+  }
+}
