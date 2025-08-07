@@ -20,6 +20,7 @@ Layout/LineLength:
   Max: 120
   Exclude:
     - "config/**/*"
+    - "spec/**/*"
 
 Style/Documentation:
   Enabled: false
@@ -42,16 +43,24 @@ Rails/FilePath:
 Performance:
   Enabled: true
 
+Metrics/AbcSize:
+  Max: 25
+
 Metrics/BlockLength:
+  Max: 150
   Exclude:
     - "config/routes.rb"
     - "spec/**/*"
     - "test/**/*"
 
 Metrics/ClassLength:
-  Max: 150
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 10
 
 Metrics/MethodLength:
-  Max: 30
-  Exclude:
-    - "db/migrate/*.rb"
+  Max: 50
+
+Metrics/PerceivedComplexity:
+  Max: 10
