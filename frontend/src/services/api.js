@@ -23,14 +23,14 @@ export const sourceTextsAPI = {
 export const poemsAPI = {
   getAll: () => api.get("/poems"),
   getById: (id) => api.get(`/poems/${id}`),
-  generateCutUp: (sourceTextId) =>
-    api.post(`/source_texts/${sourceTextId}/generate_cut_up`),
-  generateErasure: (sourceTextId) =>
-    api.post(`/source_texts/${sourceTextId}/generate_erasure`),
-  generateSnowball: (sourceTextId) =>
-    api.post(`/source_texts/${sourceTextId}/generate_snowball`),
-  generateMesostic: (sourceTextId) =>
-    api.post(`/source_texts/${sourceTextId}/generate_mesostic`),
+  generateCutUp: (sourceTextId, options) =>
+    api.post(`/source_texts/${sourceTextId}/generate_cut_up`, options),
+  generateErasure: (sourceTextId, options) =>
+    api.post(`/source_texts/${sourceTextId}/generate_erasure`, options),
+  generateSnowball: (sourceTextId, options) =>
+    api.post(`/source_texts/${sourceTextId}/generate_snowball`, options),
+  generateMesostic: (sourceTextId, options) =>
+    api.post(`/source_texts/${sourceTextId}/generate_mesostic`, options),
 };
 
 export const authAPI = {

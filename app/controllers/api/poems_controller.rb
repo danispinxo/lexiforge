@@ -74,14 +74,15 @@ class Api::PoemsController < ApiController
   private
 
   def build_cut_up_options
-    method = params[:method] || 'cut_up'
+    permitted_params = generation_params
+    method = permitted_params[:method] || 'cut_up'
     options = { method: method }
 
     if method == 'cut_up'
-      options[:num_lines] = (params[:num_lines] || 12).to_i
-      options[:words_per_line] = (params[:words_per_line] || 6).to_i
+      options[:num_lines] = (permitted_params[:num_lines] || 12).to_i
+      options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
     else
-      options[:size] = params[:size] || 'medium'
+      options[:size] = permitted_params[:size] || 'medium'
     end
 
     options
@@ -151,14 +152,15 @@ class Api::PoemsController < ApiController
   end
 
   def build_erasure_options
-    method = params[:method] || 'erasure'
+    permitted_params = generation_params
+    method = permitted_params[:method] || 'erasure'
     options = { method: method }
 
     if method == 'erasure'
-      options[:num_pages] = (params[:num_pages] || 3).to_i
-      options[:words_per_page] = (params[:words_per_page] || 50).to_i
-      options[:words_to_keep] = (params[:words_to_keep] || 8).to_i
-      options[:is_blackout] = ['true', true].include?(params[:is_blackout])
+      options[:num_pages] = (permitted_params[:num_pages] || 3).to_i
+      options[:words_per_page] = (permitted_params[:words_per_page] || 50).to_i
+      options[:words_to_keep] = (permitted_params[:words_to_keep] || 8).to_i
+      options[:is_blackout] = ['true', true].include?(permitted_params[:is_blackout])
     end
 
     options
@@ -209,22 +211,24 @@ class Api::PoemsController < ApiController
   end
 
   def build_snowball_options
-    method = params[:method] || 'snowball'
+    permitted_params = generation_params
+    method = permitted_params[:method] || 'snowball'
     options = { method: method }
 
     if method == 'snowball'
-      options[:num_lines] = (params[:num_lines] || 10).to_i
-      options[:min_word_length] = (params[:min_word_length] || 1).to_i
+      options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
+      options[:min_word_length] = (permitted_params[:min_word_length] || 1).to_i
     end
 
     options
   end
 
   def build_mesostic_options
-    method = params[:method] || 'mesostic'
+    permitted_params = generation_params
+    method = permitted_params[:method] || 'mesostic'
     options = { method: method }
 
-    options[:spine_word] = params[:spine_word] if method == 'mesostic'
+    options[:spine_word] = permitted_params[:spine_word] if permitted_params[:spine_word].present?
 
     options
   end
@@ -267,6 +271,12 @@ class Api::PoemsController < ApiController
 
   def poem_params
     params.require(:poem).permit(:title, :content, :technique_used, :source_text_id)
+  end
+
+  def generation_params
+    params.permit(:method, :spine_word, :num_lines, :words_per_line, :size, 
+                  :num_pages, :words_per_page, :words_to_keep, :is_blackout, 
+                  :min_word_length)
   end
 
   def generate_poem_title(source_text, technique)
