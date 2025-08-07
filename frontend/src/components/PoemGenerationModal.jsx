@@ -17,6 +17,7 @@ function PoemGenerationModal({
   const [isBlackout, setIsBlackout] = useState(false);
   const [snowballLines, setSnowballLines] = useState(10);
   const [minWordLength, setMinWordLength] = useState(1);
+  const [spineWord, setSpineWord] = useState("");
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -24,6 +25,12 @@ function PoemGenerationModal({
     e.preventDefault();
     setGenerating(true);
     setError("");
+
+    if (technique === "mesostic" && !spineWord.trim()) {
+      setError("Spine word is required for mesostic poetry");
+      setGenerating(false);
+      return;
+    }
 
     try {
       let response;
@@ -46,6 +53,11 @@ function PoemGenerationModal({
           method: "snowball",
           num_lines: snowballLines,
           min_word_length: minWordLength,
+        });
+      } else if (technique === "mesostic") {
+        response = await poemsAPI.generateMesostic(sourceText.id, {
+          method: "mesostic",
+          spine_word: spineWord,
         });
       }
 
@@ -148,6 +160,7 @@ function PoemGenerationModal({
                 <option value="cut_up">Cut-Up Poetry</option>
                 <option value="erasure">Erasure Poetry</option>
                 <option value="snowball">Snowball Poetry</option>
+                <option value="mesostic">Mesostic Poetry</option>
               </select>
             </div>
 
@@ -312,6 +325,35 @@ function PoemGenerationModal({
                     each subsequent line contains a word that's one character
                     longer. Perfect for creating poems with a sense of building
                     momentum and growth.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {technique === "mesostic" && (
+              <>
+                <div className="form-group">
+                  <label htmlFor="spine-word">Spine Word (Required):</label>
+                  <input
+                    type="text"
+                    id="spine-word"
+                    value={spineWord}
+                    onChange={(e) => setSpineWord(e.target.value)}
+                    placeholder="Enter a word (e.g., 'dog', 'poetry')"
+                    disabled={generating}
+                    required
+                  />
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    Mesostic poetry uses a "spine word" to guide the poem's
+                    structure. Each line contains a word from the source text
+                    that has the corresponding letter of the spine word in the
+                    correct position. For example, with spine word "dog", the
+                    first line will contain a word with 'd' as the first letter,
+                    the second line with 'o' as the second letter, and the third
+                    line with 'g' as the third letter.
                   </p>
                 </div>
               </>
