@@ -1,7 +1,7 @@
 class Poem < ApplicationRecord
   belongs_to :source_text
 
-  ALLOWED_TECHNIQUES = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball'].freeze
+  ALLOWED_TECHNIQUES = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball', 'mesostic'].freeze
 
   validates :title, presence: true
   validates :content, presence: true
