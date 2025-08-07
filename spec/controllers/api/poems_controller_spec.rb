@@ -269,6 +269,16 @@ RSpec.describe Api::PoemsController, type: :controller do
         json_response = response.parsed_body
 
         expect(json_response['success']).to be true
+        expect(json_response['message']).to include('Blackout poem successfully generated')
+        expect(json_response['poem']).to have_key('id')
+      end
+
+      it 'returns erasure success response when is_blackout is false' do
+        params = valid_params.merge(is_blackout: false)
+        post :generate_erasure, params: params
+        json_response = response.parsed_body
+
+        expect(json_response['success']).to be true
         expect(json_response['message']).to include('Erasure poem successfully generated')
         expect(json_response['poem']).to have_key('id')
       end

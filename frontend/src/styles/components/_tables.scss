@@ -1,59 +1,60 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 .texts-table-container,
 .poems-table-container {
-  margin-top: $spacing-lg;
+  margin-top: variables.$spacing-lg;
   overflow-x: auto;
-  border-radius: $border-radius-md;
-  box-shadow: $shadow-medium;
-  background: $bg-secondary;
-  border: 1px solid rgba($primary-color, 0.1);
+  border-radius: variables.$border-radius-md;
+  box-shadow: variables.$shadow-medium;
+  background: variables.$bg-secondary;
+  border: 1px solid rgba(variables.$primary-color, 0.1);
 }
 
 .texts-table,
 .poems-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: $font-sans;
+  font-family: variables.$font-sans;
   background: transparent;
 
   thead {
     background: linear-gradient(
       135deg,
-      $bg-accent 0%,
-      darken($bg-accent, 5%) 100%
+      variables.$bg-accent 0%,
+      color.adjust(variables.$bg-accent, $lightness: -5%) 100%
     );
-    border-bottom: 2px solid rgba($primary-color, 0.3);
+    border-bottom: 2px solid rgba(variables.$primary-color, 0.3);
 
     th {
-      padding: $spacing-md $spacing-lg;
+      padding: variables.$spacing-md variables.$spacing-lg;
       text-align: left;
-      font-weight: $weight-semibold;
-      color: $text-primary;
-      font-size: $font-size-sm;
-      @include small-caps;
+      font-weight: variables.$weight-semibold;
+      color: variables.$text-primary;
+      font-size: variables.$font-size-sm;
+      @include mixins.small-caps;
       letter-spacing: 0.05em;
-      border-bottom: 1px solid rgba($primary-color, 0.2);
+      border-bottom: 1px solid rgba(variables.$primary-color, 0.2);
       position: relative;
 
       &::after {
         content: "";
         position: absolute;
         bottom: 0;
-        left: $spacing-lg;
-        right: $spacing-lg;
+        left: variables.$spacing-lg;
+        right: variables.$spacing-lg;
         height: 1px;
-        background: $primary-color;
+        background: variables.$primary-color;
         opacity: 0.6;
       }
 
       &:first-child::after {
-        left: $spacing-lg;
+        left: variables.$spacing-lg;
       }
 
       &:last-child::after {
-        right: $spacing-lg;
+        right: variables.$spacing-lg;
       }
     }
   }
@@ -61,11 +62,11 @@
   // Table body
   tbody {
     tr {
-      border-bottom: 1px solid rgba($medium-gray, 0.2);
-      transition: all $transition-fast;
+      border-bottom: 1px solid rgba(variables.$medium-gray, 0.2);
+      transition: all variables.$transition-fast;
 
       &:hover {
-        background: rgba($primary-color, 0.03);
+        background: rgba(variables.$primary-color, 0.03);
         transform: translateX(2px);
       }
 
@@ -75,9 +76,9 @@
     }
 
     td {
-      padding: $spacing-md $spacing-lg;
-      color: $text-secondary;
-      font-size: $font-size-sm;
+      padding: variables.$spacing-md variables.$spacing-lg;
+      color: variables.$text-secondary;
+      font-size: variables.$font-size-sm;
       line-height: 1.5;
       vertical-align: top;
     }
@@ -87,19 +88,19 @@
 // Table cell specific styling
 .title-cell {
   width: 40%;
-  font-weight: $weight-medium;
+  font-weight: variables.$weight-medium;
 
   .title-link {
-    color: $primary-color;
+    color: variables.$primary-color;
     text-decoration: none;
-    font-family: $font-serif;
-    font-size: $font-size-base;
-    font-weight: $weight-semibold;
-    transition: all $transition-normal;
+    font-family: variables.$font-serif;
+    font-size: variables.$font-size-base;
+    font-weight: variables.$weight-semibold;
+    transition: all variables.$transition-normal;
 
     &:hover {
-      color: $link-hover;
-      @include text-glow($primary-color);
+      color: variables.$link-hover;
+      @include mixins.text-glow(variables.$primary-color);
     }
   }
 }
@@ -107,28 +108,28 @@
 .word-count-cell {
   width: 15%;
   text-align: left;
-  font-family: $font-mono;
-  font-size: $font-size-xs;
-  color: $text-muted;
+  font-family: variables.$font-mono;
+  font-size: variables.$font-size-xs;
+  color: variables.$text-muted;
 
   &::after {
     content: " words";
-    font-family: $font-sans;
-    color: $text-muted;
-    font-size: $font-size-xs;
+    font-family: variables.$font-sans;
+    color: variables.$text-muted;
+    font-size: variables.$font-size-xs;
   }
 }
 
 .gutenberg-id-cell {
   width: 15%;
   text-align: left;
-  font-family: $font-mono;
-  font-size: $font-size-xs;
-  color: $text-muted;
+  font-family: variables.$font-mono;
+  font-size: variables.$font-size-xs;
+  color: variables.$text-muted;
 
   &:not(:empty):not([data-empty])::before {
     content: "#";
-    color: rgba($primary-color, 0.6);
+    color: rgba(variables.$primary-color, 0.6);
   }
 }
 
@@ -137,28 +138,28 @@
   text-align: left;
 
   .btn {
-    padding: $spacing-xs $spacing-sm;
-    font-size: $font-size-xs;
+    padding: variables.$spacing-xs variables.$spacing-sm;
+    font-size: variables.$font-size-xs;
     min-width: auto;
 
     &.btn-sm {
-      padding: $spacing-xs $spacing-sm;
-      font-size: $font-size-xs;
-      border-radius: $border-radius-sm;
+      padding: variables.$spacing-xs variables.$spacing-sm;
+      font-size: variables.$font-size-xs;
+      border-radius: variables.$border-radius-sm;
     }
 
     // Consistent styling for table action buttons
     &.btn-ghost {
-      color: $primary-color;
-      border-color: rgba($primary-color, 0.3);
+      color: variables.$primary-color;
+      border-color: rgba(variables.$primary-color, 0.3);
       background: transparent;
 
       &:hover:not(:disabled) {
-        color: $warm-white;
-        background: $primary-color;
-        border-color: $primary-color;
+        color: variables.$warm-white;
+        background: variables.$primary-color;
+        border-color: variables.$primary-color;
         transform: translateY(-1px);
-        box-shadow: $shadow-soft;
+        box-shadow: variables.$shadow-soft;
       }
     }
   }
@@ -168,23 +169,23 @@
   width: 15%;
 
   .technique-badge {
-    @include library-label;
-    background: rgba($primary-color, 0.15);
-    color: $primary-color;
-    border-color: rgba($primary-color, 0.4);
-    font-size: $font-size-xs;
-    padding: $spacing-xs $spacing-sm;
-    border-radius: $border-radius-sm;
+    @include mixins.library-label;
+    background: rgba(variables.$primary-color, 0.15);
+    color: variables.$primary-color;
+    border-color: rgba(variables.$primary-color, 0.4);
+    font-size: variables.$font-size-xs;
+    padding: variables.$spacing-xs variables.$spacing-sm;
+    border-radius: variables.$border-radius-sm;
     display: inline-block;
-    font-weight: $weight-medium;
+    font-weight: variables.$weight-medium;
   }
 }
 
 .date-cell {
   width: 15%;
-  font-family: $font-mono;
-  font-size: $font-size-xs;
-  color: $text-muted;
+  font-family: variables.$font-mono;
+  font-size: variables.$font-size-xs;
+  color: variables.$text-muted;
   text-align: left;
 }
 
@@ -192,56 +193,56 @@
   width: 25%;
 
   .source-link {
-    color: $text-secondary;
+    color: variables.$text-secondary;
     text-decoration: none;
     font-style: italic;
-    font-size: $font-size-sm;
-    font-family: $font-serif;
-    font-weight: $weight-medium;
+    font-size: variables.$font-size-sm;
+    font-family: variables.$font-serif;
+    font-weight: variables.$weight-medium;
 
     &:hover {
-      color: $primary-color;
+      color: variables.$primary-color;
       text-decoration: underline;
     }
   }
 
   .unknown-source {
-    color: $text-muted;
+    color: variables.$text-muted;
     font-style: italic;
-    font-size: $font-size-xs;
+    font-size: variables.$font-size-xs;
   }
 }
 
 .table-empty {
   text-align: center;
-  padding: $spacing-xl * 2;
-  color: $text-muted;
+  padding: variables.$spacing-xl * 2;
+  color: variables.$text-muted;
   font-style: italic;
-  background: rgba($bg-secondary, 0.5);
-  border-radius: $border-radius-md;
-  border: 2px dashed rgba($medium-gray, 0.3);
+  background: rgba(variables.$bg-secondary, 0.5);
+  border-radius: variables.$border-radius-md;
+  border: 2px dashed rgba(variables.$medium-gray, 0.3);
 
   .empty-icon {
-    font-size: $font-size-4xl;
-    margin-bottom: $spacing-md;
+    font-size: variables.$font-size-4xl;
+    margin-bottom: variables.$spacing-md;
     opacity: 0.5;
   }
 
   h4 {
-    color: $text-secondary;
-    margin-bottom: $spacing-sm;
+    color: variables.$text-secondary;
+    margin-bottom: variables.$spacing-sm;
   }
 
   p {
-    margin-bottom: $spacing-lg;
+    margin-bottom: variables.$spacing-lg;
   }
 
   .btn {
-    margin-top: $spacing-md;
+    margin-top: variables.$spacing-md;
   }
 }
 
-@include tablet {
+@include mixins.tablet {
   .texts-table-container,
   .poems-table-container {
     overflow-x: scroll;
@@ -250,11 +251,11 @@
       content: "← Scroll horizontally to see more →";
       display: block;
       text-align: center;
-      padding: $spacing-sm;
-      font-size: $font-size-xs;
-      color: $text-muted;
+      padding: variables.$spacing-sm;
+      font-size: variables.$font-size-xs;
+      color: variables.$text-muted;
       font-style: italic;
-      background: rgba($bg-accent, 0.5);
+      background: rgba(variables.$bg-accent, 0.5);
     }
   }
 
@@ -277,25 +278,25 @@
   }
 }
 
-@include mobile {
+@include mixins.mobile {
   .texts-table,
   .poems-table {
     min-width: 500px;
-    font-size: $font-size-xs;
+    font-size: variables.$font-size-xs;
 
     thead th,
     tbody td {
-      padding: $spacing-sm;
+      padding: variables.$spacing-sm;
     }
   }
 
   .title-cell .title-link {
-    font-size: $font-size-sm;
+    font-size: variables.$font-size-sm;
   }
 
   .btn.btn-sm {
-    padding: $spacing-xs;
-    font-size: $font-size-xs;
+    padding: variables.$spacing-xs;
+    font-size: variables.$font-size-xs;
   }
 }
 
@@ -304,15 +305,15 @@
   justify-content: center;
   align-items: center;
   height: 200px;
-  background: rgba($bg-secondary, 0.5);
-  border-radius: $border-radius-md;
+  background: rgba(variables.$bg-secondary, 0.5);
+  border-radius: variables.$border-radius-md;
 
   .loading-spinner {
-    margin-right: $spacing-md;
+    margin-right: variables.$spacing-md;
   }
 
   .loading-text {
-    color: $text-muted;
+    color: variables.$text-muted;
     font-style: italic;
   }
 }

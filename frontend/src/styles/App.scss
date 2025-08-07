@@ -1,11 +1,12 @@
-@import "variables";
-@import "mixins";
+@use "sass:meta";
+@use "variables";
+@use "mixins";
 
 .app {
   min-height: 100vh;
-  font-family: $font-serif;
-  color: $text-primary;
-  background: $bg-primary;
+  font-family: variables.$font-serif;
+  color: variables.$text-primary;
+  background: variables.$bg-primary;
   position: relative;
 
   &::before {
@@ -17,12 +18,12 @@
     height: 100%;
     background: radial-gradient(
         ellipse at top left,
-        rgba($primary-color, 0.02) 0%,
+        rgba(variables.$primary-color, 0.02) 0%,
         transparent 50%
       ),
       radial-gradient(
         ellipse at bottom right,
-        rgba($accent-color, 0.01) 0%,
+        rgba(variables.$accent-color, 0.01) 0%,
         transparent 50%
       );
     pointer-events: none;
@@ -30,16 +31,16 @@
   }
 }
 
-@import "layout/header";
-@import "layout/grid";
+@include meta.load-css("layout/header");
+@include meta.load-css("layout/grid");
 
-@import "components/buttons";
-@import "components/forms";
-@import "components/cards";
-@import "components/tables";
-@import "components/modals";
-@import "components/messages";
-@import "components/poetry";
+@include meta.load-css("components/buttons");
+@include meta.load-css("components/forms");
+@include meta.load-css("components/cards");
+@include meta.load-css("components/tables");
+@include meta.load-css("components/modals");
+@include meta.load-css("components/messages");
+@include meta.load-css("components/poetry");
 
-@import "pages/import";
-@import "pages/source-text-detail";
+@include meta.load-css("pages/import");
+@include meta.load-css("pages/source-text-detail");

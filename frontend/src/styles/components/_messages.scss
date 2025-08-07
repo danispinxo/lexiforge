@@ -1,43 +1,44 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 .message {
-  padding: $spacing-md $spacing-lg;
-  border-radius: $border-radius-md;
-  margin: $spacing-md 0;
-  font-family: $font-sans;
-  font-weight: $weight-medium;
+  padding: variables.$spacing-md variables.$spacing-lg;
+  border-radius: variables.$border-radius-md;
+  margin: variables.$spacing-md 0;
+  font-family: variables.$font-sans;
+  font-weight: variables.$weight-medium;
   border-left: 4px solid;
 
   &.success {
-    background: rgba($library-green, 0.1);
-    color: lighten($library-green, 20%);
-    border-left-color: $library-green;
+    background: rgba(variables.$library-green, 0.1);
+    color: color.adjust(variables.$library-green, $lightness: 20%);
+    border-left-color: variables.$library-green;
   }
 
   &.error {
-    background: rgba($accent-color, 0.1);
-    color: lighten($accent-color, 20%);
-    border-left-color: $accent-color;
+    background: rgba(variables.$accent-color, 0.1);
+    color: color.adjust(variables.$accent-color, $lightness: 20%);
+    border-left-color: variables.$accent-color;
   }
 
   &.info {
-    background: rgba($primary-color, 0.1);
-    color: $primary-color;
-    border-left-color: $primary-color;
+    background: rgba(variables.$primary-color, 0.1);
+    color: variables.$primary-color;
+    border-left-color: variables.$primary-color;
   }
 }
 
 .help-text {
-  font-size: $font-size-sm;
-  color: $text-muted;
-  margin-top: $spacing-md;
+  font-size: variables.$font-size-sm;
+  color: variables.$text-muted;
+  margin-top: variables.$spacing-md;
   font-style: italic;
-  font-family: $font-serif;
+  font-family: variables.$font-serif;
   line-height: 1.5;
 
   a {
-    color: $primary-color;
+    color: variables.$primary-color;
     text-decoration: underline;
     text-decoration-style: dotted;
   }
@@ -45,25 +46,25 @@
 
 .empty-state {
   text-align: center;
-  padding: $spacing-xl * 2;
-  color: $text-muted;
+  padding: variables.$spacing-xl * 2;
+  color: variables.$text-muted;
 
   h3 {
-    @include heading-serif;
-    color: $text-secondary;
-    margin-bottom: $spacing-lg;
+    @include mixins.heading-serif;
+    color: variables.$text-secondary;
+    margin-bottom: variables.$spacing-lg;
   }
 
   p {
-    margin: $spacing-md 0;
-    font-family: $font-serif;
+    margin: variables.$spacing-md 0;
+    font-family: variables.$font-serif;
     font-style: italic;
-    font-size: $font-size-lg;
+    font-size: variables.$font-size-lg;
   }
 
   a {
-    @include button-primary;
-    margin-top: $spacing-lg;
+    @include mixins.button-primary;
+    margin-top: variables.$spacing-lg;
     text-decoration: none;
   }
 }
@@ -71,34 +72,34 @@
 .loading,
 .error {
   text-align: center;
-  padding: $spacing-xl * 2;
-  font-size: $font-size-lg;
-  font-family: $font-serif;
+  padding: variables.$spacing-xl * 2;
+  font-size: variables.$font-size-lg;
+  font-family: variables.$font-serif;
 
   &.loading {
-    color: $text-muted;
+    color: variables.$text-muted;
 
     &::after {
       content: "";
       display: inline-block;
       width: 20px;
       height: 20px;
-      margin-left: $spacing-sm;
-      border: 2px solid rgba($primary-color, 0.3);
-      border-top: 2px solid $primary-color;
+      margin-left: variables.$spacing-sm;
+      border: 2px solid rgba(variables.$primary-color, 0.3);
+      border-top: 2px solid variables.$primary-color;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
   }
 
   &.error {
-    color: $accent-color;
+    color: variables.$accent-color;
 
     &::before {
       content: "⚠";
       display: block;
-      font-size: $font-size-4xl;
-      margin-bottom: $spacing-md;
+      font-size: variables.$font-size-4xl;
+      margin-bottom: variables.$spacing-md;
     }
   }
 }
@@ -106,8 +107,8 @@
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba($primary-color, 0.3);
-  border-top: 3px solid $primary-color;
+  border: 3px solid rgba(variables.$primary-color, 0.3);
+  border-top: 3px solid variables.$primary-color;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

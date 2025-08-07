@@ -1,5 +1,5 @@
-@import "../variables";
-@import "../mixins";
+@use "../variables";
+@use "../mixins";
 
 .text-center {
   text-align: center;
@@ -12,102 +12,102 @@
 }
 
 .font-serif {
-  font-family: $font-serif;
+  font-family: variables.$font-serif;
 }
 .font-sans {
-  font-family: $font-sans;
+  font-family: variables.$font-sans;
 }
 .font-mono {
-  font-family: $font-mono;
+  font-family: variables.$font-mono;
 }
 .font-display {
-  font-family: $font-display;
+  font-family: variables.$font-display;
 }
 
 .text-primary {
-  color: $text-primary;
+  color: variables.$text-primary;
 }
 .text-secondary {
-  color: $text-secondary;
+  color: variables.$text-secondary;
 }
 .text-muted {
-  color: $text-muted;
+  color: variables.$text-muted;
 }
 .text-accent {
-  color: $text-accent;
+  color: variables.$text-accent;
 }
 
 .bg-primary {
-  background-color: $bg-primary;
+  background-color: variables.$bg-primary;
 }
 .bg-secondary {
-  background-color: $bg-secondary;
+  background-color: variables.$bg-secondary;
 }
 .bg-accent {
-  background-color: $bg-accent;
+  background-color: variables.$bg-accent;
 }
 
 .mb-0 {
   margin-bottom: 0;
 }
 .mb-1 {
-  margin-bottom: $spacing-xs;
+  margin-bottom: variables.$spacing-xs;
 }
 .mb-2 {
-  margin-bottom: $spacing-sm;
+  margin-bottom: variables.$spacing-sm;
 }
 .mb-3 {
-  margin-bottom: $spacing-md;
+  margin-bottom: variables.$spacing-md;
 }
 .mb-4 {
-  margin-bottom: $spacing-lg;
+  margin-bottom: variables.$spacing-lg;
 }
 .mb-5 {
-  margin-bottom: $spacing-xl;
+  margin-bottom: variables.$spacing-xl;
 }
 
 .mt-0 {
   margin-top: 0;
 }
 .mt-1 {
-  margin-top: $spacing-xs;
+  margin-top: variables.$spacing-xs;
 }
 .mt-2 {
-  margin-top: $spacing-sm;
+  margin-top: variables.$spacing-sm;
 }
 .mt-3 {
-  margin-top: $spacing-md;
+  margin-top: variables.$spacing-md;
 }
 .mt-4 {
-  margin-top: $spacing-lg;
+  margin-top: variables.$spacing-lg;
 }
 .mt-5 {
-  margin-top: $spacing-xl;
+  margin-top: variables.$spacing-xl;
 }
 
 .p-0 {
   padding: 0;
 }
 .p-1 {
-  padding: $spacing-xs;
+  padding: variables.$spacing-xs;
 }
 .p-2 {
-  padding: $spacing-sm;
+  padding: variables.$spacing-sm;
 }
 .p-3 {
-  padding: $spacing-md;
+  padding: variables.$spacing-md;
 }
 .p-4 {
-  padding: $spacing-lg;
+  padding: variables.$spacing-lg;
 }
 .p-5 {
-  padding: $spacing-xl;
+  padding: variables.$spacing-xl;
 }
 
 .truncated {
-  @include text-truncate;
+  @include mixins.text-truncate;
   font-style: italic;
-  color: $text-muted;
+  color: variables.$text-muted;
 
   &::after {
     content: "…";
@@ -116,7 +116,7 @@
 }
 
 .sr-only {
-  @include visually-hidden;
+  @include mixins.visually-hidden;
 }
 
 .d-none {
@@ -139,13 +139,13 @@
 }
 
 .flex-center {
-  @include flex-center;
+  @include mixins.flex-center;
 }
 .flex-between {
-  @include flex-between;
+  @include mixins.flex-between;
 }
 .flex-column {
-  @include flex-column;
+  @include mixins.flex-column;
 }
 .flex-wrap {
   flex-wrap: wrap;

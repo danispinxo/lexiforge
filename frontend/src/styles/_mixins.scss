@@ -1,23 +1,24 @@
-@import "variables";
+@use "sass:color";
+@use "variables";
 
 @mixin heading-display {
-  font-family: $font-display;
-  font-weight: $weight-black;
+  font-family: variables.$font-display;
+  font-weight: variables.$weight-black;
   letter-spacing: -0.02em;
   line-height: 0.9;
   text-transform: uppercase;
 }
 
 @mixin heading-serif {
-  font-family: $font-serif;
-  font-weight: $weight-semibold;
+  font-family: variables.$font-serif;
+  font-weight: variables.$weight-semibold;
   line-height: 1.2;
   letter-spacing: -0.01em;
 }
 
 @mixin body-text {
-  font-family: $font-serif;
-  font-weight: $weight-normal;
+  font-family: variables.$font-serif;
+  font-weight: variables.$weight-normal;
   line-height: 1.6;
   letter-spacing: 0.01em;
 }
@@ -25,20 +26,20 @@
 @mixin small-caps {
   font-variant: small-caps;
   letter-spacing: 0.05em;
-  font-weight: $weight-medium;
+  font-weight: variables.$weight-medium;
 }
 
 @mixin button-base {
-  font-family: $font-sans;
-  font-weight: $weight-medium;
-  font-size: $font-size-sm;
+  font-family: variables.$font-sans;
+  font-weight: variables.$weight-medium;
+  font-size: variables.$font-size-sm;
   letter-spacing: 0.025em;
   text-transform: uppercase;
-  padding: $spacing-sm $spacing-lg;
+  padding: variables.$spacing-sm variables.$spacing-lg;
   border: 1px solid transparent;
-  border-radius: $border-radius-sm;
+  border-radius: variables.$border-radius-sm;
   cursor: pointer;
-  transition: all $transition-normal $ease-out-expo;
+  transition: all variables.$transition-normal variables.$ease-out-expo;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -71,18 +72,18 @@
 
 @mixin button-primary {
   @include button-base;
-  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
-  color: $black;
-  box-shadow: $shadow-medium;
+  background: linear-gradient(135deg, variables.$primary-color 0%, variables.$primary-dark 100%);
+  color: variables.$black;
+  box-shadow: variables.$shadow-medium;
 
   &:hover:not(:disabled) {
     background: linear-gradient(
       135deg,
-      lighten($primary-color, 10%) 0%,
-      $primary-color 100%
+      color.adjust(variables.$primary-color, $lightness: 10%) 0%,
+      variables.$primary-color 100%
     );
     transform: translateY(-2px);
-    box-shadow: $shadow-heavy, $glow-gold;
+    box-shadow: variables.$shadow-heavy, variables.$glow-gold;
   }
 
   &:active {
@@ -93,15 +94,15 @@
 @mixin button-secondary {
   @include button-base;
   background: transparent;
-  color: $primary-color;
-  border: 1px solid $primary-color;
-  box-shadow: $shadow-subtle;
+  color: variables.$primary-color;
+  border: 1px solid variables.$primary-color;
+  box-shadow: variables.$shadow-subtle;
 
   &:hover:not(:disabled) {
-    background: $primary-color;
-    color: $black;
+    background: variables.$primary-color;
+    color: variables.$black;
     transform: translateY(-1px);
-    box-shadow: $shadow-medium, $glow-gold;
+    box-shadow: variables.$shadow-medium, variables.$glow-gold;
   }
 }
 
@@ -109,44 +110,44 @@
   @include button-base;
   background: linear-gradient(
     135deg,
-    $accent-color 0%,
-    darken($accent-color, 15%) 100%
+    variables.$accent-color 0%,
+    color.adjust(variables.$accent-color, $lightness: -15%) 100%
   );
-  color: $warm-white;
-  box-shadow: $shadow-medium;
+  color: variables.$warm-white;
+  box-shadow: variables.$shadow-medium;
 
   &:hover:not(:disabled) {
     background: linear-gradient(
       135deg,
-      lighten($accent-color, 10%) 0%,
-      $accent-color 100%
+      color.adjust(variables.$accent-color, $lightness: 10%) 0%,
+      variables.$accent-color 100%
     );
     transform: translateY(-2px);
-    box-shadow: $shadow-heavy, $glow-red;
+    box-shadow: variables.$shadow-heavy, variables.$glow-red;
   }
 }
 
 @mixin button-ghost {
   @include button-base;
   background: transparent;
-  color: $text-secondary;
-  border: 1px solid $medium-gray;
+  color: variables.$text-secondary;
+  border: 1px solid variables.$medium-gray;
 
   &:hover:not(:disabled) {
-    color: $text-primary;
-    border-color: $primary-color;
-    box-shadow: $glow-warm;
+    color: variables.$text-primary;
+    border-color: variables.$primary-color;
+    box-shadow: variables.$glow-warm;
   }
 }
 
 @mixin card {
-  background: $bg-secondary;
-  border-radius: $border-radius-md;
-  box-shadow: $shadow-medium;
-  padding: $spacing-xl;
-  margin-bottom: $spacing-lg;
+  background: variables.$bg-secondary;
+  border-radius: variables.$border-radius-md;
+  box-shadow: variables.$shadow-medium;
+  padding: variables.$spacing-xl;
+  margin-bottom: variables.$spacing-lg;
   position: relative;
-  border: 1px solid rgba($primary-color, 0.1);
+  border: 1px solid rgba(variables.$primary-color, 0.1);
 
   &::before {
     content: "";
@@ -157,12 +158,12 @@
     bottom: 0;
     background: radial-gradient(
         circle at 20% 80%,
-        rgba($primary-color, 0.03) 0%,
+        rgba(variables.$primary-color, 0.03) 0%,
         transparent 50%
       ),
       radial-gradient(
         circle at 80% 20%,
-        rgba($accent-color, 0.02) 0%,
+        rgba(variables.$accent-color, 0.02) 0%,
         transparent 50%
       );
     border-radius: inherit;
@@ -173,16 +174,16 @@
 @mixin card-paper {
   @include card;
 
-  background: linear-gradient(145deg, $paper-bg 0%, darken($paper-bg, 5%) 100%);
-  color: $ink-blue;
+  background: linear-gradient(145deg, variables.$paper-bg 0%, color.adjust(variables.$paper-bg, $lightness: -5%) 100%);
+  color: variables.$ink-blue;
 
   &::before {
     background: repeating-linear-gradient(
       90deg,
       transparent,
       transparent 1px,
-      rgba($ink-blue, 0.03) 1px,
-      rgba($ink-blue, 0.03) 2px
+      rgba(variables.$ink-blue, 0.03) 1px,
+      rgba(variables.$ink-blue, 0.03) 2px
     );
   }
 }
@@ -208,16 +209,16 @@
 @mixin grid-responsive($min-width: 300px) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
-  gap: $spacing-lg;
+  gap: variables.$spacing-lg;
 }
 
 // Text effects
-@mixin text-glow($color: $primary-color) {
+@mixin text-glow($color: variables.$primary-color) {
   text-shadow: 0 0 10px rgba($color, 0.5);
 }
 
 @mixin text-shadow-heavy {
-  text-shadow: 2px 2px 4px rgba($black, 0.8);
+  text-shadow: 2px 2px 4px rgba(variables.$black, 0.8);
 }
 
 @mixin text-truncate {
@@ -227,49 +228,49 @@
 }
 
 @mixin text-fade-in {
-  animation: fadeInText 0.8s $ease-out-expo;
+  animation: fadeInText 0.8s variables.$ease-out-expo;
 }
 
 // Academic elements
 @mixin manuscript-style {
-  font-family: $font-serif;
+  font-family: variables.$font-serif;
   line-height: 1.8;
-  font-size: $font-size-lg;
-  color: $ink-blue;
-  background: $paper-bg;
-  padding: $spacing-xl;
-  border-radius: $border-radius-sm;
-  box-shadow: inset 0 0 0 1px rgba($ink-blue, 0.1);
+  font-size: variables.$font-size-lg;
+  color: variables.$ink-blue;
+  background: variables.$paper-bg;
+  padding: variables.$spacing-xl;
+  border-radius: variables.$border-radius-sm;
+  box-shadow: inset 0 0 0 1px rgba(variables.$ink-blue, 0.1);
 
   // Vintage paper effect
   background-image: linear-gradient(
       90deg,
       transparent 79px,
-      rgba($ink-blue, 0.1) 81px,
+      rgba(variables.$ink-blue, 0.1) 81px,
       transparent 82px
     ),
-    linear-gradient(rgba($ink-blue, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(variables.$ink-blue, 0.05) 1px, transparent 1px);
   background-size: 100% 1.5em;
   background-position: 0 0;
 }
 
 @mixin library-label {
   @include small-caps;
-  font-size: $font-size-xs;
-  color: $text-muted;
-  background: rgba($medium-gray, 0.2);
-  padding: $spacing-xs $spacing-sm;
-  border-radius: $border-radius-sm;
-  border: 1px solid rgba($medium-gray, 0.3);
+  font-size: variables.$font-size-xs;
+  color: variables.$text-muted;
+  background: rgba(variables.$medium-gray, 0.2);
+  padding: variables.$spacing-xs variables.$spacing-sm;
+  border-radius: variables.$border-radius-sm;
+  border: 1px solid rgba(variables.$medium-gray, 0.3);
 }
 
 // Indie rock elements
 @mixin concert-poster {
-  background: linear-gradient(45deg, $charcoal 0%, $dark-gray 100%);
-  color: $warm-white;
-  padding: $spacing-xl;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-dramatic;
+  background: linear-gradient(45deg, variables.$charcoal 0%, variables.$dark-gray 100%);
+  color: variables.$warm-white;
+  padding: variables.$spacing-xl;
+  border-radius: variables.$border-radius-lg;
+  box-shadow: variables.$shadow-dramatic;
   position: relative;
   overflow: hidden;
 
@@ -282,7 +283,7 @@
     height: 200%;
     background: radial-gradient(
       circle,
-      rgba($primary-color, 0.1) 0%,
+      rgba(variables.$primary-color, 0.1) 0%,
       transparent 70%
     );
     animation: rotate 20s linear infinite;
@@ -293,11 +294,11 @@
   background: radial-gradient(
       circle at center,
       transparent 20%,
-      rgba($black, 0.1) 21%,
-      rgba($black, 0.1) 22%,
+      rgba(variables.$black, 0.1) 21%,
+      rgba(variables.$black, 0.1) 22%,
       transparent 23%
     ),
-    conic-gradient(from 0deg, $charcoal, $dark-gray, $charcoal, $dark-gray);
+    conic-gradient(from 0deg, variables.$charcoal, variables.$dark-gray, variables.$charcoal, variables.$dark-gray);
   border-radius: 50%;
 }
 
@@ -308,39 +309,39 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: $bg-overlay;
+  background: variables.$bg-overlay;
   backdrop-filter: blur(8px);
   @include flex-center;
   z-index: 1000;
-  animation: fadeIn 0.3s $ease-out-expo;
+  animation: fadeIn 0.3s variables.$ease-out-expo;
 }
 
 @mixin modal-content {
-  background: $bg-secondary;
-  border-radius: $border-radius-lg;
+  background: variables.$bg-secondary;
+  border-radius: variables.$border-radius-lg;
   max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: $shadow-dramatic;
-  border: 1px solid rgba($primary-color, 0.2);
-  animation: slideUpFadeIn 0.4s $ease-out-expo;
+  box-shadow: variables.$shadow-dramatic;
+  border: 1px solid rgba(variables.$primary-color, 0.2);
+  animation: slideUpFadeIn 0.4s variables.$ease-out-expo;
 }
 
 // Responsive design mixins
 @mixin mobile {
-  @media (max-width: #{$breakpoint-sm - 1px}) {
+  @media (max-width: #{variables.$breakpoint-sm - 1px}) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-md - 1px}) {
+  @media (min-width: #{variables.$breakpoint-sm}) and (max-width: #{variables.$breakpoint-md - 1px}) {
     @content;
   }
 }
 
 @mixin desktop {
-  @media (min-width: #{$breakpoint-lg}) {
+  @media (min-width: #{variables.$breakpoint-lg}) {
     @content;
   }
 }
@@ -359,7 +360,7 @@
 }
 
 @mixin focus-outline {
-  outline: 2px solid $primary-color;
+  outline: 2px solid variables.$primary-color;
   outline-offset: 2px;
 }
 
@@ -406,9 +407,9 @@
 @keyframes glow {
   0%,
   100% {
-    text-shadow: 0 0 5px rgba($primary-color, 0.5);
+    text-shadow: 0 0 5px rgba(variables.$primary-color, 0.5);
   }
   50% {
-    text-shadow: 0 0 20px rgba($primary-color, 0.8);
+    text-shadow: 0 0 20px rgba(variables.$primary-color, 0.8);
   }
 }

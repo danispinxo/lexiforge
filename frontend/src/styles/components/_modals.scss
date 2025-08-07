@@ -1,56 +1,57 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 .modal-overlay {
-  @include modal-overlay;
+  @include mixins.modal-overlay;
 }
 
 .modal-content {
-  @include modal-content;
+  @include mixins.modal-content;
   width: min(800px, 90vw);
-  background: $bg-secondary;
+  background: variables.$bg-secondary;
 }
 
 .modal-header {
-  @include flex-between;
-  padding: $spacing-xl;
-  border-bottom: 1px solid rgba($primary-color, 0.2);
+  @include mixins.flex-between;
+  padding: variables.$spacing-xl;
+  border-bottom: 1px solid rgba(variables.$primary-color, 0.2);
   background: linear-gradient(
     135deg,
-    $bg-secondary 0%,
-    lighten($bg-secondary, 3%) 100%
+    variables.$bg-secondary 0%,
+    color.adjust(variables.$bg-secondary, $lightness: 3%) 100%
   );
 
   h2 {
-    @include heading-serif;
+    @include mixins.heading-serif;
     margin: 0;
-    color: $text-primary;
-    font-size: $font-size-xl;
+    color: variables.$text-primary;
+    font-size: variables.$font-size-xl;
   }
 }
 
 .modal-close {
-  @include button-ghost;
-  font-size: $font-size-xl;
+  @include mixins.button-ghost;
+  font-size: variables.$font-size-xl;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   padding: 0;
 
   &:hover {
-    background: rgba($accent-color, 0.1);
-    color: $accent-color;
+    background: rgba(variables.$accent-color, 0.1);
+    color: variables.$accent-color;
   }
 }
 
 .modal-body {
-  padding: $spacing-xl;
+  padding: variables.$spacing-xl;
 
   .source-info {
-    @include card-paper;
-    margin-bottom: $spacing-lg;
-    padding: $spacing-md;
-    font-size: $font-size-sm;
+    @include mixins.card-paper;
+    margin-bottom: variables.$spacing-lg;
+    padding: variables.$spacing-md;
+    font-size: variables.$font-size-sm;
 
     &:hover {
       transform: none !important;
@@ -58,15 +59,15 @@
   }
 
   .form-group {
-    margin-bottom: $spacing-lg;
+    margin-bottom: variables.$spacing-lg;
 
     label {
       display: block;
-      @include small-caps;
-      font-weight: $weight-medium;
-      margin-bottom: $spacing-sm;
-      color: $text-secondary;
-      font-family: $font-sans;
+      @include mixins.small-caps;
+      font-weight: variables.$weight-medium;
+      margin-bottom: variables.$spacing-sm;
+      color: variables.$text-secondary;
+      font-family: variables.$font-sans;
 
       &.checkbox-label {
         display: flex !important;
@@ -77,21 +78,41 @@
 
     select {
       width: 100%;
-      padding: $spacing-md;
-      border: 1px solid rgba($medium-gray, 0.5);
-      border-radius: $border-radius-sm;
-      font-size: $font-size-base;
-      background: $bg-accent;
-      color: $text-primary;
-      font-family: $font-sans;
+      padding: variables.$spacing-md;
+      border: 1px solid rgba(variables.$medium-gray, 0.5);
+      border-radius: variables.$border-radius-sm;
+      font-size: variables.$font-size-base;
+      background: variables.$bg-accent;
+      color: variables.$text-primary;
+      font-family: variables.$font-sans;
 
       &:focus {
-        border-color: $primary-color;
-        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+        border-color: variables.$primary-color;
+        box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
       }
     }
 
-    // Force checkbox to stay square in modals
+    input[type="text"] {
+      width: 100%;
+      padding: variables.$spacing-md;
+      border: 1px solid rgba(variables.$medium-gray, 0.5);
+      border-radius: variables.$border-radius-sm;
+      font-size: variables.$font-size-base;
+      background: variables.$bg-accent;
+      color: variables.$text-primary;
+      font-family: variables.$font-sans;
+
+      &:focus {
+        border-color: variables.$primary-color;
+        box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
+      }
+
+      &::placeholder {
+        color: variables.$text-muted;
+        font-style: italic;
+      }
+    }
+
     input[type="checkbox"] {
       width: 20px !important;
       min-width: 20px !important;
@@ -101,26 +122,26 @@
   }
 
   .help-text {
-    font-size: $font-size-sm;
-    color: $text-muted;
-    margin-top: $spacing-sm;
+    font-size: variables.$font-size-sm;
+    color: variables.$text-muted;
+    margin-top: variables.$spacing-sm;
     font-style: italic;
-    font-family: $font-serif;
+    font-family: variables.$font-serif;
   }
 
   .form-description {
-    margin-top: $spacing-md;
-    
+    margin-top: variables.$spacing-md;
+
     .technique-description {
-      font-size: $font-size-sm;
-      color: $text-secondary;
+      font-size: variables.$font-size-sm;
+      color: variables.$text-secondary;
       font-style: italic;
-      font-family: $font-serif;
+      font-family: variables.$font-serif;
       line-height: 1.5;
-      background: rgba($primary-color, 0.05);
-      padding: $spacing-md;
-      border-radius: $border-radius-sm;
-      border-left: 3px solid $primary-color;
+      background: rgba(variables.$primary-color, 0.05);
+      padding: variables.$spacing-md;
+      border-radius: variables.$border-radius-sm;
+      border-left: 3px solid variables.$primary-color;
       margin: 0;
     }
   }
@@ -128,21 +149,21 @@
 
 .modal-actions {
   display: flex;
-  gap: $spacing-md;
+  gap: variables.$spacing-md;
   justify-content: flex-end;
-  margin-top: $spacing-xl;
-  padding-top: $spacing-lg;
-  border-top: 1px solid rgba($primary-color, 0.1);
+  margin-top: variables.$spacing-xl;
+  padding-top: variables.$spacing-lg;
+  border-top: 1px solid rgba(variables.$primary-color, 0.1);
 
   .btn {
     min-width: 120px;
   }
 }
 
-@include tablet {
+@include mixins.tablet {
   .modal-content {
     width: 95vw;
-    margin: $spacing-md;
+    margin: variables.$spacing-md;
   }
 
   .modal-actions {
@@ -154,10 +175,10 @@
   }
 }
 
-@include mobile {
+@include mixins.mobile {
   .modal-content {
     width: 95vw;
-    margin: $spacing-md;
+    margin: variables.$spacing-md;
   }
 
   .modal-actions {
