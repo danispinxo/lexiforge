@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   namespace :api do
+    devise_for :users, controllers: {
+      sessions: 'api/sessions',
+      registrations: 'api/registrations'
+    }, skip: [:passwords, :confirmations, :unlocks]
+
     resources :source_texts do
       collection do
         post :import_from_gutenberg
@@ -17,6 +22,7 @@ Rails.application.routes.draw do
     end
 
     resources :poems
+    get 'current_user', to: 'sessions#current_user'
   end
 
   match '*path', to: 'application#handle_options_request', via: :options
