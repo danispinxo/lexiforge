@@ -3,7 +3,13 @@ class ApplicationController < ActionController::Base
 
   def handle_options_request
     if request.path.start_with?('/api')
-      response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
+      allowed_origins = ENV.fetch('ALLOWED_ORIGINS', 'http://localhost:3001').split(',')
+      origin = request.headers['Origin']
+      
+      if allowed_origins.include?(origin)
+        response.headers['Access-Control-Allow-Origin'] = origin
+      end
+      
       response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
       response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
     end
@@ -21,7 +27,13 @@ class ApiController < ActionController::API
   private
 
   def set_cors_headers
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
+    allowed_origins = ENV.fetch('ALLOWED_ORIGINS', 'http://localhost:3001').split(',')
+    origin = request.headers['Origin']
+    
+    if allowed_origins.include?(origin)
+      response.headers['Access-Control-Allow-Origin'] = origin
+    end
+    
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
   end
