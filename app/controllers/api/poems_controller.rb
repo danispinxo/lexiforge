@@ -224,9 +224,7 @@ class Api::PoemsController < ApiController
     method = params[:method] || 'mesostic'
     options = { method: method }
 
-    if method == 'mesostic'
-      options[:spine_word] = params[:spine_word]
-    end
+    options[:spine_word] = params[:spine_word] if method == 'mesostic'
 
     options
   end

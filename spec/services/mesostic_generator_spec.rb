@@ -60,15 +60,15 @@ RSpec.describe MesosticGenerator do
       it 'creates separate stanzas for each word' do
         expect(result).to be_a(String)
         lines = result.lines.map(&:strip)
-        
+
         expect(lines.length).to eq(7)
-        
+
         expect(lines[0]).to start_with('d')
         expect(lines[1][1]).to eq('o')
         expect(lines[2][2]).to eq('g')
-        
+
         expect(lines[3]).to eq('')
-        
+
         expect(lines[4]).to start_with('c')
         expect(lines[5][1]).to eq('a')
         expect(lines[6][2]).to eq('t')
@@ -82,9 +82,9 @@ RSpec.describe MesosticGenerator do
       it 'treats multiple spaces as single stanza breaks' do
         expect(result).to be_a(String)
         lines = result.lines.map(&:strip)
-        
+
         expect(lines.length).to eq(7)
-        
+
         expect(lines[3]).to eq('')
       end
     end
@@ -96,9 +96,9 @@ RSpec.describe MesosticGenerator do
       it 'only does one stanza if the second stanza fails entirely' do
         expect(result).to be_a(String)
         lines = result.lines.map(&:strip)
-        
+
         expect(lines.length).to eq(3)
-        
+
         expect(lines[0]).to start_with('d')
         expect(lines[1][1]).to eq('o')
         expect(lines[2][2]).to eq('g')

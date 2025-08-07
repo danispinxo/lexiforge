@@ -18,43 +18,39 @@ class MesosticGenerator
 
   def generate_mesostic(options = {})
     spine_word = options[:spine_word]
-    
+
     return 'Spine word is required for mesostic generation' if spine_word.blank?
-    
+
     words = extract_clean_words
     return 'Not enough words in source text' if words.length < 10
 
     mesostic_lines = build_mesostic_lines(words, spine_word)
-    
+
     return 'Could not generate mesostic poem with given spine word' if mesostic_lines.empty?
-    
+
     mesostic_lines.join("\n")
   end
 
   def build_mesostic_lines(words, spine_word)
     lines = []
     spine_words = spine_word.downcase.split(/\s+/)
-    
+
     spine_words.each_with_index do |spine_word_part, stanza_index|
       stanza_lines = []
-      
+
       spine_word_part.each_char.with_index do |target_letter, position|
         matching_word = find_word_with_letter_at_position(words, target_letter, position)
-        
-        if matching_word
-          stanza_lines << matching_word
-        else
-          break
-        end
+
+        break unless matching_word
+
+        stanza_lines << matching_word
       end
-      
+
       lines.concat(stanza_lines)
-      
-      if stanza_index < spine_words.length - 1 && !stanza_lines.empty?
-        lines << ""
-      end
+
+      lines << '' if stanza_index < spine_words.length - 1 && !stanza_lines.empty?
     end
-    
+
     lines
   end
 
