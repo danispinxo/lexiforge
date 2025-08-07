@@ -34,16 +34,18 @@ class MesosticGenerator
   def build_mesostic_lines(words, spine_word)
     lines = []
     spine_words = spine_word.downcase.split(/\s+/)
+    current_word_index = 0
 
     spine_words.each_with_index do |spine_word_part, stanza_index|
       stanza_lines = []
 
       spine_word_part.each_char.with_index do |target_letter, position|
-        matching_word = find_word_with_letter_at_position(words, target_letter, position)
+        result = find_word_with_letter_at_position(words, target_letter, position, current_word_index)
+        
+        break unless result[:found]
 
-        break unless matching_word
-
-        stanza_lines << matching_word
+        stanza_lines << result[:word]
+        current_word_index = result[:next_index]
       end
 
       lines.concat(stanza_lines)
@@ -54,10 +56,15 @@ class MesosticGenerator
     lines
   end
 
-  def find_word_with_letter_at_position(words, target_letter, position)
-    words.find do |word|
-      word.length > position && word[position] == target_letter
+  def find_word_with_letter_at_position(words, target_letter, position, start_index)
+    (start_index...words.length).each do |i|
+      word = words[i]
+      if word.length > position && word[position] == target_letter
+        return { found: true, word: word, next_index: i + 1 }
+      end
     end
+    
+    { found: false, word: nil, next_index: start_index }
   end
 
   def extract_clean_words

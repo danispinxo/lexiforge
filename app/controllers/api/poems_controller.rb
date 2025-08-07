@@ -274,8 +274,8 @@ class Api::PoemsController < ApiController
   end
 
   def generation_params
-    params.permit(:method, :spine_word, :num_lines, :words_per_line, :size, 
-                  :num_pages, :words_per_page, :words_to_keep, :is_blackout, 
+    params.permit(:method, :spine_word, :num_lines, :words_per_line, :size,
+                  :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length)
   end
 
