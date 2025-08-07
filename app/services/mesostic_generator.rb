@@ -50,9 +50,7 @@ class MesosticGenerator
 
       lines.concat(stanza_lines)
 
-      if stanza_index < spine_words.length - 1
-        lines << ''
-      end
+      lines << '' if stanza_index < spine_words.length - 1
     end
 
     lines
