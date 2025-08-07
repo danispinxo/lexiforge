@@ -18,7 +18,8 @@ class ApplicationController < ActionController::Base
   end
 end
 
-class ApiController < ActionController::API
+class ApiController < ActionController::Base
+  protect_from_forgery with: :null_session
   before_action :set_cors_headers
 
   def handle_options_request
@@ -35,8 +36,8 @@ class ApiController < ActionController::API
       response.headers['Access-Control-Allow-Origin'] = origin
     end
     
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
   end
 end
