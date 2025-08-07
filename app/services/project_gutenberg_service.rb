@@ -3,10 +3,10 @@ require 'httparty'
 class ProjectGutenbergService
   include HTTParty
 
-  base_uri 'https://www.gutenberg.org'
+  base_uri ENV.fetch('GUTENBERG_BASE_URL', 'https://www.gutenberg.org')
 
   def initialize
-    @base_url = 'https://www.gutenberg.org'
+    @base_url = ENV.fetch('GUTENBERG_BASE_URL', 'https://www.gutenberg.org')
   end
 
   def import_text(gutenberg_id)

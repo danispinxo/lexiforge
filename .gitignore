@@ -2,9 +2,7 @@
 # Ignore bundler config.
 /.bundle
 
-# Ignore all environment files (except templates).
-/.env*
-!/.env*.erb
+.env
 
 # Ignore tmp and log files
 lexiforge/tmp/
