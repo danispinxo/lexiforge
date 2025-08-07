@@ -1,0 +1,25 @@
+class PreloadGutenbergTexts < ActiveRecord::Migration[7.1]
+  def up
+    gutenberg_ids = [2383, 16328, 1727, 1322, 4099, 26, 36098]
+    service = ProjectGutenbergService.new
+    
+    gutenberg_ids.each do |gutenberg_id|
+      # Skip if the text already exists
+      next if SourceText.exists?(gutenberg_id: gutenberg_id)
+      
+      puts "Importing Gutenberg text #{gutenberg_id}..."
+      source_text = service.import_text(gutenberg_id)
+      
+      if source_text.persisted?
+        puts "Successfully imported: #{source_text.title}"
+      else
+        puts "Failed to import Gutenberg text #{gutenberg_id}"
+      end
+    end
+  end
+
+  def down
+    gutenberg_ids = [2383, 16328, 1727, 1322, 4099, 26, 36098]
+    SourceText.where(gutenberg_id: gutenberg_ids).destroy_all
+  end
+end
