@@ -1,18 +1,19 @@
-@import "../variables";
+@use "sass:color";
+@use "../variables";
 
 * {
   box-sizing: border-box;
 }
 
 :root {
-  font-family: $font-serif;
+  font-family: variables.$font-serif;
   line-height: 1.6;
-  font-weight: $weight-normal;
+  font-weight: variables.$weight-normal;
   font-size: 18px;
 
   color-scheme: dark;
-  color: $text-primary;
-  background-color: $bg-primary;
+  color: variables.$text-primary;
+  background-color: variables.$bg-primary;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,22 +21,22 @@
   -moz-osx-font-smoothing: grayscale;
 
   scrollbar-width: thin;
-  scrollbar-color: $medium-gray $bg-primary;
+  scrollbar-color: variables.$medium-gray variables.$bg-primary;
 
   &::-webkit-scrollbar {
     width: 8px;
   }
 
   &::-webkit-scrollbar-track {
-    background: $bg-primary;
+    background: variables.$bg-primary;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: $medium-gray;
-    border-radius: $border-radius-sm;
+    background: variables.$medium-gray;
+    border-radius: variables.$border-radius-sm;
 
     &:hover {
-      background: $light-gray;
+      background: variables.$light-gray;
     }
   }
 }
@@ -45,22 +46,22 @@ body {
   min-height: 100vh;
   background: repeating-conic-gradient(
       from 0deg at 50% 50%,
-      $bg-primary 0deg,
-      lighten($bg-primary, 1%) 1deg,
-      $bg-primary 2deg
+      variables.$bg-primary 0deg,
+      color.adjust(variables.$bg-primary, $lightness: 1%) 1deg,
+      variables.$bg-primary 2deg
     ),
-    linear-gradient(180deg, $bg-primary 0%, lighten($bg-primary, 3%) 100%);
+    linear-gradient(180deg, variables.$bg-primary 0%, color.adjust(variables.$bg-primary, $lightness: 3%) 100%);
 
   opacity: 0;
   animation: fadeIn 0.5s ease-out forwards;
 }
 
 ::selection {
-  background: rgba($primary-color, 0.3);
-  color: $warm-white;
+  background: rgba(variables.$primary-color, 0.3);
+  color: variables.$warm-white;
 }
 
 ::-moz-selection {
-  background: rgba($primary-color, 0.3);
-  color: $warm-white;
+  background: rgba(variables.$primary-color, 0.3);
+  color: variables.$warm-white;
 }

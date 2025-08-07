@@ -1,64 +1,64 @@
-@import "../variables";
-@import "../mixins";
+@use "../variables";
+@use "../mixins";
 
 .texts-grid,
 .poems-grid {
-  @include grid-responsive(380px);
-  margin-top: $spacing-xl;
+  @include mixins.grid-responsive(380px);
+  margin-top: variables.$spacing-xl;
 }
 
 .app-main {
   max-width: min(1400px, 95vw);
   margin: 0 auto;
-  padding: $spacing-xl;
+  padding: variables.$spacing-xl;
   position: relative;
 }
 
 .source-info {
-  margin: $spacing-md 0;
-  font-size: $font-size-sm;
-  color: $text-muted;
-  font-family: $font-sans;
+  margin: variables.$spacing-md 0;
+  font-size: variables.$font-size-sm;
+  color: variables.$text-muted;
+  font-family: variables.$font-sans;
 }
 
 .source-link {
-  color: $primary-color;
+  color: variables.$primary-color;
   text-decoration: none;
-  font-weight: $weight-medium;
-  @include small-caps;
+  font-weight: variables.$weight-medium;
+  @include mixins.small-caps;
 
   &:hover {
-    @include text-glow($primary-color);
+    @include mixins.text-glow(variables.$primary-color);
   }
 }
 
 .text-info,
 .poem-info {
-  margin-bottom: $spacing-xl;
+  margin-bottom: variables.$spacing-xl;
 }
 
 .metadata {
   display: flex;
-  gap: $spacing-md;
-  margin: $spacing-md 0;
+  gap: variables.$spacing-md;
+  margin: variables.$spacing-md 0;
   flex-wrap: wrap;
 }
 
-@include tablet {
+@include mixins.tablet {
   .texts-grid,
   .poems-grid {
     grid-template-columns: 1fr;
-    gap: $spacing-md;
+    gap: variables.$spacing-md;
   }
 }
 
-@include mobile {
+@include mixins.mobile {
   .app-main {
-    padding: $spacing-md;
+    padding: variables.$spacing-md;
   }
 
   .metadata {
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: variables.$spacing-sm;
   }
 }

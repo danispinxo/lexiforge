@@ -1,10 +1,11 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 .source-text-detail {
   .header .actions {
     display: flex;
-    gap: $spacing-md;
+    gap: variables.$spacing-md;
     align-items: center;
 
     .btn {
@@ -12,9 +13,9 @@
       align-items: center;
       justify-content: center;
       height: 40px;
-      padding: $spacing-sm $spacing-lg !important;
-      font-size: $font-size-sm !important;
-      font-weight: $weight-medium !important;
+      padding: variables.$spacing-sm variables.$spacing-lg !important;
+      font-size: variables.$font-size-sm !important;
+      font-weight: variables.$weight-medium !important;
       line-height: 1 !important;
       text-decoration: none;
       white-space: nowrap;
@@ -24,18 +25,18 @@
   }
 
   .content {
-    margin-top: $spacing-xl;
+    margin-top: variables.$spacing-xl;
 
     h3 {
-      color: $text-primary;
-      margin-bottom: $spacing-lg;
+      color: variables.$text-primary;
+      margin-bottom: variables.$spacing-lg;
     }
 
     .text-content {
-      @include manuscript-style;
-      color: $ink-blue;
-      background: $paper-bg;
-      padding: $spacing-xl $spacing-xl $spacing-xl 120px;
+      @include mixins.manuscript-style;
+      color: variables.$ink-blue;
+      background: variables.$paper-bg;
+      padding: variables.$spacing-xl variables.$spacing-xl variables.$spacing-xl 120px;
       margin-left: 0;
       position: relative;
 
@@ -49,8 +50,8 @@
         background: linear-gradient(
           to bottom,
           transparent 0%,
-          rgba($accent-color, 0.3) 10%,
-          rgba($accent-color, 0.3) 90%,
+          rgba(variables.$accent-color, 0.3) 10%,
+          rgba(variables.$accent-color, 0.3) 90%,
           transparent 100%
         );
       }
@@ -62,15 +63,15 @@
         top: 0;
         bottom: 0;
         width: 1px;
-        background: rgba($accent-color, 0.6);
+        background: rgba(variables.$accent-color, 0.6);
       }
 
       p {
-        color: $ink-blue;
-        margin-bottom: $spacing-md;
+        color: variables.$ink-blue;
+        margin-bottom: variables.$spacing-md;
         line-height: 1.7;
         text-align: justify;
-        text-indent: $spacing-lg;
+        text-indent: variables.$spacing-lg;
 
         &:first-child {
           text-indent: 0;
@@ -78,12 +79,12 @@
       }
 
       .truncated {
-        color: rgba($ink-blue, 0.6);
+        color: rgba(variables.$ink-blue, 0.6);
         font-style: italic;
         text-align: center;
-        margin-top: $spacing-lg;
-        padding-top: $spacing-md;
-        border-top: 1px solid rgba($ink-blue, 0.2);
+        margin-top: variables.$spacing-lg;
+        padding-top: variables.$spacing-md;
+        border-top: 1px solid rgba(variables.$ink-blue, 0.2);
         text-indent: 0;
       }
     }
@@ -91,39 +92,39 @@
 
   .text-info {
     h1 {
-      color: $text-primary;
+      color: variables.$text-primary;
     }
 
     .metadata {
       .word-count,
       .gutenberg-id,
       .poems-count {
-        @include library-label;
-        background: rgba($medium-gray, 0.2);
-        color: $text-secondary;
-        border-color: rgba($medium-gray, 0.3);
+        @include mixins.library-label;
+        background: rgba(variables.$medium-gray, 0.2);
+        color: variables.$text-secondary;
+        border-color: rgba(variables.$medium-gray, 0.3);
       }
     }
   }
 
   .message {
     &.success {
-      background: rgba($library-green, 0.1);
-      color: lighten($library-green, 20%);
-      border-left-color: $library-green;
+      background: rgba(variables.$library-green, 0.1);
+      color: color.adjust(variables.$library-green, $lightness: 20%);
+      border-left-color: variables.$library-green;
     }
 
     &.error {
-      background: rgba($accent-color, 0.1);
-      color: lighten($accent-color, 20%);
-      border-left-color: $accent-color;
+      background: rgba(variables.$accent-color, 0.1);
+      color: color.adjust(variables.$accent-color, $lightness: 20%);
+      border-left-color: variables.$accent-color;
     }
   }
 }
 
-@include mobile {
+@include mixins.mobile {
   .source-text-detail .content .text-content {
-    padding: $spacing-lg $spacing-md $spacing-lg 60px;
+    padding: variables.$spacing-lg variables.$spacing-md variables.$spacing-lg 60px;
 
     &::before {
       left: 40px;

@@ -1,5 +1,5 @@
-@import "base/reset";
-@import "base/typography";
+@use "base/reset";
+@use "base/typography";
 
-@import "utils/animations";
-@import "utils/utilities";
+@use "utils/animations";
+@use "utils/utilities";

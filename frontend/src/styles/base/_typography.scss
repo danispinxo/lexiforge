@@ -1,6 +1,6 @@
 // Typography styles
-@import "../variables";
-@import "../mixins";
+@use "../variables";
+@use "../mixins";
 
 // Import Google Fonts for that academic + indie vibe
 @import url("https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Oswald:wght@400;600;700;900&family=Kalam:wght@400;700&display=swap");
@@ -12,50 +12,50 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 $spacing-md 0;
-  font-weight: $weight-semibold;
+  margin: 0 0 variables.$spacing-md 0;
+  font-weight: variables.$weight-semibold;
   line-height: 1.2;
-  color: $text-primary;
+  color: variables.$text-primary;
 }
 
 h1 {
-  @include heading-display;
-  font-size: clamp($font-size-3xl, 5vw, $font-size-5xl);
-  margin-bottom: $spacing-lg;
-  @include text-glow($primary-color);
+  @include mixins.heading-display;
+  font-size: clamp(variables.$font-size-3xl, 5vw, variables.$font-size-5xl);
+  margin-bottom: variables.$spacing-lg;
+  @include mixins.text-glow(variables.$primary-color);
 }
 
 h2 {
-  @include heading-serif;
-  font-size: clamp($font-size-xl, 3vw, $font-size-3xl);
+  @include mixins.heading-serif;
+  font-size: clamp(variables.$font-size-xl, 3vw, variables.$font-size-3xl);
 }
 
 h3 {
-  @include heading-serif;
-  font-size: $font-size-xl;
+  @include mixins.heading-serif;
+  font-size: variables.$font-size-xl;
 }
 
 h4,
 h5,
 h6 {
-  font-family: $font-sans;
-  font-size: $font-size-lg;
-  color: $text-secondary;
+  font-family: variables.$font-sans;
+  font-size: variables.$font-size-lg;
+  color: variables.$text-secondary;
 }
 
 // Paragraphs
 p {
-  @include body-text;
-  margin: 0 0 $spacing-md 0;
-  color: $text-secondary;
+  @include mixins.body-text;
+  margin: 0 0 variables.$spacing-md 0;
+  color: variables.$text-secondary;
 }
 
 // Links with that indie rock flair
 a {
-  color: $link-color;
+  color: variables.$link-color;
   text-decoration: none;
-  font-weight: $weight-medium;
-  transition: all $transition-normal;
+  font-weight: variables.$weight-medium;
+  transition: all variables.$transition-normal;
   position: relative;
 
   // Subtle underline animation
@@ -66,13 +66,13 @@ a {
     height: 1px;
     bottom: -2px;
     left: 0;
-    background: linear-gradient(90deg, $link-color, $link-hover);
-    transition: width $transition-normal $ease-out-expo;
+    background: linear-gradient(90deg, variables.$link-color, variables.$link-hover);
+    transition: width variables.$transition-normal variables.$ease-out-expo;
   }
 
   &:hover {
-    color: $link-hover;
-    @include text-glow($link-color);
+    color: variables.$link-hover;
+    @include mixins.text-glow(variables.$link-color);
 
     &::after {
       width: 100%;
@@ -80,27 +80,27 @@ a {
   }
 
   &:visited {
-    color: $link-visited;
+    color: variables.$link-visited;
   }
 }
 
 // Code blocks - perfect for poems
 code,
 pre {
-  font-family: $font-mono;
-  background: rgba($black, 0.3);
-  border-radius: $border-radius-sm;
-  border: 1px solid rgba($primary-color, 0.1);
+  font-family: variables.$font-mono;
+  background: rgba(variables.$black, 0.3);
+  border-radius: variables.$border-radius-sm;
+  border: 1px solid rgba(variables.$primary-color, 0.1);
 }
 
 code {
-  padding: $spacing-xs $spacing-sm;
+  padding: variables.$spacing-xs variables.$spacing-sm;
   font-size: 0.9em;
-  color: $primary-color;
+  color: variables.$primary-color;
 }
 
 pre {
-  padding: $spacing-md;
+  padding: variables.$spacing-md;
   overflow-x: auto;
   line-height: 1.5;
 
@@ -108,17 +108,17 @@ pre {
     background: none;
     border: none;
     padding: 0;
-    color: $text-secondary;
+    color: variables.$text-secondary;
   }
 }
 
 // Responsive text sizes
-@include mobile {
+@include mixins.mobile {
   :root {
     font-size: 16px;
   }
 
   h1 {
-    font-size: $font-size-3xl;
+    font-size: variables.$font-size-3xl;
   }
 }

@@ -1,17 +1,18 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 .app-header {
   background: linear-gradient(
     135deg,
-    darken($bg-primary, 5%) 0%,
-    $bg-secondary 100%
+    color.adjust(variables.$bg-primary, $lightness: -5%) 0%,
+    variables.$bg-secondary 100%
   );
-  color: $warm-white;
-  padding: $spacing-lg $spacing-xl;
-  @include flex-between;
-  box-shadow: $shadow-heavy;
-  border-bottom: 3px solid $primary-color;
+  color: variables.$warm-white;
+  padding: variables.$spacing-lg variables.$spacing-xl;
+  @include mixins.flex-between;
+  box-shadow: variables.$shadow-heavy;
+  border-bottom: 3px solid variables.$primary-color;
   position: relative;
 
   &::before {
@@ -25,21 +26,21 @@
       45deg,
       transparent,
       transparent 50px,
-      rgba($primary-color, 0.02) 50px,
-      rgba($primary-color, 0.02) 52px
+      rgba(variables.$primary-color, 0.02) 50px,
+      rgba(variables.$primary-color, 0.02) 52px
     );
     pointer-events: none;
   }
 
   h1 {
-    @include heading-display;
+    @include mixins.heading-display;
     margin: 0;
-    font-size: clamp($font-size-2xl, 4vw, $font-size-4xl);
-    color: $primary-color;
-    @include text-glow($primary-color);
+    font-size: clamp(variables.$font-size-2xl, 4vw, variables.$font-size-4xl);
+    color: variables.$primary-color;
+    @include mixins.text-glow(variables.$primary-color);
     letter-spacing: -0.03em;
 
-    background: linear-gradient(45deg, $primary-color 30%, $warm-white 70%);
+    background: linear-gradient(45deg, variables.$primary-color 30%, variables.$warm-white 70%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -47,45 +48,45 @@
 
   nav {
     display: flex;
-    gap: $spacing-lg;
+    gap: variables.$spacing-lg;
     align-items: center;
 
     a {
-      @include small-caps;
-      color: $text-secondary;
+      @include mixins.small-caps;
+      color: variables.$text-secondary;
       text-decoration: none;
-      padding: $spacing-sm $spacing-md;
-      border-radius: $border-radius-sm;
-      transition: all $transition-normal $ease-out-expo;
-      font-family: $font-sans;
-      font-weight: $weight-medium;
-      font-size: $font-size-sm;
+      padding: variables.$spacing-sm variables.$spacing-md;
+      border-radius: variables.$border-radius-sm;
+      transition: all variables.$transition-normal variables.$ease-out-expo;
+      font-family: variables.$font-sans;
+      font-weight: variables.$weight-medium;
+      font-size: variables.$font-size-sm;
       letter-spacing: 0.1em;
       position: relative;
       border: 1px solid transparent;
 
       &:hover {
-        color: $primary-color;
-        background: rgba($primary-color, 0.05);
-        border-color: rgba($primary-color, 0.2);
+        color: variables.$primary-color;
+        background: rgba(variables.$primary-color, 0.05);
+        border-color: rgba(variables.$primary-color, 0.2);
         transform: translateY(-2px);
-        @include text-glow($primary-color);
+        @include mixins.text-glow(variables.$primary-color);
       }
 
       &.active {
-        color: $primary-color;
-        background: rgba($primary-color, 0.1);
-        border-color: rgba($primary-color, 0.3);
+        color: variables.$primary-color;
+        background: rgba(variables.$primary-color, 0.1);
+        border-color: rgba(variables.$primary-color, 0.3);
       }
     }
   }
 }
 
 .header {
-  @include flex-between;
-  margin-bottom: $spacing-xl;
-  padding-bottom: $spacing-lg;
-  border-bottom: 2px solid rgba($primary-color, 0.2);
+  @include mixins.flex-between;
+  margin-bottom: variables.$spacing-xl;
+  padding-bottom: variables.$spacing-lg;
+  border-bottom: 2px solid rgba(variables.$primary-color, 0.2);
   position: relative;
 
   &::after {
@@ -95,48 +96,48 @@
     left: 0;
     width: 60px;
     height: 2px;
-    background: $primary-color;
+    background: variables.$primary-color;
   }
 
   h1 {
-    @include heading-serif;
+    @include mixins.heading-serif;
     margin: 0;
-    color: $text-primary;
-    font-size: clamp($font-size-xl, 3vw, $font-size-3xl);
+    color: variables.$text-primary;
+    font-size: clamp(variables.$font-size-xl, 3vw, variables.$font-size-3xl);
   }
 }
 
 .back-link {
-  color: $primary-color;
+  color: variables.$primary-color;
   text-decoration: none;
-  font-weight: $weight-medium;
-  margin-bottom: $spacing-lg;
+  font-weight: variables.$weight-medium;
+  margin-bottom: variables.$spacing-lg;
   display: inline-flex;
   align-items: center;
-  gap: $spacing-sm;
-  font-family: $font-sans;
-  @include small-caps;
-  font-size: $font-size-sm;
-  transition: all $transition-normal;
+  gap: variables.$spacing-sm;
+  font-family: variables.$font-sans;
+  @include mixins.small-caps;
+  font-size: variables.$font-size-sm;
+  transition: all variables.$transition-normal;
 
   &:hover {
-    color: $link-hover;
+    color: variables.$link-hover;
     transform: translateX(-4px);
-    @include text-glow($primary-color);
+    @include mixins.text-glow(variables.$primary-color);
   }
 
   &::before {
     content: "←";
-    font-size: $font-size-lg;
+    font-size: variables.$font-size-lg;
   }
 }
 
-@include tablet {
+@include mixins.tablet {
   .app-header {
     flex-direction: column;
-    gap: $spacing-md;
+    gap: variables.$spacing-md;
     text-align: center;
-    padding: $spacing-lg;
+    padding: variables.$spacing-lg;
 
     nav {
       justify-content: center;
@@ -146,7 +147,7 @@
 
   .header {
     flex-direction: column;
-    gap: $spacing-md;
+    gap: variables.$spacing-md;
     text-align: center;
   }
 }

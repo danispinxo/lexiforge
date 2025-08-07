@@ -1,71 +1,72 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 input,
 textarea,
 select {
-  font-family: $font-sans;
-  font-size: $font-size-base;
-  padding: $spacing-sm $spacing-md;
-  border: 1px solid $medium-gray;
-  border-radius: $border-radius-sm;
-  background: $bg-accent;
-  color: $text-primary;
-  transition: all $transition-normal;
+  font-family: variables.$font-sans;
+  font-size: variables.$font-size-base;
+  padding: variables.$spacing-sm variables.$spacing-md;
+  border: 1px solid variables.$medium-gray;
+  border-radius: variables.$border-radius-sm;
+  background: variables.$bg-accent;
+  color: variables.$text-primary;
+  transition: all variables.$transition-normal;
 
   &:focus {
     outline: none;
-    border-color: $primary-color;
-    box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
-    background: lighten($bg-accent, 2%);
+    border-color: variables.$primary-color;
+    box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
+    background: color.adjust(variables.$bg-accent, $lightness: 2%);
   }
 
   &::placeholder {
-    color: $text-muted;
+    color: variables.$text-muted;
     font-style: italic;
   }
 }
 
 .form-group {
   display: flex;
-  gap: $spacing-md;
+  gap: variables.$spacing-md;
   align-items: center;
-  margin-bottom: $spacing-lg;
+  margin-bottom: variables.$spacing-lg;
 
-  @include mobile {
+  @include mixins.mobile {
     flex-direction: column;
     align-items: stretch;
   }
 
   label {
-    @include small-caps;
-    font-weight: $weight-medium;
+    @include mixins.small-caps;
+    font-weight: variables.$weight-medium;
     min-width: 160px;
-    color: $text-secondary;
-    font-family: $font-sans;
-    font-size: $font-size-sm;
+    color: variables.$text-secondary;
+    font-family: variables.$font-sans;
+    font-size: variables.$font-size-sm;
   }
 
   input {
     flex: 1;
     min-width: 240px;
-    padding: $spacing-sm $spacing-md;
-    border: 1px solid rgba($medium-gray, 0.5);
-    border-radius: $border-radius-sm;
-    font-size: $font-size-base;
-    background: rgba($bg-accent, 0.8);
-    color: $text-primary;
-    font-family: $font-sans;
+    padding: variables.$spacing-sm variables.$spacing-md;
+    border: 1px solid rgba(variables.$medium-gray, 0.5);
+    border-radius: variables.$border-radius-sm;
+    font-size: variables.$font-size-base;
+    background: rgba(variables.$bg-accent, 0.8);
+    color: variables.$text-primary;
+    font-family: variables.$font-sans;
 
     &:focus {
-      border-color: $primary-color;
-      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
-      background: $bg-accent;
+      border-color: variables.$primary-color;
+      box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
+      background: variables.$bg-accent;
     }
   }
 
   button {
-    @include button-primary;
+    @include mixins.button-primary;
     white-space: nowrap;
   }
 }
@@ -75,15 +76,15 @@ select {
   align-items: center;
   cursor: pointer;
   font-weight: normal;
-  font-family: $font-sans;
-  color: $text-secondary;
-  border-radius: $border-radius-sm;
+  font-family: variables.$font-sans;
+  color: variables.$text-secondary;
+  border-radius: variables.$border-radius-sm;
   position: relative;
 
   input[type="checkbox"] {
-    margin-right: $spacing-md;
+    margin-right: variables.$spacing-md;
     cursor: pointer;
-    accent-color: $primary-color;
+    accent-color: variables.$primary-color;
 
     &:focus,
     &:focus-visible,
@@ -97,10 +98,10 @@ select {
 }
 
 .checkbox-text {
-  @include small-caps;
+  @include mixins.small-caps;
 
-  font-size: $font-size-sm;
+  font-size: variables.$font-size-sm;
   letter-spacing: 0.03em;
-  font-weight: $weight-medium;
+  font-weight: variables.$weight-medium;
   user-select: none;
 }

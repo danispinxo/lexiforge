@@ -1,139 +1,140 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 .import-section {
-  @include card-paper;
-  margin-bottom: $spacing-xl;
-  color: $ink-blue;
+  @include mixins.card-paper;
+  margin-bottom: variables.$spacing-xl;
+  color: variables.$ink-blue;
 
   h3 {
-    @include heading-serif;
+    @include mixins.heading-serif;
     margin-top: 0;
-    color: $ink-blue;
-    font-size: $font-size-xl;
+    color: variables.$ink-blue;
+    font-size: variables.$font-size-xl;
   }
 
   .form-group {
     label {
-      color: $ink-blue;
+      color: variables.$ink-blue;
     }
 
     input {
       background: white;
-      color: $ink-blue;
-      border: 1px solid rgba($ink-blue, 0.3);
+      color: variables.$ink-blue;
+      border: 1px solid rgba(variables.$ink-blue, 0.3);
 
       &:focus {
-        border-color: $ink-blue;
-        box-shadow: 0 0 0 2px rgba($ink-blue, 0.2);
+        border-color: variables.$ink-blue;
+        box-shadow: 0 0 0 2px rgba(variables.$ink-blue, 0.2);
         background: white;
       }
 
       &::placeholder {
-        color: rgba($ink-blue, 0.6);
+        color: rgba(variables.$ink-blue, 0.6);
         font-style: italic;
       }
     }
 
     button {
-      background: $ink-blue;
+      background: variables.$ink-blue;
       color: white;
       border: none;
 
       &:hover:not(:disabled) {
-        background: darken($ink-blue, 10%);
+        background: color.adjust(variables.$ink-blue, $lightness: -10%);
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba($ink-blue, 0.3);
+        box-shadow: 0 4px 8px rgba(variables.$ink-blue, 0.3);
       }
     }
   }
 
   .popular-books {
     details {
-      background: rgba($ink-blue, 0.05);
-      border: 1px solid rgba($ink-blue, 0.2);
+      background: rgba(variables.$ink-blue, 0.05);
+      border: 1px solid rgba(variables.$ink-blue, 0.2);
     }
 
     summary {
-      color: $ink-blue;
+      color: variables.$ink-blue;
 
       &:hover {
-        color: darken($ink-blue, 15%);
-        background: rgba($ink-blue, 0.1);
+        color: color.adjust(variables.$ink-blue, $lightness: -15%);
+        background: rgba(variables.$ink-blue, 0.1);
       }
     }
 
     .book-item {
-      color: rgba($ink-blue, 0.8);
+      color: rgba(variables.$ink-blue, 0.8);
 
       &:hover {
-        color: $ink-blue;
-        border-left-color: $ink-blue;
+        color: variables.$ink-blue;
+        border-left-color: variables.$ink-blue;
       }
     }
   }
 
   .help-text {
-    color: rgba($ink-blue, 0.7);
+    color: rgba(variables.$ink-blue, 0.7);
 
     a {
-      color: $ink-blue;
+      color: variables.$ink-blue;
       text-decoration: underline;
       text-decoration-style: solid;
-      text-decoration-color: $ink-blue;
+      text-decoration-color: variables.$ink-blue;
 
       &:hover {
-        color: darken($ink-blue, 15%);
-        text-decoration-color: darken($ink-blue, 15%);
+        color: color.adjust(variables.$ink-blue, $lightness: -15%);
+        text-decoration-color: color.adjust(variables.$ink-blue, $lightness: -15%);
       }
     }
   }
 }
 
 .popular-books {
-  margin: $spacing-lg 0;
+  margin: variables.$spacing-lg 0;
 
   details {
-    background: rgba($bg-secondary, 0.5);
-    border-radius: $border-radius-md;
-    padding: $spacing-md;
-    border: 1px solid rgba($primary-color, 0.1);
+    background: rgba(variables.$bg-secondary, 0.5);
+    border-radius: variables.$border-radius-md;
+    padding: variables.$spacing-md;
+    border: 1px solid rgba(variables.$primary-color, 0.1);
   }
 
   summary {
-    @include small-caps;
+    @include mixins.small-caps;
     cursor: pointer;
-    font-weight: $weight-medium;
-    color: $text-secondary;
-    font-family: $font-sans;
-    padding: $spacing-sm;
-    border-radius: $border-radius-sm;
-    transition: all $transition-normal;
+    font-weight: variables.$weight-medium;
+    color: variables.$text-secondary;
+    font-family: variables.$font-sans;
+    padding: variables.$spacing-sm;
+    border-radius: variables.$border-radius-sm;
+    transition: all variables.$transition-normal;
 
     &:hover {
-      color: $primary-color;
-      background: rgba($primary-color, 0.05);
+      color: variables.$primary-color;
+      background: rgba(variables.$primary-color, 0.05);
     }
   }
 }
 
 .books-list {
-  margin-top: $spacing-md;
-  padding-left: $spacing-lg;
+  margin-top: variables.$spacing-md;
+  padding-left: variables.$spacing-lg;
 
   .book-item {
-    margin: $spacing-sm 0;
-    color: $text-muted;
-    font-family: $font-serif;
+    margin: variables.$spacing-sm 0;
+    color: variables.$text-muted;
+    font-family: variables.$font-serif;
     font-style: italic;
-    padding: $spacing-xs;
+    padding: variables.$spacing-xs;
     border-left: 2px solid transparent;
-    transition: all $transition-fast;
+    transition: all variables.$transition-fast;
 
     &:hover {
-      color: $text-secondary;
-      border-left-color: $primary-color;
-      padding-left: $spacing-sm;
+      color: variables.$text-secondary;
+      border-left-color: variables.$primary-color;
+      padding-left: variables.$spacing-sm;
     }
   }
 }

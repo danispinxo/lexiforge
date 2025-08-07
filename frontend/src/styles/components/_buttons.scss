@@ -1,75 +1,76 @@
-@import "../variables";
-@import "../mixins";
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
 
 button {
-  @include button-base;
+  @include mixins.button-base;
 
   &:focus-visible {
-    @include focus-outline;
+    @include mixins.focus-outline;
   }
 }
 
 .btn {
-  @include button-base;
+  @include mixins.button-base;
 
   &-primary {
-    @include button-primary;
+    @include mixins.button-primary;
   }
 
   &-secondary {
-    @include button-secondary;
+    @include mixins.button-secondary;
   }
 
   &-danger {
-    @include button-danger;
+    @include mixins.button-danger;
   }
 
   &-ghost {
-    @include button-ghost;
+    @include mixins.button-ghost;
   }
 
   &-sm {
-    padding: $spacing-xs $spacing-sm;
-    font-size: $font-size-xs;
-    border-radius: $border-radius-sm;
+    padding: variables.$spacing-xs variables.$spacing-sm;
+    font-size: variables.$font-size-xs;
+    border-radius: variables.$border-radius-sm;
   }
 
   &-lg {
-    padding: $spacing-md $spacing-xl;
-    font-size: $font-size-lg;
-    border-radius: $border-radius-md;
+    padding: variables.$spacing-md variables.$spacing-xl;
+    font-size: variables.$font-size-lg;
+    border-radius: variables.$border-radius-md;
   }
 
   &-academic {
-    @include button-base;
-    background: $paper-bg;
-    color: $ink-blue;
-    font-family: $font-serif;
-    font-weight: $weight-semibold;
-    border: 1px solid rgba($ink-blue, 0.2);
+    @include mixins.button-base;
+    background: variables.$paper-bg;
+    color: variables.$ink-blue;
+    font-family: variables.$font-serif;
+    font-weight: variables.$weight-semibold;
+    border: 1px solid rgba(variables.$ink-blue, 0.2);
 
     &:hover:not(:disabled) {
-      background: darken($paper-bg, 5%);
-      color: darken($ink-blue, 10%);
-      box-shadow: $shadow-medium;
+      background: color.adjust(variables.$paper-bg, $lightness: -5%);
+      color: color.adjust(variables.$ink-blue, $lightness: -10%);
+      box-shadow: variables.$shadow-medium;
       transform: translateY(-2px);
     }
   }
 
   &-rock {
-    @include button-base;
-    background: linear-gradient(45deg, $charcoal, $dark-gray);
-    color: $primary-color;
-    font-family: $font-display;
-    font-weight: $weight-bold;
+    @include mixins.button-base;
+    background: linear-gradient(45deg, variables.$charcoal, variables.$dark-gray);
+    color: variables.$primary-color;
+    font-family: variables.$font-display;
+    font-weight: variables.$weight-bold;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border: 2px solid $primary-color;
+    border: 2px solid variables.$primary-color;
 
     &:hover:not(:disabled) {
-      background: linear-gradient(45deg, $dark-gray, $medium-gray);
-      color: $warm-white;
-      box-shadow: $shadow-heavy, $glow-gold;
+      background: linear-gradient(45deg, variables.$dark-gray, variables.$medium-gray);
+      color: variables.$warm-white;
+      box-shadow: variables.$shadow-heavy, variables.$glow-gold;
       transform: translateY(-3px) scale(1.02);
     }
   }

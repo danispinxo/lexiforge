@@ -1,54 +1,54 @@
-@import "../variables";
-@import "../mixins";
+@use "../variables";
+@use "../mixins";
 
 .text-content,
 .poem-content {
-  @include manuscript-style;
+  @include mixins.manuscript-style;
 
-  margin-top: $spacing-xl;
+  margin-top: variables.$spacing-xl;
   padding-left: 100px;
 
   p {
-    margin-bottom: $spacing-md;
+    margin-bottom: variables.$spacing-md;
     line-height: 1.7;
   }
 }
 
 .poem-text {
-  font-family: $font-serif;
+  font-family: variables.$font-serif;
   line-height: 1.8;
-  font-size: $font-size-lg;
-  color: $ink-blue;
+  font-size: variables.$font-size-lg;
+  color: variables.$ink-blue;
 
   .poem-line {
-    margin-bottom: $spacing-sm;
+    margin-bottom: variables.$spacing-sm;
   }
 }
 
 .erasure-poem {
   .erasure-text {
-    font-family: $font-mono;
+    font-family: variables.$font-mono;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-size: $font-size-base;
+    font-size: variables.$font-size-base;
     line-height: 1.4;
     background: linear-gradient(145deg, #f8f6f0 0%, #f0ead6 100%);
-    border: 1px solid rgba($ink-blue, 0.2);
-    border-radius: $border-radius-sm;
-    padding: $spacing-xl;
+    border: 1px solid rgba(variables.$ink-blue, 0.2);
+    border-radius: variables.$border-radius-sm;
+    padding: variables.$spacing-xl;
     margin: 0;
     overflow-x: auto;
-    color: $ink-blue;
-    box-shadow: inset 0 2px 4px rgba($black, 0.1);
+    color: variables.$ink-blue;
+    box-shadow: inset 0 2px 4px rgba(variables.$black, 0.1);
 
     &::before {
       content: "";
       position: absolute;
-      top: $spacing-md;
-      right: $spacing-md;
+      top: variables.$spacing-md;
+      right: variables.$spacing-md;
       width: 8px;
       height: 8px;
-      background: $accent-color;
+      background: variables.$accent-color;
       border-radius: 50%;
       animation: blink 1s infinite;
     }
@@ -58,19 +58,19 @@
 .erasure-pages-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: $spacing-xl;
-  margin: 0 $spacing-lg $spacing-xl 80px;
+  gap: variables.$spacing-xl;
+  margin: 0 variables.$spacing-lg variables.$spacing-xl 80px;
 }
 
 .erasure-page {
   width: 100%;
   min-height: 240px;
-  background: $warm-white;
-  border: 1px solid rgba($ink-blue, 0.1);
-  border-radius: $border-radius-md;
+  background: variables.$warm-white;
+  border: 1px solid rgba(variables.$ink-blue, 0.1);
+  border-radius: variables.$border-radius-md;
   box-shadow: none;
   overflow: hidden;
-  transition: all $transition-normal $ease-out-expo;
+  transition: all variables.$transition-normal variables.$ease-out-expo;
   position: relative;
 
   &::before {
@@ -84,8 +84,8 @@
       0deg,
       transparent,
       transparent 24px,
-      rgba($ink-blue, 0.03) 24px,
-      rgba($ink-blue, 0.03) 25px
+      rgba(variables.$ink-blue, 0.03) 24px,
+      rgba(variables.$ink-blue, 0.03) 25px
     );
     pointer-events: none;
   }
@@ -95,50 +95,50 @@
   }
 
   .page-content {
-    font-family: $font-mono;
+    font-family: variables.$font-mono;
     white-space: pre-wrap;
     word-wrap: break-word;
-    font-size: $font-size-sm;
+    font-size: variables.$font-size-sm;
     line-height: 1.5;
     padding: 2.5rem;
     margin: 0;
     height: 100%;
     overflow-y: auto;
-    color: $ink-blue;
+    color: variables.$ink-blue;
     text-align: justify;
     background: transparent !important;
   }
 }
 
 .blackout-word {
-  background: linear-gradient(45deg, $black, $charcoal);
+  background: linear-gradient(45deg, variables.$black, variables.$charcoal);
   color: transparent;
-  border-radius: $border-radius-sm;
+  border-radius: variables.$border-radius-sm;
   user-select: none;
-  box-shadow: inset 0 1px 2px rgba($black, 0.8);
+  box-shadow: inset 0 1px 2px rgba(variables.$black, 0.8);
 }
 
 .blackout-content {
-  font-family: $font-mono;
+  font-family: variables.$font-mono;
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-size: $font-size-sm;
+  font-size: variables.$font-size-sm;
   line-height: 1.4;
-  padding: $spacing-lg;
+  padding: variables.$spacing-lg;
   margin: 0;
-  color: $ink-blue;
+  color: variables.$ink-blue;
 }
 
-@include tablet {
+@include mixins.tablet {
   .erasure-pages-container {
-    gap: $spacing-lg;
+    gap: variables.$spacing-lg;
   }
 }
 
-@include mobile {
+@include mixins.mobile {
   .erasure-pages-container {
     grid-template-columns: 1fr;
-    gap: $spacing-md;
+    gap: variables.$spacing-md;
   }
 }
 
