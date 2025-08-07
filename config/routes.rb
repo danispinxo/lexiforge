@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     end
 
     resources :poems
-    get 'current_user', to: 'sessions#current_user'
+    get 'user/current', to: 'users#current_user_info'
   end
 
   match '*path', to: 'application#handle_options_request', via: :options
