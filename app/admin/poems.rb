@@ -6,7 +6,7 @@ ActiveAdmin.register Poem do
     id_column
     column :title
     column :technique_used
-    column "Content Preview" do |poem|
+    column 'Content Preview' do |poem|
       truncate(poem.content, length: 150) if poem.content
     end
     column :source_text do |poem|
@@ -16,7 +16,6 @@ ActiveAdmin.register Poem do
     actions
   end
 
-  # Customize the show page (detail view)
   show do
     attributes_table do
       row :id
@@ -33,10 +32,11 @@ ActiveAdmin.register Poem do
       row :created_at
       row :updated_at
     end
-    
-    # Show full content in a separate panel
-    panel "Full Poem Content" do
-      div style: "max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: serif; font-size: 14px; line-height: 1.6; padding: 15px; background: #f9f9f9; border-radius: 5px;" do
+
+    panel 'Full Poem Content' do
+      div style: 'max-height: 400px; overflow-y: auto; white-space: pre-wrap; ' \
+                 'font-family: serif; font-size: 14px; line-height: 1.6; ' \
+                 'padding: 15px; background: #f9f9f9; border-radius: 5px;' do
         poem.content
       end
     end

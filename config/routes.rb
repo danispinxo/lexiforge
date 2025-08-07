@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 
   namespace :api do
     resources :source_texts do
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         post :generate_snowball, to: 'poems#generate_snowball'
       end
     end
-    
+
     resources :poems
   end
 

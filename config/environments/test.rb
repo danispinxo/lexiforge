@@ -1,13 +1,13 @@
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   config.enable_reloading = false
 
-  config.eager_load = ENV["CI"].present?
+  config.eager_load = ENV['CI'].present?
 
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
+    'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
   config.consider_all_requests_local       = true
@@ -33,6 +33,6 @@ Rails.application.configure do
   config.i18n.raise_on_missing_translations = true
 
   # config.action_view.annotate_rendered_view_with_filenames = true
-  
+
   config.action_controller.raise_on_missing_callback_actions = true
 end

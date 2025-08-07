@@ -7,10 +7,6 @@ updates:
       day: "monday"
       time: "09:00"
     open-pull-requests-limit: 3
-    reviewers:
-      - "danispinosa"
-    assignees:
-      - "danispinosa"
     commit-message:
       prefix: "deps"
       include: "scope"
@@ -25,10 +21,6 @@ updates:
       day: "monday"
       time: "09:00"
     open-pull-requests-limit: 3
-    reviewers:
-      - "danispinosa"
-    assignees:
-      - "danispinosa"
     commit-message:
       prefix: "deps"
       include: "scope"
@@ -43,10 +35,6 @@ updates:
       day: "monday"
       time: "09:00"
     open-pull-requests-limit: 2
-    reviewers:
-      - "danispinosa"
-    assignees:
-      - "danispinosa"
     commit-message:
       prefix: "ci"
       include: "scope"
