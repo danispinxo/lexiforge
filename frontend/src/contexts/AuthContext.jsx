@@ -27,6 +27,11 @@ export const AuthProvider = ({ children }) => {
       if (response.data.success) {
         setUser(response.data.user);
         return { success: true };
+      } else {
+        return {
+          success: false,
+          message: response.data.message || "Login failed",
+        };
       }
     } catch (error) {
       return {
