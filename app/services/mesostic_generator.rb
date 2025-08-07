@@ -33,14 +33,25 @@ class MesosticGenerator
 
   def build_mesostic_lines(words, spine_word)
     lines = []
-    spine_word.downcase.each_char.with_index do |target_letter, position|
-      matching_word = find_word_with_letter_at_position(words, target_letter, position)
+    spine_words = spine_word.downcase.split(/\s+/)
+    
+    spine_words.each_with_index do |spine_word_part, stanza_index|
+      stanza_lines = []
       
-      if matching_word
-        lines << matching_word
-      else
-        # Stop when we can't find a word with the required letter at the required position
-        break
+      spine_word_part.each_char.with_index do |target_letter, position|
+        matching_word = find_word_with_letter_at_position(words, target_letter, position)
+        
+        if matching_word
+          stanza_lines << matching_word
+        else
+          break
+        end
+      end
+      
+      lines.concat(stanza_lines)
+      
+      if stanza_index < spine_words.length - 1 && !stanza_lines.empty?
+        lines << ""
       end
     end
     
