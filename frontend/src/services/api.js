@@ -37,7 +37,7 @@ export const authAPI = {
   register: (userData) => api.post("/users", userData),
   login: (credentials) => api.post("/users/sign_in", credentials),
   logout: () => api.delete("/users/sign_out"),
-  getCurrentUser: () => api.get("/current_user"),
+  getCurrentUser: () => api.get("/user/current"),
 };
 
 export default api;
