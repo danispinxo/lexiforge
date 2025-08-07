@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe SnowballGenerator do
   let(:source_text) do
-    create(:source_text, content: "I am the cat who walks by himself and all places are alike to me. I can walk through walls and swim through seas. I am a wonderful magical mystical cat.")
+    create(:source_text,
+           content: 'I am the cat who walks by himself and all places are alike to me. I can walk through walls and swim through seas. I am a wonderful magical mystical cat.')
   end
 
   let(:generator) { described_class.new(source_text) }
@@ -21,7 +22,7 @@ RSpec.describe SnowballGenerator do
       it 'has progressively longer words' do
         lines = result.split("\n")
         expect(lines.length).to be >= 3
-        
+
         previous_length = 0
         lines.each do |line|
           word = line.strip
@@ -33,7 +34,7 @@ RSpec.describe SnowballGenerator do
       it 'uses words from the source text' do
         source_words = source_text.content.downcase.gsub(/[^\w\s]/, '').split.uniq
         lines = result.split("\n")
-        
+
         lines.each do |line|
           word = line.strip
           expect(source_words).to include(word)
@@ -48,7 +49,7 @@ RSpec.describe SnowballGenerator do
     end
 
     context 'with insufficient content' do
-      let(:short_source_text) { create(:source_text, content: "a b c") }
+      let(:short_source_text) { create(:source_text, content: 'a b c') }
       let(:short_generator) { described_class.new(short_source_text) }
 
       it 'returns error message' do

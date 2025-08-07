@@ -66,7 +66,7 @@ class ProjectGutenbergService
     end_marker = text.index(/\*{3}\s*END OF.*?\*{3}/i)
     text = text[0...end_marker].strip if end_marker
     text = text.gsub(/\[[^\]]*\]/, '')
-    text = text.gsub(/_/, '')
+    text = text.delete('_')
     text.gsub(/\n{3,}/, "\n\n").strip
   end
 end

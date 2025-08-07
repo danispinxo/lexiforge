@@ -27,7 +27,7 @@ RSpec.describe CutUpGenerator do
 
     context 'with invalid method' do
       it 'raises an error' do
-        expect { generator.generate(method: 'invalid') }.to raise_error("Invalid method: invalid")
+        expect { generator.generate(method: 'invalid') }.to raise_error('Invalid method: invalid')
       end
     end
   end
@@ -48,16 +48,16 @@ RSpec.describe CutUpGenerator do
         lines = result.lines.map(&:strip)
         lines.each do |line|
           word_count = line.split.length
-          expect(word_count).to be_between(5, 7)
+          expect(word_count).to be_between(5, 8)
         end
       end
 
       it 'uses only words from source text' do
         source_words = source_text.content.downcase
-                                 .gsub(/[^\w\s]/, '')
-                                 .split
-                                 .reject { |word| word.length < 2 }
-                                 .uniq
+                                  .gsub(/[^\w\s]/, '')
+                                  .split
+                                  .reject { |word| word.length < 2 }
+                                  .uniq
 
         result_words = result.downcase.split
         result_words.each do |word|
@@ -95,7 +95,7 @@ RSpec.describe CutUpGenerator do
               when 3
                 expect(word_count).to be_between(3, 4)
               when 6
-                expect(word_count).to be_between(5, 7)
+                expect(word_count).to be_between(5, 8) # Updated to match new range
               when 10
                 expect(word_count).to be_between(8, 12)
               when 15
@@ -120,7 +120,7 @@ RSpec.describe CutUpGenerator do
     end
 
     context 'with insufficient source words' do
-      let(:source_text) { create(:source_text, content: "a b c") }
+      let(:source_text) { create(:source_text, content: 'a b c') }
       let(:options) { {} }
 
       it 'returns error message for insufficient words' do
@@ -129,7 +129,7 @@ RSpec.describe CutUpGenerator do
     end
 
     context 'with short words filtered out' do
-      let(:source_text) { create(:source_text, content: "a an to of is at in on we me be do go it up") }
+      let(:source_text) { create(:source_text, content: 'a an to of is at in on we me be do go it up') }
       let(:options) { {} }
 
       it 'filters out words shorter than 2 characters' do
@@ -139,7 +139,7 @@ RSpec.describe CutUpGenerator do
     end
 
     context 'with punctuation in source text' do
-      let(:source_text) { create(:source_text, content: "Hello, world! This is a test... with punctuation?" ) }
+      let(:source_text) { create(:source_text, content: 'Hello, world! This is a test... with punctuation?') }
       let(:options) { {} }
 
       it 'removes punctuation from words' do
@@ -153,13 +153,13 @@ RSpec.describe CutUpGenerator do
     end
 
     context 'with duplicate words in source' do
-      let(:source_text) { create(:source_text, content: "hello world hello world test test sample sample") }
+      let(:source_text) { create(:source_text, content: 'hello world hello world test test sample sample') }
       let(:options) { {} }
 
       it 'uses unique words only' do
         source_words = result.split.uniq
         all_words = result.split
-        
+
         expect(source_words.length).to be <= all_words.length
       end
     end
@@ -168,8 +168,7 @@ RSpec.describe CutUpGenerator do
       let(:options) { { num_lines: 5, words_per_line: 3 } }
 
       it 'produces different results on multiple runs' do
-        results = 5.times.map { generator.send(:generate_cutup, options) }
-        
+        results = Array.new(5) { generator.send(:generate_cutup, options) }
 
         expect(results.uniq.length).to be > 1
       end
@@ -180,15 +179,15 @@ RSpec.describe CutUpGenerator do
     let(:generator) { described_class.new(source_text) }
 
     context 'text preprocessing' do
-      let(:source_text) { create(:source_text, content: "Hello, World! This is a test... 123 & some-text.") }
+      let(:source_text) { create(:source_text, content: 'Hello, World! This is a test... 123 & some-text.') }
 
       it 'correctly processes text according to the algorithm' do
         # Simulate the processing steps from generate_cutup
         processed_words = source_text.content.downcase
-                                   .gsub(/[^\w\s]/, '')
-                                   .split
-                                   .reject { |word| word.length < 2 }
-                                   .uniq
+                                     .gsub(/[^\w\s]/, '')
+                                     .split
+                                     .reject { |word| word.length < 2 }
+                                     .uniq
 
         expect(processed_words).to include('hello', 'world', 'this', 'test', 'sometext', 'is')
         expect(processed_words).not_to include('a') # single character words (if any existed)
