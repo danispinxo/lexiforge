@@ -8,17 +8,27 @@ class Api::SessionsController < Devise::SessionsController
   
   def create      
     user = User.find_by(email: sign_in_params[:email])
+    admin_user = AdminUser.find_by(email: sign_in_params[:email])
     
     if user&.valid_password?(sign_in_params[:password])
       begin
         sign_in(user)
         render json: {
           success: true,
-          user: {
-            id: user.id,
-            email: user.email,
-            created_at: user.created_at
-          }
+          user: UserSerializer.new(user).as_json
+        }
+      rescue => e
+        render json: {
+          success: false,
+          message: 'Login failed'
+        }, status: :internal_server_error
+      end
+    elsif admin_user&.valid_password?(sign_in_params[:password])
+      begin
+        sign_in(admin_user)
+        render json: {
+          success: true,
+          user: AdminUserSerializer.new(admin_user).as_json
         }
       rescue => e
         render json: {
