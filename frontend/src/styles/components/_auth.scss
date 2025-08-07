@@ -384,6 +384,13 @@
   }
 }
 
+.admin-indicator {
+  margin-left: 6px;
+  font-size: 0.9em;
+  opacity: 0.8;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
 @include mixins.tablet {
   .auth-section {
     margin-left: 0;

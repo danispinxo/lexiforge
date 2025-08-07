@@ -42,7 +42,10 @@ function AuthWrapper() {
       >
         {user ? (
           <>
-            <span className="user-email">{user.email}</span>
+            <span className="user-email">
+              {user.email}
+              {user.admin && <span className="admin-indicator">🔒</span>}
+            </span>
             <span className="dropdown-arrow">▼</span>
           </>
         ) : (
@@ -58,7 +61,10 @@ function AuthWrapper() {
           {user ? (
             <>
               <div className="dropdown-header">
-                <span>Welcome, {user.email}</span>
+                <span>
+                  Welcome, {user.email}
+                  {user.admin && <span className="admin-indicator">🔒</span>}
+                </span>
               </div>
               <button onClick={handleLogout} className="dropdown-item">
                 Logout
