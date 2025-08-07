@@ -50,7 +50,9 @@ class MesosticGenerator
 
       lines.concat(stanza_lines)
 
-      lines << '' if stanza_index < spine_words.length - 1 && !stanza_lines.empty?
+      if stanza_index < spine_words.length - 1
+        lines << ''
+      end
     end
 
     lines
@@ -70,6 +72,5 @@ class MesosticGenerator
                 .gsub(/[^\w\s]/, '')
                 .split
                 .reject { |word| word.length < 2 }
-                .uniq
   end
 end
