@@ -354,6 +354,12 @@ function PoemGenerationModal({
                     first line will contain a word with 'd' as the first letter,
                     the second line with 'o' as the second letter, and the third
                     line with 'g' as the third letter.
+                    <br />
+                    <br />
+                    <strong>Stanza breaks:</strong> Use spaces in your spine
+                    word to create multiple stanzas. For example, "dog cat" will
+                    create two stanzas - one for "dog" and one for "cat",
+                    separated by a blank line.
                   </p>
                 </div>
               </>
