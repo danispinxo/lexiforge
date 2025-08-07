@@ -67,10 +67,12 @@ function Register() {
               <input
                 type="email"
                 id="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                autoComplete="email"
               />
             </div>
 
@@ -80,11 +82,13 @@ function Register() {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
+                  name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={loading}
                   minLength={6}
+                  autoComplete="new-password"
                 />
                 <button
                   type="button"
@@ -103,11 +107,13 @@ function Register() {
                 <input
                   type={showPasswordConfirmation ? "text" : "password"}
                   id="passwordConfirmation"
+                  name="passwordConfirmation"
                   value={passwordConfirmation}
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                   required
                   disabled={loading}
                   minLength={6}
+                  autoComplete="new-password"
                 />
                 <button
                   type="button"
