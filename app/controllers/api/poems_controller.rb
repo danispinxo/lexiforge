@@ -1,6 +1,6 @@
 class Api::PoemsController < ApiController
   before_action :set_poem, only: %i[show edit update destroy]
-  before_action :set_source_text, only: %i[generate_cut_up generate_erasure generate_snowball]
+  before_action :set_source_text, only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
@@ -65,7 +65,7 @@ class Api::PoemsController < ApiController
     @poem = build_cut_up_poem(cut_up_content)
 
     if @poem.save
-      render_cut_up_success
+      render_poem_generation_success('cut-up')
     else
       render_poem_save_error
     end
@@ -100,10 +100,10 @@ class Api::PoemsController < ApiController
     )
   end
 
-  def render_cut_up_success
+  def render_poem_generation_success(technique_name)
     render json: {
       success: true,
-      message: "Cut-up poem successfully generated from '#{@source_text.title}'!",
+      message: "#{technique_name.capitalize} poem successfully generated from '#{@source_text.title}'!",
       poem: poem_json_data
     }
   end
@@ -143,7 +143,8 @@ class Api::PoemsController < ApiController
     @poem = build_erasure_poem(erasure_content, options)
 
     if @poem.save
-      render_erasure_success
+      technique_name = options[:is_blackout] ? 'blackout' : 'erasure'
+      render_poem_generation_success(technique_name)
     else
       render_poem_save_error
     end
@@ -177,14 +178,6 @@ class Api::PoemsController < ApiController
     )
   end
 
-  def render_erasure_success
-    render json: {
-      success: true,
-      message: "Erasure poem successfully generated from '#{@source_text.title}'!",
-      poem: poem_json_data
-    }
-  end
-
   def generate_snowball
     return render_blank_content_error if @source_text.content.blank?
 
@@ -194,7 +187,22 @@ class Api::PoemsController < ApiController
     @poem = build_snowball_poem(snowball_content)
 
     if @poem.save
-      render_snowball_success
+      render_poem_generation_success('snowball')
+    else
+      render_poem_save_error
+    end
+  end
+
+  def generate_mesostic
+    return render_blank_content_error if @source_text.content.blank?
+
+    options = build_mesostic_options
+    mesostic_content = generate_mesostic_content(options)
+
+    @poem = build_mesostic_poem(mesostic_content)
+
+    if @poem.save
+      render_poem_generation_success('mesostic')
     else
       render_poem_save_error
     end
@@ -212,8 +220,24 @@ class Api::PoemsController < ApiController
     options
   end
 
+  def build_mesostic_options
+    method = params[:method] || 'mesostic'
+    options = { method: method }
+
+    if method == 'mesostic'
+      options[:spine_word] = params[:spine_word]
+    end
+
+    options
+  end
+
   def generate_snowball_content(options)
     generator = SnowballGenerator.new(@source_text)
+    generator.generate(options)
+  end
+
+  def generate_mesostic_content(options)
+    generator = MesosticGenerator.new(@source_text)
     generator.generate(options)
   end
 
@@ -225,12 +249,12 @@ class Api::PoemsController < ApiController
     )
   end
 
-  def render_snowball_success
-    render json: {
-      success: true,
-      message: "Snowball poem successfully generated from '#{@source_text.title}'!",
-      poem: poem_json_data
-    }
+  def build_mesostic_poem(content)
+    @source_text.poems.build(
+      title: generate_poem_title(@source_text, 'mesostic'),
+      content: content,
+      technique_used: 'mesostic'
+    )
   end
 
   private
