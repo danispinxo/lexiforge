@@ -1,15 +1,15 @@
 class Api::SessionsController < Devise::SessionsController
   include Devise::Controllers::Helpers
   include Devise::Controllers::SignInOut
-  
+
   skip_before_action :verify_authenticity_token
   skip_before_action :require_no_authentication, only: [:create]
   after_action :set_cors_headers
-  
-  def create      
+
+  def create
     user = User.find_by(email: sign_in_params[:email])
     admin_user = AdminUser.find_by(email: sign_in_params[:email])
-    
+
     if user&.valid_password?(sign_in_params[:password])
       begin
         sign_in(user)
@@ -17,7 +17,7 @@ class Api::SessionsController < Devise::SessionsController
           success: true,
           user: UserSerializer.new(user).as_json
         }
-      rescue => e
+      rescue StandardError
         render json: {
           success: false,
           message: 'Login failed'
@@ -30,7 +30,7 @@ class Api::SessionsController < Devise::SessionsController
           success: true,
           user: AdminUserSerializer.new(admin_user).as_json
         }
-      rescue => e
+      rescue StandardError
         render json: {
           success: false,
           message: 'Login failed'
@@ -62,11 +62,9 @@ class Api::SessionsController < Devise::SessionsController
   def set_cors_headers
     allowed_origins = ENV.fetch('ALLOWED_ORIGINS', 'http://localhost:3001').split(',')
     origin = request.headers['Origin']
-    
-    if origin && allowed_origins.include?(origin)
-      response.headers['Access-Control-Allow-Origin'] = origin
-    end
-    
+
+    response.headers['Access-Control-Allow-Origin'] = origin if origin && allowed_origins.include?(origin)
+
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization, X-Requested-With'

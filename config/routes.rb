@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     devise_for :users, controllers: {
       sessions: 'api/sessions',
       registrations: 'api/registrations'
-    }, skip: [:passwords, :confirmations, :unlocks]
+    }, skip: %i[passwords confirmations unlocks]
 
     resources :source_texts do
       collection do

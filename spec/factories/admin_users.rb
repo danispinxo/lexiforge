@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :admin_user do
     sequence(:email) { |n| "admin#{n}@example.com" }
-    password { "adminpassword123" }
-    password_confirmation { "adminpassword123" }
+    password { 'adminpassword123' }
+    password_confirmation { 'adminpassword123' }
 
     trait :super_admin do
-      email { "superadmin@example.com" }
+      email { 'superadmin@example.com' }
     end
 
     trait :with_comments do

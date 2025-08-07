@@ -40,15 +40,18 @@ ActiveAdmin.register User do
   filter :sign_in_count
   filter :last_sign_in_at
 
-  sidebar "User Details", only: :show do
+  sidebar 'User Details', only: :show do
     ul do
-      li link_to "View Source Texts", admin_source_texts_path(q: { user_id_eq: user.id })
-      li link_to "View Poems", admin_poems_path(q: { user_id_eq: user.id })
+      li link_to 'View Source Texts', admin_source_texts_path(q: { user_id_eq: user.id })
+      li link_to 'View Poems', admin_poems_path(q: { user_id_eq: user.id })
     end
   end
 
   action_item :reset_password, only: :show do
-    link_to 'Reset Password', reset_password_admin_user_path(user), method: :post if user.respond_to?(:send_reset_password_instructions)
+    if user.respond_to?(:send_reset_password_instructions)
+      link_to 'Reset Password', reset_password_admin_user_path(user),
+              method: :post
+    end
   end
 
   member_action :reset_password, method: :post do
