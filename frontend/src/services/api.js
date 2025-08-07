@@ -28,6 +28,8 @@ export const poemsAPI = {
     api.post(`/source_texts/${sourceTextId}/generate_erasure`, options),
   generateSnowball: (sourceTextId, options = {}) =>
     api.post(`/source_texts/${sourceTextId}/generate_snowball`, options),
+  generateMesostic: (sourceTextId, options = {}) =>
+    api.post(`/source_texts/${sourceTextId}/generate_mesostic`, options),
 };
 
 export default api;
