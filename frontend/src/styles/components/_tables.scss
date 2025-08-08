@@ -213,34 +213,7 @@
   }
 }
 
-.table-empty {
-  text-align: center;
-  padding: variables.$spacing-xl * 2;
-  color: variables.$text-muted;
-  font-style: italic;
-  background: rgba(variables.$bg-secondary, 0.5);
-  border-radius: variables.$border-radius-md;
-  border: 2px dashed rgba(variables.$medium-gray, 0.3);
 
-  .empty-icon {
-    font-size: variables.$font-size-4xl;
-    margin-bottom: variables.$spacing-md;
-    opacity: 0.5;
-  }
-
-  h4 {
-    color: variables.$text-secondary;
-    margin-bottom: variables.$spacing-sm;
-  }
-
-  p {
-    margin-bottom: variables.$spacing-lg;
-  }
-
-  .btn {
-    margin-top: variables.$spacing-md;
-  }
-}
 
 @include mixins.tablet {
   .texts-table-container,
@@ -300,20 +273,4 @@
   }
 }
 
-.table-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  background: rgba(variables.$bg-secondary, 0.5);
-  border-radius: variables.$border-radius-md;
 
-  .loading-spinner {
-    margin-right: variables.$spacing-md;
-  }
-
-  .loading-text {
-    color: variables.$text-muted;
-    font-style: italic;
-  }
-}
