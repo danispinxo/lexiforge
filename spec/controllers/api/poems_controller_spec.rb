@@ -6,7 +6,6 @@ RSpec.describe Api::PoemsController, type: :controller do
 
   describe 'GET #index' do
     before do
-      # Clear existing poems to get predictable count
       Poem.destroy_all
       @test_poems = create_list(:poem, 3, source_text: source_text)
       get :index

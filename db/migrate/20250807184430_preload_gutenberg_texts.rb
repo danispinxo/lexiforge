@@ -6,14 +6,7 @@ class PreloadGutenbergTexts < ActiveRecord::Migration[7.1]
     gutenberg_ids.each do |gutenberg_id|
       next if SourceText.exists?(gutenberg_id: gutenberg_id)
       
-      puts "Importing Gutenberg text #{gutenberg_id}..."
-      source_text = service.import_text(gutenberg_id)
-      
-      if source_text.persisted?
-        puts "Successfully imported: #{source_text.title}"
-      else
-        puts "Failed to import Gutenberg text #{gutenberg_id}"
-      end
+      service.import_text(gutenberg_id)
     end
   end
 

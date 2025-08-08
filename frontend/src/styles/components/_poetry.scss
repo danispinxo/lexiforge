@@ -1,8 +1,7 @@
 @use "../variables";
 @use "../mixins";
 
-.text-content,
-.poem-content {
+.text-content {
   @include mixins.manuscript-style;
 
   margin-top: variables.$spacing-xl;
@@ -12,6 +11,12 @@
     margin-bottom: variables.$spacing-md;
     line-height: 1.7;
   }
+}
+
+.poem-content {
+  @include mixins.manuscript-style;
+  margin-top: variables.$spacing-xl;
+  padding-left: 100px;
 }
 
 .poem-text {
@@ -40,18 +45,6 @@
     overflow-x: auto;
     color: variables.$ink-blue;
     box-shadow: inset 0 2px 4px rgba(variables.$black, 0.1);
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: variables.$spacing-md;
-      right: variables.$spacing-md;
-      width: 8px;
-      height: 8px;
-      background: variables.$accent-color;
-      border-radius: 50%;
-      animation: blink 1s infinite;
-    }
   }
 }
 
@@ -139,16 +132,5 @@
   .erasure-pages-container {
     grid-template-columns: 1fr;
     gap: variables.$spacing-md;
-  }
-}
-
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
   }
 }

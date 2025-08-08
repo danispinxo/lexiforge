@@ -40,7 +40,7 @@ RSpec.describe CutUpGenerator do
 
       it 'generates cut-up poem with default settings' do
         expect(result).to be_a(String)
-        expect(result.lines.count).to eq(12) # default num_lines
+        expect(result.lines.count).to eq(12)
         expect(result).not_to be_empty
       end
 
@@ -95,7 +95,7 @@ RSpec.describe CutUpGenerator do
               when 3
                 expect(word_count).to be_between(3, 4)
               when 6
-                expect(word_count).to be_between(5, 8) # Updated to match new range
+                expect(word_count).to be_between(5, 8)
               when 10
                 expect(word_count).to be_between(8, 12)
               when 15
@@ -182,7 +182,6 @@ RSpec.describe CutUpGenerator do
       let(:source_text) { create(:source_text, content: 'Hello, World! This is a test... 123 & some-text.') }
 
       it 'correctly processes text according to the algorithm' do
-        # Simulate the processing steps from generate_cutup
         processed_words = source_text.content.downcase
                                      .gsub(/[^\w\s]/, '')
                                      .split
@@ -190,8 +189,8 @@ RSpec.describe CutUpGenerator do
                                      .uniq
 
         expect(processed_words).to include('hello', 'world', 'this', 'test', 'sometext', 'is')
-        expect(processed_words).not_to include('a') # single character words (if any existed)
-        expect(processed_words).to include('123') # numbers are included in \w
+        expect(processed_words).not_to include('a')
+        expect(processed_words).to include('123')
       end
     end
   end

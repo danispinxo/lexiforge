@@ -43,7 +43,7 @@ RSpec.describe ErasureGenerator do
         expect(parsed_result['type']).to eq('erasure_pages')
         expect(parsed_result['is_blackout']).to be false
         expect(parsed_result['pages']).to be_an(Array)
-        expect(parsed_result['pages'].length).to eq(3) # default num_pages
+        expect(parsed_result['pages'].length).to eq(3)
       end
 
       it 'creates pages with correct structure' do
@@ -92,8 +92,8 @@ RSpec.describe ErasureGenerator do
 
     context 'finding start boundary' do
       it 'finds word start from middle of word' do
-        result = generator.send(:find_word_boundary, text, 8, :start) # middle of "world"
-        expect(result).to eq(6) # start of "world"
+        result = generator.send(:find_word_boundary, text, 8, :start)
+        expect(result).to eq(6)
       end
 
       it 'returns 0 for position at beginning' do
@@ -122,12 +122,12 @@ RSpec.describe ErasureGenerator do
     end
 
     it 'handles starting position in middle of text' do
-      result = generator.send(:extract_text_excerpt, text, 8, 2) # starting at "three"
+      result = generator.send(:extract_text_excerpt, text, 8, 2)
       expect(result).to eq('three four')
     end
 
     it 'handles case where there are fewer words than requested' do
-      result = generator.send(:extract_text_excerpt, text, 40, 10) # near end
+      result = generator.send(:extract_text_excerpt, text, 40, 10)
       expect(result.split.length).to be <= 10
     end
 
@@ -144,14 +144,13 @@ RSpec.describe ErasureGenerator do
       let(:result) { generator.send(:create_prose_erasure, text, words_to_keep: 2, is_blackout: false) }
 
       it 'keeps approximately the requested number of words' do
-        # Count words that aren't just spaces
         kept_words = result.split.reject { |word| word.strip.empty? }
         expect(kept_words.length).to eq(2)
       end
 
       it 'preserves word spacing with spaces' do
-        expect(result).to match(/\s+/) # contains whitespace
-        expect(result).not_to include('█') # no blackout characters
+        expect(result).to match(/\s+/)
+        expect(result).not_to include('█')
       end
     end
 
@@ -164,7 +163,6 @@ RSpec.describe ErasureGenerator do
       end
 
       it 'keeps the requested number of visible words' do
-        # Remove HTML tags and count remaining words
         visible_text = result.gsub(/<[^>]*>/, '').gsub(/█+/, '')
         visible_words = visible_text.split.reject { |word| word.strip.empty? }
         expect(visible_words.length).to eq(2)
@@ -205,13 +203,13 @@ RSpec.describe ErasureGenerator do
 
     it 'preserves exact spacing' do
       space_items = result.select { |item| item[:type] == :space }
-      expect(space_items.first[:text]).to eq('  ') # double space after "Hello"
+      expect(space_items.first[:text]).to eq('  ')
     end
 
     it 'handles different whitespace characters' do
       space_texts = result.select { |item| item[:type] == :space }.map { |item| item[:text] }
-      expect(space_texts.join).to include("\t") # tab character
-      expect(space_texts.join).to include("\n") # newline character
+      expect(space_texts.join).to include("\t")
+      expect(space_texts.join).to include("\n")
     end
 
     it 'maintains correct order of elements' do

@@ -49,30 +49,7 @@
     }
   }
 
-  .popular-books {
-    details {
-      background: rgba(variables.$ink-blue, 0.05);
-      border: 1px solid rgba(variables.$ink-blue, 0.2);
-    }
 
-    summary {
-      color: variables.$ink-blue;
-
-      &:hover {
-        color: color.adjust(variables.$ink-blue, $lightness: -15%);
-        background: rgba(variables.$ink-blue, 0.1);
-      }
-    }
-
-    .book-item {
-      color: rgba(variables.$ink-blue, 0.8);
-
-      &:hover {
-        color: variables.$ink-blue;
-        border-left-color: variables.$ink-blue;
-      }
-    }
-  }
 
   .help-text {
     color: rgba(variables.$ink-blue, 0.7);

@@ -1,11 +1,7 @@
 @use "../variables";
 @use "../mixins";
 
-.texts-grid,
-.poems-grid {
-  @include mixins.grid-responsive(380px);
-  margin-top: variables.$spacing-xl;
-}
+
 
 .app-main {
   max-width: min(1400px, 95vw);
@@ -44,13 +40,7 @@
   flex-wrap: wrap;
 }
 
-@include mixins.tablet {
-  .texts-grid,
-  .poems-grid {
-    grid-template-columns: 1fr;
-    gap: variables.$spacing-md;
-  }
-}
+
 
 @include mixins.mobile {
   .app-main {
