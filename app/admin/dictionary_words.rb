@@ -64,7 +64,6 @@ ActiveAdmin.register DictionaryWord do
   end
 
   collection_action :populate_from_wordnet, method: :post do
-    # This would call your rake task
     system('bundle exec rake dictionary:populate')
     redirect_to admin_dictionary_words_path, notice: t('admin.dictionary_words.populated')
   rescue StandardError => e

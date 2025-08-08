@@ -124,7 +124,7 @@ RSpec.describe NPlusSevenGenerator do
 
     it 'returns false for words that do not exist as nouns' do
       expect(generator.send(:noun?, 'the')).to be false
-      expect(generator.send(:noun?, 'sat')).to be false
+      expect(generator.send(:noun?, 'strengthen')).to be false
     end
 
     it 'returns false for short words' do
