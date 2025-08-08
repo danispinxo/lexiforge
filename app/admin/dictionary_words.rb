@@ -70,7 +70,6 @@ ActiveAdmin.register DictionaryWord do
     redirect_to admin_dictionary_words_path, alert: t('admin.dictionary_words.populate_error', message: e.message)
   end
 
-
   collection_action :clear_dictionary, method: :delete do
     DictionaryWord.delete_all
     redirect_to admin_dictionary_words_path, notice: t('admin.dictionary_words.cleared')
