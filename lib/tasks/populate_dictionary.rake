@@ -12,6 +12,8 @@ namespace :dictionary do
     puts "Available words: #{words.count}"
 
     words.each_with_index do |word, index|
+      next if word.lemma.match?(/\s|\d/) || word.lemma.start_with?("'")
+      
       synsets = word.synsets
 
       synsets.each do |synset|
