@@ -1,25 +1,38 @@
 FactoryBot.define do
   factory :poem do
     association :source_text
-    title { 'Generated Poem' }
-    content { "This is a generated poem\nwith multiple lines\nand interesting words" }
+    title { Faker::Book.title }
+    content { Faker::Lorem.paragraphs(number: 2).join("\n") }
     technique_used { 'cutup' }
 
     trait :erasure_poem do
       technique_used { 'erasure' }
-      content { 'This is an erasure poem with some words     removed and others kept intact.' }
+      content { Faker::Lorem.paragraphs(number: 1).join("\n") }
     end
 
     trait :blackout_poem do
       technique_used { 'blackout' }
       content do
-        "This is a <span class='blackout-word'>██████</span> poem with <span class='blackout-word'>████</span> words blacked out."
+        words = Faker::Lorem.words(number: 10)
+        words.map.with_index do |word, index|
+          index.even? ? word : "<span class='blackout-word'>██████</span>"
+        end.join(' ')
       end
     end
 
     trait :cut_up_poem do
       technique_used { 'cutup' }
-      content { "random words\ncut up lines\nmixed together\nfrom source text" }
+      content { Faker::Lorem.paragraphs(number: 2).join("\n") }
+    end
+
+    trait :mesostic_poem do
+      technique_used { 'mesostic' }
+      content { Faker::Lorem.paragraphs(number: 1).join("\n") }
+    end
+
+    trait :snowball_poem do
+      technique_used { 'snowball' }
+      content { Faker::Lorem.paragraphs(number: 1).join("\n") }
     end
   end
 end

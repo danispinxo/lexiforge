@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :admin_user do
-    sequence(:email) { |n| "admin#{n}@example.com" }
-    password { 'adminpassword123' }
-    password_confirmation { 'adminpassword123' }
+    email { Faker::Internet.unique.email(domain: 'admin.com') }
+    password { Faker::Internet.password(min_length: 10) }
+    password_confirmation { password }
 
     trait :super_admin do
       email { 'superadmin@example.com' }

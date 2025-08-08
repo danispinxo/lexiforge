@@ -4,7 +4,6 @@ class PreloadGutenbergTexts < ActiveRecord::Migration[7.1]
     service = ProjectGutenbergService.new
     
     gutenberg_ids.each do |gutenberg_id|
-      # Skip if the text already exists
       next if SourceText.exists?(gutenberg_id: gutenberg_id)
       
       puts "Importing Gutenberg text #{gutenberg_id}..."

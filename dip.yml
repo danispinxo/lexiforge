@@ -34,6 +34,11 @@ interaction:
       run_options: [no-deps]
     environment:
       RAILS_ENV: test
+      TEST_DB_HOST: db_test
+      TEST_DB_PORT: 5432
+      TEST_DB_NAME: lexiforge_test
+      TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
+      TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
 
   rspec-doc:
     description: Run RSpec tests with documentation format
@@ -43,6 +48,11 @@ interaction:
       run_options: [no-deps]
     environment:
       RAILS_ENV: test
+      TEST_DB_HOST: db_test
+      TEST_DB_PORT: 5432
+      TEST_DB_NAME: lexiforge_test
+      TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
+      TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
 
   test-setup:
     description: Setup test database
@@ -50,6 +60,11 @@ interaction:
     command: sh -c "./bin/rails db:create db:migrate RAILS_ENV=test"
     environment:
       RAILS_ENV: test
+      TEST_DB_HOST: db_test
+      TEST_DB_PORT: 5432
+      TEST_DB_NAME: lexiforge_test
+      TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
+      TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
 
   rails-test:
     description: Run Rails tests
@@ -57,6 +72,13 @@ interaction:
     command: ./bin/rails test
     compose:
       run_options: [no-deps]
+    environment:
+      RAILS_ENV: test
+      TEST_DB_HOST: db_test
+      TEST_DB_PORT: 5432
+      TEST_DB_NAME: lexiforge_test
+      TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
+      TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
 
   rubocop:
     description: Run RuboCop

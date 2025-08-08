@@ -19,6 +19,26 @@ services:
       timeout: 5s
       retries: 5
 
+  db_test:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: lexiforge_test
+      POSTGRES_USER: ${POSTGRES_USER:-lexiforge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-lexiforge} -d lexiforge_test",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   api:
     build:
       context: .
@@ -39,6 +59,8 @@ services:
       - bundle_data:/usr/local/bundle
     depends_on:
       db:
+        condition: service_healthy
+      db_test:
         condition: service_healthy
     stdin_open: true
     tty: true
@@ -65,4 +87,5 @@ services:
 
 volumes:
   postgres_data:
+  postgres_test_data:
   bundle_data:
