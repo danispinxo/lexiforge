@@ -24,7 +24,7 @@ namespace :dictionary do
         end
       end
 
-      puts "Processed #{index + 1} words..." if (index + 1) % 1000 == 0
+      puts "Processed #{index + 1} words..." if ((index + 1) % 1000).zero?
     rescue StandardError => e
       puts "Error processing word #{index + 1}: #{e.message}"
     end

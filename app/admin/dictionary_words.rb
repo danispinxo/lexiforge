@@ -66,9 +66,9 @@ ActiveAdmin.register DictionaryWord do
   collection_action :populate_from_wordnet, method: :post do
     # This would call your rake task
     system('bundle exec rake dictionary:populate')
-    redirect_to admin_dictionary_words_path, notice: 'Dictionary populated from WordNet successfully!'
+    redirect_to admin_dictionary_words_path, notice: t('admin.dictionary_words.populated')
   rescue StandardError => e
-    redirect_to admin_dictionary_words_path, alert: "Error populating dictionary: #{e.message}"
+    redirect_to admin_dictionary_words_path, alert: t('admin.dictionary_words.populate_error', message: e.message)
   end
 
   action_item :clear_dictionary, only: :index do
@@ -79,9 +79,9 @@ ActiveAdmin.register DictionaryWord do
 
   collection_action :clear_dictionary, method: :delete do
     DictionaryWord.delete_all
-    redirect_to admin_dictionary_words_path, notice: 'Dictionary cleared successfully!'
+    redirect_to admin_dictionary_words_path, notice: t('admin.dictionary_words.cleared')
   rescue StandardError => e
-    redirect_to admin_dictionary_words_path, alert: "Error clearing dictionary: #{e.message}"
+    redirect_to admin_dictionary_words_path, alert: t('admin.dictionary_words.clear_error', message: e.message)
   end
 
   controller do

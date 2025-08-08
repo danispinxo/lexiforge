@@ -29,7 +29,7 @@ class NPlusSevenGenerator
     processed_words = []
 
     selected_words.each do |word|
-      if is_noun?(word)
+      if noun?(word)
         replacement = find_n_plus_seven_replacement(word, config[:offset])
         processed_words << (replacement || word)
       else
@@ -57,7 +57,7 @@ class NPlusSevenGenerator
       if /\w/.match?(char)
         current_word += char
         word_start = index if current_word.length == 1
-      elsif current_word.length > 0
+      elsif current_word.length.positive?
         words << {
           word: current_word,
           position: word_start,
@@ -67,7 +67,7 @@ class NPlusSevenGenerator
       end
     end
 
-    if current_word.length > 0
+    if current_word.length.positive?
       words << {
         word: current_word,
         position: word_start,
@@ -82,10 +82,10 @@ class NPlusSevenGenerator
     start_index = rand([words.length - words_to_select + 1, 1].max)
     selected_count = [words_to_select, words.length - start_index].min
 
-    words[start_index, selected_count].map { |w| w[:word] }
+    words[start_index, selected_count].pluck(:word)
   end
 
-  def is_noun?(word)
+  def noun?(word)
     return false if word.length < 2
 
     DictionaryWord.exists?(word: word.downcase, part_of_speech: 'n')

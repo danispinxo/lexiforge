@@ -1,5 +1,5 @@
 class DictionaryWord < ApplicationRecord
-  validates :word, presence: true, uniqueness: { scope: [:part_of_speech] }
+  validates :word, presence: true
   validates :part_of_speech, presence: true
 
   scope :nouns, -> { where(part_of_speech: 'n') }

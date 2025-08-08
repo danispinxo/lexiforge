@@ -116,19 +116,19 @@ RSpec.describe NPlusSevenGenerator do
     end
   end
 
-  describe '#is_noun?' do
+  describe '#noun?' do
     it 'returns true for words that exist as nouns in dictionary' do
-      expect(generator.send(:is_noun?, 'cat')).to be true
-      expect(generator.send(:is_noun?, 'dog')).to be true
+      expect(generator.send(:noun?, 'cat')).to be true
+      expect(generator.send(:noun?, 'dog')).to be true
     end
 
     it 'returns false for words that do not exist as nouns' do
-      expect(generator.send(:is_noun?, 'the')).to be false
-      expect(generator.send(:is_noun?, 'sat')).to be false
+      expect(generator.send(:noun?, 'the')).to be false
+      expect(generator.send(:noun?, 'sat')).to be false
     end
 
     it 'returns false for short words' do
-      expect(generator.send(:is_noun?, 'a')).to be false
+      expect(generator.send(:noun?, 'a')).to be false
     end
   end
 
@@ -168,7 +168,7 @@ RSpec.describe NPlusSevenGenerator do
       expect(result).not_to be_empty
 
       # Check that the result contains words from the selected subset
-      words = result.split(' ')
+      words = result.split
       expect(words.length).to be <= 15 # Allow for some flexibility in word count
     end
   end
