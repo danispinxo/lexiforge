@@ -1,6 +1,7 @@
 class Api::PoemsController < ApiController
   before_action :set_poem, only: %i[show edit update destroy]
-  before_action :set_source_text, only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic]
+  before_action :set_source_text,
+                only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic generate_n_plus_seven]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
@@ -210,6 +211,21 @@ class Api::PoemsController < ApiController
     end
   end
 
+  def generate_n_plus_seven
+    return render_blank_content_error if @source_text.content.blank?
+
+    options = build_n_plus_seven_options
+    n_plus_seven_content = generate_n_plus_seven_content(options)
+
+    @poem = build_n_plus_seven_poem(n_plus_seven_content)
+
+    if @poem.save
+      render_poem_generation_success('n+7')
+    else
+      render_poem_save_error
+    end
+  end
+
   def build_snowball_options
     permitted_params = generation_params
     method = permitted_params[:method] || 'snowball'
@@ -233,6 +249,18 @@ class Api::PoemsController < ApiController
     options
   end
 
+  def build_n_plus_seven_options
+    permitted_params = generation_params
+    method = permitted_params[:method] || 'n_plus_seven'
+    options = { method: method }
+
+    options[:offset] = (permitted_params[:offset] || 7).to_i
+    options[:words_to_select] = (permitted_params[:words_to_select] || 50).to_i
+    options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
+
+    options
+  end
+
   def generate_snowball_content(options)
     generator = SnowballGenerator.new(@source_text)
     generator.generate(options)
@@ -240,6 +268,11 @@ class Api::PoemsController < ApiController
 
   def generate_mesostic_content(options)
     generator = MesosticGenerator.new(@source_text)
+    generator.generate(options)
+  end
+
+  def generate_n_plus_seven_content(options)
+    generator = NPlusSevenGenerator.new(@source_text)
     generator.generate(options)
   end
 
@@ -256,6 +289,14 @@ class Api::PoemsController < ApiController
       title: generate_poem_title(@source_text, 'mesostic'),
       content: content,
       technique_used: 'mesostic'
+    )
+  end
+
+  def build_n_plus_seven_poem(content)
+    @source_text.poems.build(
+      title: generate_poem_title(@source_text, 'n+7'),
+      content: content,
+      technique_used: 'n+7'
     )
   end
 
@@ -276,7 +317,7 @@ class Api::PoemsController < ApiController
   def generation_params
     params.permit(:method, :spine_word, :num_lines, :words_per_line, :size,
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
-                  :min_word_length)
+                  :min_word_length, :offset, :words_to_select, :preserve_structure)
   end
 
   def generate_poem_title(source_text, technique)

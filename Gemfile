@@ -12,6 +12,8 @@ gem 'jbuilder'
 gem 'bootsnap', require: false
 gem 'httparty'
 gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]
+gem 'wordnet'
+gem 'wordnet-defaultdb'
 
 gem 'activeadmin'
 gem 'devise'

@@ -18,6 +18,8 @@ function PoemGenerationModal({
   const [snowballLines, setSnowballLines] = useState(10);
   const [minWordLength, setMinWordLength] = useState(1);
   const [spineWord, setSpineWord] = useState("");
+  const [offset, setOffset] = useState(7);
+  const [wordsToSelect, setWordsToSelect] = useState(50);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -59,15 +61,20 @@ function PoemGenerationModal({
           method: "mesostic",
           spine_word: spineWord,
         });
+      } else if (technique === "n_plus_seven") {
+        response = await poemsAPI.generateNPlusSeven(sourceText.id, {
+          method: "n_plus_seven",
+          offset: offset,
+          words_to_select: wordsToSelect,
+        });
       }
 
       if (response.data.success) {
         onSuccess(response.data.message);
         onClose();
 
-        if (onPoemGenerated && response.data.poem) {
+        if (onPoemGenerated && response.data.poem)
           onPoemGenerated(response.data.poem.id);
-        }
       }
     } catch (error) {
       setError(error.response?.data?.message || "Error generating poem");
@@ -133,6 +140,22 @@ function PoemGenerationModal({
     { value: 5, label: "5 characters" },
   ];
 
+  const offsetOptions = [
+    { value: 3, label: "3 words ahead" },
+    { value: 5, label: "5 words ahead" },
+    { value: 7, label: "7 words ahead" },
+    { value: 10, label: "10 words ahead" },
+    { value: 15, label: "15 words ahead" },
+  ];
+
+  const wordsToSelectOptions = [
+    { value: 25, label: "25 words" },
+    { value: 50, label: "50 words" },
+    { value: 75, label: "75 words" },
+    { value: 100, label: "100 words" },
+    { value: 150, label: "150 words" },
+  ];
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -161,6 +184,7 @@ function PoemGenerationModal({
                 <option value="erasure">Erasure Poetry</option>
                 <option value="snowball">Snowball Poetry</option>
                 <option value="mesostic">Mesostic Poetry</option>
+                <option value="n_plus_seven">N+7 Poetry</option>
               </select>
             </div>
 
@@ -360,6 +384,55 @@ function PoemGenerationModal({
                     word to create multiple stanzas. For example, "dog cat" will
                     create two stanzas - one for "dog" and one for "cat",
                     separated by a blank line.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {technique === "n_plus_seven" && (
+              <>
+                <div className="form-group">
+                  <label htmlFor="offset">Dictionary Offset:</label>
+                  <select
+                    id="offset"
+                    value={offset}
+                    onChange={(e) => setOffset(parseInt(e.target.value))}
+                    disabled={generating}
+                  >
+                    {offsetOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="words-to-select">Words to Select:</label>
+                  <select
+                    id="words-to-select"
+                    value={wordsToSelect}
+                    onChange={(e) => setWordsToSelect(parseInt(e.target.value))}
+                    disabled={generating}
+                  >
+                    {wordsToSelectOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    N+7 poetry replaces nouns in the source text with the 7th
+                    (or your chosen offset) noun that appears after them in the
+                    dictionary. This technique, developed by the Oulipo group,
+                    creates surprising juxtapositions while maintaining the
+                    original text's grammatical structure. The algorithm
+                    randomly selects a subset of words from your source text and
+                    applies N+7 replacement to all nouns found in that
+                    selection, creating new meanings and unexpected connections.
                   </p>
                 </div>
               </>

@@ -31,6 +31,8 @@ export const poemsAPI = {
     api.post(`/source_texts/${sourceTextId}/generate_snowball`, options),
   generateMesostic: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_mesostic`, options),
+  generateNPlusSeven: (sourceTextId, options) =>
+    api.post(`/source_texts/${sourceTextId}/generate_n_plus_seven`, options),
 };
 
 export const authAPI = {

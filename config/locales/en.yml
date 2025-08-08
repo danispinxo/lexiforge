@@ -38,3 +38,8 @@ en:
   admin:
     users:
       password_reset_sent: "Password reset instructions sent to user."
+    dictionary_words:
+      populated: "Dictionary populated from WordNet successfully!"
+      cleared: "Dictionary cleared successfully!"
+      populate_error: "Error populating dictionary: %{message}"
+      clear_error: "Error clearing dictionary: %{message}"
