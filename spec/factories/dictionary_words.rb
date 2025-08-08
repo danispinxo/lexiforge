@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :dictionary_word do
-    word { Faker::Lorem.word.downcase }
-    part_of_speech { ['n', 'v', 'a', 'r', 's'].sample }
+    sequence(:word) { |n| "word#{n}" }
+    part_of_speech { %w[n v a r s].sample }
     definition { Faker::Lorem.sentence }
     synsets { [Faker::Lorem.word, Faker::Lorem.word, Faker::Lorem.word] }
   end

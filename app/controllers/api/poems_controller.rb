@@ -1,6 +1,7 @@
 class Api::PoemsController < ApiController
   before_action :set_poem, only: %i[show edit update destroy]
-  before_action :set_source_text, only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic generate_n_plus_seven]
+  before_action :set_source_text,
+                only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic generate_n_plus_seven]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
