@@ -70,11 +70,6 @@ ActiveAdmin.register DictionaryWord do
     redirect_to admin_dictionary_words_path, alert: t('admin.dictionary_words.populate_error', message: e.message)
   end
 
-  action_item :clear_dictionary, only: :index do
-    link_to 'Clear Dictionary', clear_dictionary_admin_dictionary_words_path,
-            method: :delete,
-            data: { confirm: 'Are you sure? This will delete ALL dictionary words!' }
-  end
 
   collection_action :clear_dictionary, method: :delete do
     DictionaryWord.delete_all
