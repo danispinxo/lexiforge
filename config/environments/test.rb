@@ -32,7 +32,5 @@ Rails.application.configure do
 
   config.i18n.raise_on_missing_translations = true
 
-
-
   config.action_controller.raise_on_missing_callback_actions = true
 end
