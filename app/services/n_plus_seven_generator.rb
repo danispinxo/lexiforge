@@ -121,7 +121,6 @@ class NPlusSevenGenerator
 
   def apply_replacements_to_text(original_segment, replacements, start_pos)
     result = original_segment.dup
-    # Apply replacements in reverse order to avoid position shifts
     replacements.keys.sort.reverse_each do |pos|
       replacement_data = replacements[pos]
       relative_pos = pos - start_pos

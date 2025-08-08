@@ -43,7 +43,7 @@ RSpec.describe ErasureGenerator do
         expect(parsed_result['type']).to eq('erasure_pages')
         expect(parsed_result['is_blackout']).to be false
         expect(parsed_result['pages']).to be_an(Array)
-        expect(parsed_result['pages'].length).to eq(3) # default num_pages
+        expect(parsed_result['pages'].length).to eq(3)
       end
 
       it 'creates pages with correct structure' do
@@ -92,8 +92,8 @@ RSpec.describe ErasureGenerator do
 
     context 'finding start boundary' do
       it 'finds word start from middle of word' do
-        result = generator.send(:find_word_boundary, text, 8, :start) # middle of "world"
-        expect(result).to eq(6) # start of "world"
+        result = generator.send(:find_word_boundary, text, 8, :start)
+        expect(result).to eq(6)
       end
 
       it 'returns 0 for position at beginning' do
