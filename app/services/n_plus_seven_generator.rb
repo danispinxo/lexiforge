@@ -25,10 +25,8 @@ class NPlusSevenGenerator
     return 'Not enough words in source text' if words.length < 10
 
     selected_words = select_random_word_subset(words, config[:words_to_select])
-    
-    result = reconstruct_text_with_replacements(selected_words, config[:offset])
-    
-    result
+
+    reconstruct_text_with_replacements(selected_words, config[:offset])
   end
 
   def extract_n_plus_seven_config(options)
@@ -90,40 +88,45 @@ class NPlusSevenGenerator
   end
 
   def reconstruct_text_with_replacements(selected_words, offset)
-    # Sort words by their position in the original text
     sorted_words = selected_words.sort_by { |w| w[:position] }
-    
-    # Get the range of text we're working with
+    start_pos, end_pos = calculate_text_range(sorted_words)
+    original_segment = @source_text.content[start_pos...end_pos]
+    replacements = build_replacements_map(sorted_words, offset)
+
+    apply_replacements_to_text(original_segment, replacements, start_pos)
+  end
+
+  def calculate_text_range(sorted_words)
     start_pos = sorted_words.first[:position]
     end_pos = sorted_words.last[:position] + sorted_words.last[:length]
-    
-    # Extract the original text segment with all formatting preserved
-    original_segment = @source_text.content[start_pos...end_pos]
-    
-    # Create a mapping of word positions to their replacements
+    [start_pos, end_pos]
+  end
+
+  def build_replacements_map(sorted_words, offset)
     replacements = {}
     sorted_words.each do |word_data|
-      if noun?(word_data[:word])
-        replacement = find_n_plus_seven_replacement(word_data[:word], offset)
-        if replacement
-          replacements[word_data[:position]] = {
-            original: word_data[:word],
-            replacement: replacement,
-            length: word_data[:length]
-          }
-        end
-      end
+      next unless noun?(word_data[:word])
+
+      replacement = find_n_plus_seven_replacement(word_data[:word], offset)
+      next unless replacement
+
+      replacements[word_data[:position]] = {
+        original: word_data[:word],
+        replacement: replacement,
+        length: word_data[:length]
+      }
     end
-    
-    # Apply replacements while preserving original formatting
+    replacements
+  end
+
+  def apply_replacements_to_text(original_segment, replacements, start_pos)
     result = original_segment.dup
     # Apply replacements in reverse order to avoid position shifts
-    replacements.keys.sort.reverse.each do |pos|
+    replacements.keys.sort.reverse_each do |pos|
       replacement_data = replacements[pos]
       relative_pos = pos - start_pos
       result[relative_pos, replacement_data[:length]] = replacement_data[:replacement]
     end
-    
     result
   end
 end
