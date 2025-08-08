@@ -1,162 +1,180 @@
 # LexiForge
 
-**A digital cut-up poetry generator powered by classic literature from Project Gutenberg**
+A digital poetry generation platform that transforms classic literature from Project Gutenberg into experimental poetry using multiple avant-garde literary techniques. The application provides a comprehensive API and web interface for generating cut-up, erasure, mesostic, N+7, and snowball poetry from public domain texts.
 
-LexiForge transforms classic texts into experimental poetry using the cut-up technique pioneered by William S. Burroughs. Import any book from Project Gutenberg's vast collection and generate unique, randomized verse compositions.
+## Core Architecture
 
-## ✨ Features
+### Backend Framework
 
-- **Project Gutenberg Integration** - Import any of 60,000+ free books directly via API
-- **Cut-Up Poetry Generation** - Transform prose into experimental poetry using randomization
-- **Source Text Management** - Store and organize your literary collection
-- **Clean, Modern Interface** - Intuitive web interface for seamless text manipulation
-- **Popular Classics** - Quick access to beloved works like Pride & Prejudice, Alice in Wonderland
-- **Text Analytics** - View word counts and content previews
+- **Rails 7.1** with Ruby 3.1.1
+- **PostgreSQL** database with Active Record ORM
+- **RESTful API** design with JSON serialization
+- **Active Admin** for content management
+- **Devise** for user authentication
 
-## 🚀 Quick Start
+### Frontend Technology
 
-### Prerequisites
+- **React 18** with Vite build system
+- **SCSS** for modular styling architecture
+- **Context API** for state management
+- **Responsive design** with CSS Grid and Flexbox
 
-- Ruby 3.1.1
-- Rails 7.1
-- PostgreSQL
+## Poetry Generation Techniques
 
-### Installation
+### Cut-Up Poetry
 
-```bash
-# Clone the repository
-git clone https://github.com/danispinxo/lexiforge.git
-cd lexiforge
+The foundational technique pioneered by William S. Burroughs and Brion Gysin. The `CutUpGenerator` service:
 
-# Copy environment variables
-cp .env.example .env
-# Edit .env with your configuration
+- Extracts clean words from source text using regex filtering
+- Implements configurable line generation with variable word counts
+- Supports multiple output formats with customizable parameters
+- Generates 12 lines by default with 6 words per line
+- Applies randomization algorithms to create unexpected juxtapositions
 
-# Install dependencies
-bundle install
+### Erasure Poetry
 
-# Set up the database
-rails db:create db:migrate db:seed
+Digital implementation of the erasure technique where words are selectively removed from source text. The `ErasureGenerator` service:
 
-# Start the server
-rails server
-```
+- Processes text in page-based segments for structured output
+- Implements both traditional erasure and blackout poetry modes
+- Uses word boundary detection for precise text manipulation
+- Maintains original spacing and formatting during word removal
+- Supports configurable retention rates (default: 8 words per 50-word page)
+- Generates HTML output with CSS classes for visual presentation
 
-Visit `http://localhost:3000/source_texts` to begin importing texts!
+### Blackout Poetry
 
-### Environment Variables
+A variant of erasure poetry where removed words are replaced with visual blocks. The system:
 
-Copy `env.example` to `.env` and configure the following variables:
+- Replaces eliminated words with Unicode block characters
+- Applies CSS styling for visual blackout effects
+- Preserves text structure while creating visual poetry
+- Generates multiple pages with consistent formatting
 
-- **Database**: `DATABASE_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
-- **API**: `API_BASE_URL`, `FRONTEND_URL`
-- **CORS**: `ALLOWED_ORIGINS` (comma-separated list)
-- **Admin**: `ADMIN_EMAIL`, `ADMIN_PASSWORD`
-- **Security**: `SECRET_KEY_BASE`, `RAILS_MASTER_KEY`
+### Mesostic Poetry
 
-For production deployment, ensure all environment variables are properly set in your hosting platform.
+Implementation of John Cage's mesostic technique using spine words. The `MesosticGenerator` service:
 
-## Usage
+- Requires a spine word input for poem generation
+- Searches source text for words containing spine letters at specific positions
+- Supports multi-word spine phrases with stanza separation
+- Implements progressive text scanning to maintain poem flow
+- Validates spine word compatibility with available vocabulary
 
-### Importing from Project Gutenberg
+### N+7 Poetry
 
-1. Navigate to the **Source Texts** page
-2. Enter a Project Gutenberg ID (e.g., `1342` for Pride and Prejudice)
-3. Click **Import Text** to fetch and store the book
-4. The text is automatically cleaned of headers and footers
+Digital implementation of the Oulipo N+7 technique. The `NPlusSevenGenerator` service:
 
-### Popular Book IDs to Try
+- Integrates with a comprehensive dictionary database
+- Identifies nouns in source text using part-of-speech tagging
+- Replaces nouns with dictionary entries offset by configurable distance
+- Supports variable offset values (default: 7 positions)
+- Preserves original text structure and formatting
+- Implements fallback search algorithms for dictionary lookups
 
-| ID   | Title                             | Author             |
-| :--- | :-------------------------------- | :----------------- |
-| 1342 | Pride and Prejudice               | Jane Austen        |
-| 11   | Alice's Adventures in Wonderland  | Lewis Carroll      |
-| 74   | The Adventures of Tom Sawyer      | Mark Twain         |
-| 1661 | The Adventures of Sherlock Holmes | Arthur Conan Doyle |
-| 2701 | Moby Dick                         | Herman Melville    |
-| 844  | The Importance of Being Earnest   | Oscar Wilde        |
+### Snowball Poetry
 
-### Generating Cut-Up Poetry
+Implementation of the snowball technique where each line contains words of increasing length. The `SnowballGenerator` service:
 
-1. Click on any imported source text
-2. Select **Generate Cut-Up Poem**
-3. Watch as lines are shuffled to create experimental verse
-4. Save your favorite generated poems
+- Groups words by character length for systematic selection
+- Implements configurable minimum word length parameters
+- Ensures word variety across different length categories
+- Prevents word repetition using Set data structures
+- Validates source text vocabulary diversity requirements
 
-## Technical Architecture
+## Data Models
 
-### Services
+### SourceText Model
 
-- **ProjectGutenbergService** - Handles API integration with Project Gutenberg
+- Stores imported Project Gutenberg content with metadata
+- Implements unique constraints on Gutenberg IDs
+- Associates with generated poems through foreign keys
+- Provides content validation and text processing methods
+- Supports full-text search and content analytics
 
-  - Fetches metadata and plain text content
-  - Cleans texts by removing Project Gutenberg headers/footers
-  - Supports multiple text formats (UTF-8, ASCII)
+### Poem Model
 
-- **CutUpGenerator** - Implements the literary cut-up technique
-  - Splits text into lines
-  - Randomizes order for experimental poetry
-  - Preserves original formatting where possible
+- Tracks generated poetry with technique classification
+- Implements validation for allowed technique types
+- Provides word count and line count analytics
+- Supports content truncation and formatting utilities
+- Integrates with Ransack for advanced querying
 
-### Models
+### DictionaryWord Model
 
-- **SourceText** - Stores imported literary works
+- Stores comprehensive dictionary data for N+7 generation
+- Implements part-of-speech tagging and categorization
+- Provides efficient lookup algorithms for word replacement
+- Supports fuzzy matching and fallback search strategies
+- Enables systematic word substitution patterns
 
-  - Tracks Project Gutenberg IDs to prevent duplicates
-  - Validates content presence and title
-  - Associated with generated poems
+## API Endpoints
 
-- **Poem** - Stores generated cut-up poetry
-  - Links to source text for traceability
-  - Preserves creative output for review
+### Poetry Generation
 
-## The Cut-Up Technique
+- `POST /api/source_texts/:id/generate_cut_up` - Cut-up poetry generation
+- `POST /api/source_texts/:id/generate_erasure` - Erasure poetry generation
+- `POST /api/source_texts/:id/generate_snowball` - Snowball poetry generation
+- `POST /api/source_texts/:id/generate_mesostic` - Mesostic poetry generation
+- `POST /api/source_texts/:id/generate_n_plus_seven` - N+7 poetry generation
 
-The cut-up technique is a literary method in which written text is cut up and rearranged to create new text. Originally developed by artist Brion Gysin and popularized by writer William S. Burroughs, this method reveals hidden meanings and creates unexpected juxtapositions.
+### Content Management
 
-LexiForge automates this process digitally, allowing you to:
+- `GET /api/poems` - Retrieve all generated poems
+- `GET /api/poems/:id` - Retrieve specific poem details
+- `POST /api/poems` - Create new poem entries
+- `GET /api/source_texts` - Retrieve available source texts
+- `GET /api/source_texts/:id` - Retrieve specific source text details
 
-- Experiment with classic literature in new ways
-- Discover unexpected connections between passages
-- Create unique poetic compositions from prose
-- Explore the intersection of tradition and avant-garde
+## Project Gutenberg Integration
 
-## API Integration Details
+The `ProjectGutenbergService` provides automated text import functionality:
 
-### Project Gutenberg URLs
+- Fetches metadata and plain text content via HTTP requests
+- Implements multiple URL patterns for different text formats
+- Performs automatic text cleaning and formatting
+- Removes Project Gutenberg headers, footers, and metadata
+- Supports UTF-8 and ASCII text encoding
+- Implements error handling and retry logic
 
-LexiForge attempts to fetch texts from multiple URL patterns:
+## Technical Features
 
-```
-/files/{id}/{id}-0.txt      # UTF-8 format
-/files/{id}/{id}.txt        # ASCII format
-/cache/epub/{id}/pg{id}.txt # Alternative format
-```
+### Content Processing
 
-## Deployment
+- Advanced text cleaning with regex pattern matching
+- Word boundary detection and preservation
+- Unicode character handling and normalization
+- Configurable content filtering and validation
 
-### Production Setup
+### Performance Optimization
 
-1. Set all required environment variables in your hosting platform
-2. Ensure PostgreSQL and Redis are available
-3. Run database migrations: `rails db:migrate`
-4. Seed the database: `rails db:seed`
-5. Set up SSL certificates for HTTPS
-6. Configure your web server (nginx, Apache) to proxy to the Rails app
+- Database indexing on frequently queried fields
+- Efficient word lookup algorithms
+- Caching strategies for dictionary operations
+- Optimized text processing pipelines
 
-### Docker Deployment
+### Security Implementation
 
-```bash
-# Build and run with Docker Compose
-docker-compose up -d
+- Input validation and sanitization
+- CORS configuration for cross-origin requests
+- Authentication and authorization controls
+- Parameterized queries to prevent injection attacks
 
-# Or build production images
-docker build -t lexiforge-api .
-docker build -t lexiforge-frontend ./frontend
-```
+### Scalability Considerations
 
-## Resources
+- Modular service architecture for easy extension
+- Configurable generation parameters
+- Database optimization for large text processing
+- Memory-efficient text manipulation algorithms
 
-- [Project Gutenberg](https://www.gutenberg.org/) - Source of public domain texts
-- [Cut-up Technique](https://en.wikipedia.org/wiki/Cut-up_technique) - Literary method background
-- [William S. Burroughs](https://en.wikipedia.org/wiki/William_S._Burroughs) - Cut-up technique pioneer
+## Literary Context
+
+The application implements five major experimental poetry techniques from the 20th century avant-garde movement:
+
+1. **Cut-up** (1950s-60s) - William S. Burroughs and Brion Gysin's randomization technique
+2. **Erasure** (1960s-present) - Selective word removal to reveal hidden meanings
+3. **Mesostic** (1960s-70s) - John Cage's spine word technique
+4. **N+7** (1960s) - Oulipo's systematic word replacement method
+5. **Snowball** (1960s) - Progressive word length patterns
+
+Each technique is implemented with respect to its original literary principles while leveraging modern computational capabilities for automated generation and analysis.
