@@ -182,7 +182,6 @@ RSpec.describe CutUpGenerator do
       let(:source_text) { create(:source_text, content: 'Hello, World! This is a test... 123 & some-text.') }
 
       it 'correctly processes text according to the algorithm' do
-
         processed_words = source_text.content.downcase
                                      .gsub(/[^\w\s]/, '')
                                      .split

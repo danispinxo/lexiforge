@@ -144,7 +144,6 @@ RSpec.describe ErasureGenerator do
       let(:result) { generator.send(:create_prose_erasure, text, words_to_keep: 2, is_blackout: false) }
 
       it 'keeps approximately the requested number of words' do
-
         kept_words = result.split.reject { |word| word.strip.empty? }
         expect(kept_words.length).to eq(2)
       end
@@ -164,7 +163,6 @@ RSpec.describe ErasureGenerator do
       end
 
       it 'keeps the requested number of visible words' do
-
         visible_text = result.gsub(/<[^>]*>/, '').gsub(/█+/, '')
         visible_words = visible_text.split.reject { |word| word.strip.empty? }
         expect(visible_words.length).to eq(2)
