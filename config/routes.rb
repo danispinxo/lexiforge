@@ -18,6 +18,7 @@ Rails.application.routes.draw do
         post :generate_erasure, to: 'poems#generate_erasure'
         post :generate_snowball, to: 'poems#generate_snowball'
         post :generate_mesostic, to: 'poems#generate_mesostic'
+        post :generate_n_plus_seven, to: 'poems#generate_n_plus_seven'
       end
     end
 
