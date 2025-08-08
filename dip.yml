@@ -66,20 +66,6 @@ interaction:
       TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
       TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
 
-  rails-test:
-    description: Run Rails tests
-    service: api
-    command: ./bin/rails test
-    compose:
-      run_options: [no-deps]
-    environment:
-      RAILS_ENV: test
-      TEST_DB_HOST: db_test
-      TEST_DB_PORT: 5432
-      TEST_DB_NAME: lexiforge_test
-      TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
-      TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
-
   rubocop:
     description: Run RuboCop
     service: api
