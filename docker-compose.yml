@@ -45,6 +45,8 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "${PORT:-3000}:3000"
+    env_file:
+      - .env
     environment:
       RAILS_ENV: ${RAILS_ENV:-development}
       DATABASE_URL: postgres://${POSTGRES_USER:-lexiforge}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-lexiforge_${RAILS_ENV:-development}}
