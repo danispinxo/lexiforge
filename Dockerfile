@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=3.1.1.18
+ARG RUBY_VERSION=3.1.1
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 WORKDIR /rails
@@ -40,4 +40,4 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+CMD ["./bin/rails", "server", "-p", "${PORT:-3000}", "-b", "0.0.0.0"]
