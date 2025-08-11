@@ -1,30 +1,22 @@
-# Rails Backend
-# Ignore bundler config.
 /.bundle
 
 .env
 
-# Ignore tmp and log files
 lexiforge/tmp/
 log
 tmp
 
-# Ignore database information (now safe to commit - uses env vars only)
-# config/database.yml
-
-# Ignore storage 
 storage
 /public/assets
 
-# Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/credentials.yml.enc.backup
+/config/credentials/*.key
 
-# React Frontend (Node.js)
 frontend/node_modules
 frontend/dist
 frontend/dist-ssr
 
-# Logs
 logs
 *.log
 npm-debug.log*
@@ -33,10 +25,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Local env files
 *.local
 
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
