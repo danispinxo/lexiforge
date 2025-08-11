@@ -24,6 +24,10 @@ class DictionaryWord < ApplicationRecord
       .first
   end
 
+  def self.find_with_definition(word)
+    where(word: word.downcase).where.not(definition: [nil, '']).first
+  end
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[created_at definition id id_value part_of_speech synsets updated_at word]
   end
