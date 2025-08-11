@@ -9,8 +9,8 @@ lexiforge/tmp/
 log
 tmp
 
-# Ignore database information
-config/database.yml
+# Ignore database information (now safe to commit - uses env vars only)
+# config/database.yml
 
 # Ignore storage 
 storage

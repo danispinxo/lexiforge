@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL"), { "postgres://danispinosa@localhost:5432" } %>
+  database: lexiforge_development
+
+test:
+  <<: *default
+  host: <%= ENV.fetch("TEST_DB_HOST", "db_test") %>
+  port: <%= ENV.fetch("TEST_DB_PORT", "5432") %>
+  database: <%= ENV.fetch("TEST_DB_NAME", "lexiforge_test") %>
+  username: <%= ENV.fetch("TEST_DB_USER", "lexiforge") %>
+  password: <%= ENV.fetch("TEST_DB_PASSWORD", "password") %>
+
+production:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL", "postgresql://dummy:dummy@localhost:5432/dummy") %>
