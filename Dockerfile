@@ -41,4 +41,4 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 EXPOSE 3000
-CMD ["./bin/rails", "server", "-p", "${PORT:-3000}", "-b", "0.0.0.0"]
+CMD ["./bin/start-server"]
