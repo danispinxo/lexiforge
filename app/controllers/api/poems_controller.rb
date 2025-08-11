@@ -1,7 +1,8 @@
 class Api::PoemsController < ApiController
   before_action :set_poem, only: %i[show edit update destroy]
   before_action :set_source_text,
-                only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic generate_n_plus_seven]
+                only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic generate_n_plus_seven
+                         generate_definitional]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
@@ -226,6 +227,21 @@ class Api::PoemsController < ApiController
     end
   end
 
+  def generate_definitional
+    return render_blank_content_error if @source_text.content.blank?
+
+    options = build_definitional_options
+    definitional_content = generate_definitional_content(options)
+
+    @poem = build_definitional_poem(definitional_content)
+
+    if @poem.save
+      render_poem_generation_success('definitional')
+    else
+      render_poem_save_error
+    end
+  end
+
   def build_snowball_options
     permitted_params = generation_params
     method = permitted_params[:method] || 'snowball'
@@ -261,6 +277,18 @@ class Api::PoemsController < ApiController
     options
   end
 
+  def build_definitional_options
+    permitted_params = generation_params
+    method = permitted_params[:method] || 'definitional'
+    options = { method: method }
+
+    options[:section_length] = (permitted_params[:section_length] || 200).to_i
+    options[:words_to_replace] = (permitted_params[:words_to_replace] || 20).to_i
+    options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
+
+    options
+  end
+
   def generate_snowball_content(options)
     generator = SnowballGenerator.new(@source_text)
     generator.generate(options)
@@ -273,6 +301,11 @@ class Api::PoemsController < ApiController
 
   def generate_n_plus_seven_content(options)
     generator = NPlusSevenGenerator.new(@source_text)
+    generator.generate(options)
+  end
+
+  def generate_definitional_content(options)
+    generator = DefinitionalGenerator.new(@source_text)
     generator.generate(options)
   end
 
@@ -300,6 +333,14 @@ class Api::PoemsController < ApiController
     )
   end
 
+  def build_definitional_poem(content)
+    @source_text.poems.build(
+      title: generate_poem_title(@source_text, 'definitional'),
+      content: content,
+      technique_used: 'definitional'
+    )
+  end
+
   private
 
   def set_poem
@@ -317,7 +358,8 @@ class Api::PoemsController < ApiController
   def generation_params
     params.permit(:method, :spine_word, :num_lines, :words_per_line, :size,
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
-                  :min_word_length, :offset, :words_to_select, :preserve_structure)
+                  :min_word_length, :offset, :words_to_select, :preserve_structure,
+                  :section_length, :words_to_replace)
   end
 
   def generate_poem_title(source_text, technique)
