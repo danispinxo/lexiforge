@@ -20,6 +20,8 @@ function PoemGenerationModal({
   const [spineWord, setSpineWord] = useState("");
   const [offset, setOffset] = useState(7);
   const [wordsToSelect, setWordsToSelect] = useState(50);
+  const [sectionLength, setSectionLength] = useState(200);
+  const [wordsToReplace, setWordsToReplace] = useState(20);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -66,6 +68,12 @@ function PoemGenerationModal({
           method: "n_plus_seven",
           offset: offset,
           words_to_select: wordsToSelect,
+        });
+      } else if (technique === "definitional") {
+        response = await poemsAPI.generateDefinitional(sourceText.id, {
+          method: "definitional",
+          section_length: sectionLength,
+          words_to_replace: wordsToReplace,
         });
       }
 
@@ -156,6 +164,22 @@ function PoemGenerationModal({
     { value: 150, label: "150 words" },
   ];
 
+  const sectionLengthOptions = [
+    { value: 100, label: "100 words" },
+    { value: 200, label: "200 words" },
+    { value: 300, label: "300 words" },
+    { value: 500, label: "500 words" },
+    { value: 1000, label: "1000 words" },
+  ];
+
+  const wordsToReplaceOptions = [
+    { value: 10, label: "10 words" },
+    { value: 20, label: "20 words" },
+    { value: 30, label: "30 words" },
+    { value: 50, label: "50 words" },
+    { value: 100, label: "100 words" },
+  ];
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -185,6 +209,7 @@ function PoemGenerationModal({
                 <option value="snowball">Snowball Poetry</option>
                 <option value="mesostic">Mesostic Poetry</option>
                 <option value="n_plus_seven">N+7 Poetry</option>
+                <option value="definitional">Definitional Literature</option>
               </select>
             </div>
 
@@ -433,6 +458,57 @@ function PoemGenerationModal({
                     randomly selects a subset of words from your source text and
                     applies N+7 replacement to all nouns found in that
                     selection, creating new meanings and unexpected connections.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {technique === "definitional" && (
+              <>
+                <div className="form-group">
+                  <label htmlFor="section-length">Section Length:</label>
+                  <select
+                    id="section-length"
+                    value={sectionLength}
+                    onChange={(e) => setSectionLength(parseInt(e.target.value))}
+                    disabled={generating}
+                  >
+                    {sectionLengthOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="words-to-replace">Words to Replace:</label>
+                  <select
+                    id="words-to-replace"
+                    value={wordsToReplace}
+                    onChange={(e) =>
+                      setWordsToReplace(parseInt(e.target.value))
+                    }
+                    disabled={generating}
+                  >
+                    {wordsToReplaceOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    Definitional literature replaces words in the source text
+                    with their dictionary definitions. First, a section of text
+                    is selected based on your chosen length. Then, within that
+                    section, a specified number of words are randomly chosen and
+                    replaced with their dictionary definitions. This technique
+                    creates new meanings by expanding simple words into their
+                    full definitions, often revealing hidden layers of meaning
+                    and creating unexpected juxtapositions.
                   </p>
                 </div>
               </>
