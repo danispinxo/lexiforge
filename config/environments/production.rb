@@ -20,10 +20,15 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
   config.active_record.dump_schema_after_migration = false
 
-  # Database configuration
   config.active_record.database_url = ENV['DATABASE_URL'] if ENV['DATABASE_URL']
 
-  # Action Cable configuration
   config.action_cable.url = ENV.fetch('ACTION_CABLE_URL', nil)
   config.action_cable.allowed_request_origins = ENV.fetch('ALLOWED_ORIGINS', 'http://localhost:3001').split(',')
+
+  config.hosts << ENV.fetch('RAILWAY_STATIC_URL', 'localhost') if ENV['RAILWAY_STATIC_URL']
+  config.hosts << ENV.fetch('RAILWAY_PUBLIC_DOMAIN', 'localhost') if ENV['RAILWAY_PUBLIC_DOMAIN']
+  
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  
+  config.cache_store = :memory_store, { size: 64.megabytes }
 end
