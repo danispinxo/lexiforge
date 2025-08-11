@@ -1,0 +1,7 @@
+set -e
+
+PORT=${PORT:-3000}
+
+echo "Starting Rails server on port $PORT"
+
+exec ./bin/rails server -p "$PORT" -b 0.0.0.0
