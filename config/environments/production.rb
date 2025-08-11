@@ -27,8 +27,8 @@ Rails.application.configure do
 
   config.hosts << ENV.fetch('RAILWAY_STATIC_URL', 'localhost') if ENV['RAILWAY_STATIC_URL']
   config.hosts << ENV.fetch('RAILWAY_PUBLIC_DOMAIN', 'localhost') if ENV['RAILWAY_PUBLIC_DOMAIN']
-  
+
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  
+
   config.cache_store = :memory_store, { size: 64.megabytes }
 end

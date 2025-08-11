@@ -26,9 +26,9 @@ module Lexiforge
       allow do
         origins ENV.fetch('ALLOWED_ORIGINS', 'http://localhost:3001').split(',')
         resource '*',
-          headers: :any,
-          methods: [:get, :post, :put, :patch, :delete, :options, :head],
-          credentials: true
+                 headers: :any,
+                 methods: %i[get post put patch delete options head],
+                 credentials: true
       end
     end
   end
