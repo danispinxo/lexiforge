@@ -11,6 +11,30 @@ const api = axios.create({
   withCredentials: true,
 });
 
+api.interceptors.request.use(
+  (config) => {
+    if (import.meta.env.DEV) {
+      console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (import.meta.env.DEV) {
+      console.error("API Error:", error.response?.data || error.message);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const sourceTextsAPI = {
   getAll: () => api.get("/source_texts"),
   getById: (id) => api.get(`/source_texts/${id}`),
