@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  url: <%= ENV.fetch("DATABASE_URL") { "postgres://danispinosa@localhost:5432" } %>
+  url: <%= ENV.fetch("DATABASE_URL", "postgres://danispinosa@localhost:5432") %>
   database: lexiforge_development
 
 test:
