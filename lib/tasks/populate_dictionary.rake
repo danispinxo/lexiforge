@@ -7,28 +7,51 @@ namespace :dictionary do
 
     puts 'WordNet loaded successfully'
 
-    WordNet::Lexicon.new
-    words = WordNet::Word.all
-    puts "Available words: #{words.count}"
+    batch_size = 100
+    processed_count = 0
+    total_words = 0
 
-    words.each_with_index do |word, index|
-      next if word.lemma.match?(/\s|\d/) || word.lemma.start_with?("'")
+    begin
+      WordNet::Lexicon.new
+      words = WordNet::Word.all
+      total_words = words.count
+      puts "Total words to process: #{total_words}"
 
-      synsets = word.synsets
+      words.each_slice(batch_size) do |word_batch|
+        ActiveRecord::Base.transaction do
+          word_batch.each_with_index do |word, _batch_index|
+            next if word.lemma.match?(/\s|\d/) || word.lemma.start_with?("'")
 
-      synsets.each do |synset|
-        DictionaryWord.find_or_create_by(
-          word: word.lemma.downcase,
-          part_of_speech: synset.pos
-        ) do |dw|
-          dw.definition = synset.definition
-          dw.synsets = synset.words.map(&:lemma)
+            synsets = word.synsets
+
+            synsets.each do |synset|
+              DictionaryWord.find_or_create_by(
+                word: word.lemma.downcase,
+                part_of_speech: synset.pos
+              ) do |dw|
+                dw.definition = synset.definition
+                dw.synsets = synset.words.map(&:lemma)
+              end
+            end
+
+            processed_count += 1
+          end
         end
-      end
 
-      puts "Processed #{index + 1} words..." if ((index + 1) % 1000).zero?
+        puts "Processed #{processed_count}/#{total_words} words " \
+             "(#{(processed_count.to_f / total_words * 100).round(1)}%)"
+
+        if ((processed_count / batch_size) % 5).zero?
+          GC.start
+          puts "Memory cleanup performed at #{processed_count} words"
+        end
+
+        sleep(0.1)
+      end
     rescue StandardError => e
-      puts "Error processing word #{index + 1}: #{e.message}"
+      puts "Error during processing: #{e.message}"
+      puts "Processed #{processed_count} words before error"
+      raise e
     end
 
     puts 'WordNet dictionary population complete!'
