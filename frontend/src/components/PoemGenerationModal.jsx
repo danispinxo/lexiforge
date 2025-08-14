@@ -22,6 +22,8 @@ function PoemGenerationModal({
   const [wordsToSelect, setWordsToSelect] = useState(50);
   const [sectionLength, setSectionLength] = useState(200);
   const [wordsToReplace, setWordsToReplace] = useState(20);
+  const [foundPoemLines, setFoundPoemLines] = useState(10);
+  const [lineLength, setLineLength] = useState("medium");
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -74,6 +76,12 @@ function PoemGenerationModal({
           method: "definitional",
           section_length: sectionLength,
           words_to_replace: wordsToReplace,
+        });
+      } else if (technique === "found_poem") {
+        response = await poemsAPI.generateFoundPoem(sourceText.id, {
+          method: "found_poem",
+          num_lines: foundPoemLines,
+          line_length: lineLength,
         });
       }
 
@@ -180,6 +188,23 @@ function PoemGenerationModal({
     { value: 100, label: "100 words" },
   ];
 
+  const foundPoemLineOptions = [
+    { value: 5, label: "5 lines" },
+    { value: 8, label: "8 lines" },
+    { value: 10, label: "10 lines" },
+    { value: 12, label: "12 lines" },
+    { value: 15, label: "15 lines" },
+    { value: 20, label: "20 lines" },
+  ];
+
+  const lineLengthOptions = [
+    { value: "very_short", label: "Very Short (1-2 words)" },
+    { value: "short", label: "Short (3-4 words)" },
+    { value: "medium", label: "Medium (5-7 words)" },
+    { value: "long", label: "Long (8-10 words)" },
+    { value: "very_long", label: "Very Long (10-15 words)" },
+  ];
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -210,6 +235,7 @@ function PoemGenerationModal({
                 <option value="mesostic">Mesostic Poetry</option>
                 <option value="n_plus_seven">N+7 Poetry</option>
                 <option value="definitional">Definitional Literature</option>
+                <option value="found_poem">Found Poetry</option>
               </select>
             </div>
 
@@ -509,6 +535,52 @@ function PoemGenerationModal({
                     creates new meanings by expanding simple words into their
                     full definitions, often revealing hidden layers of meaning
                     and creating unexpected juxtapositions.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {technique === "found_poem" && (
+              <>
+                <div className="form-group">
+                  <label htmlFor="found-poem-lines">Number of Lines:</label>
+                  <select
+                    id="found-poem-lines"
+                    value={foundPoemLines}
+                    onChange={(e) => setFoundPoemLines(parseInt(e.target.value))}
+                    disabled={generating}
+                  >
+                    {foundPoemLineOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="line-length">Length of Lines:</label>
+                  <select
+                    id="line-length"
+                    value={lineLength}
+                    onChange={(e) => setLineLength(e.target.value)}
+                    disabled={generating}
+                  >
+                    {lineLengthOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    Found poetry extracts consecutive lines from different sections of the source text. 
+                    Each line is taken from a different part of the book to ensure diversity, while 
+                    maintaining the natural flow of consecutive words within each line. This technique 
+                    creates new meaning by recontextualizing existing text fragments, allowing the 
+                    original work to speak in new and unexpected ways.
                   </p>
                 </div>
               </>
