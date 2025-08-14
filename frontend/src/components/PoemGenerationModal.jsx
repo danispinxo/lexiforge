@@ -39,51 +39,41 @@ function PoemGenerationModal({
     }
 
     try {
-      let response;
-      if (technique === "cut_up") {
-        response = await poemsAPI.generateCutUp(sourceText.id, {
-          method: "cut_up",
-          num_lines: numLines,
-          words_per_line: wordsPerLine,
-        });
-      } else if (technique === "erasure") {
-        response = await poemsAPI.generateErasure(sourceText.id, {
-          method: "erasure",
-          num_pages: numPages,
-          words_per_page: wordsPerPage,
-          words_to_keep: wordsToKeep,
-          is_blackout: isBlackout,
-        });
-      } else if (technique === "snowball") {
-        response = await poemsAPI.generateSnowball(sourceText.id, {
-          method: "snowball",
-          num_lines: snowballLines,
-          min_word_length: minWordLength,
-        });
-      } else if (technique === "mesostic") {
-        response = await poemsAPI.generateMesostic(sourceText.id, {
-          method: "mesostic",
-          spine_word: spineWord,
-        });
-      } else if (technique === "n_plus_seven") {
-        response = await poemsAPI.generateNPlusSeven(sourceText.id, {
-          method: "n_plus_seven",
-          offset: offset,
-          words_to_select: wordsToSelect,
-        });
-      } else if (technique === "definitional") {
-        response = await poemsAPI.generateDefinitional(sourceText.id, {
-          method: "definitional",
-          section_length: sectionLength,
-          words_to_replace: wordsToReplace,
-        });
-      } else if (technique === "found_poem") {
-        response = await poemsAPI.generateFoundPoem(sourceText.id, {
-          method: "found_poem",
-          num_lines: foundPoemLines,
-          line_length: lineLength,
-        });
+      let options = { method: technique };
+      
+      switch (technique) {
+        case "cut_up":
+          options.num_lines = numLines;
+          options.words_per_line = wordsPerLine;
+          break;
+        case "erasure":
+          options.num_pages = numPages;
+          options.words_per_page = wordsPerPage;
+          options.words_to_keep = wordsToKeep;
+          options.is_blackout = isBlackout;
+          break;
+        case "snowball":
+          options.num_lines = snowballLines;
+          options.min_word_length = minWordLength;
+          break;
+        case "mesostic":
+          options.spine_word = spineWord;
+          break;
+        case "n_plus_seven":
+          options.offset = offset;
+          options.words_to_select = wordsToSelect;
+          break;
+        case "definitional":
+          options.section_length = sectionLength;
+          options.words_to_replace = wordsToReplace;
+          break;
+        case "found_poem":
+          options.num_lines = foundPoemLines;
+          options.line_length = lineLength;
+          break;
       }
+      
+      const response = await poemsAPI.generatePoem(sourceText.id, options);
 
       if (response.data.success) {
         onSuccess(response.data.message);
