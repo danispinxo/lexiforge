@@ -145,7 +145,7 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
   end
 
-  describe 'POST #generate_cut_up' do
+  describe 'POST #generate_poem for cut_up technique' do
     let(:valid_params) do
       {
         id: source_text.id,
@@ -156,13 +156,21 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
 
     context 'with valid source text' do
+      before do
+        generator_instance = instance_double(CutUpGenerator)
+        allow(CutUpGenerator).to receive(:new).with(source_text).and_return(generator_instance)
+        allow(generator_instance).to receive(:generate).and_return('Generated poem content')
+      end
+
       it 'generates and saves a cut-up poem' do
-        expect { post :generate_cut_up, params: valid_params }.to change(Poem, :count).by(1)
+        expect { post :generate_poem, params: valid_params }.to change(Poem, :count).by(1)
       end
 
       it 'returns success response' do
-        post :generate_cut_up, params: valid_params
+        post :generate_poem, params: valid_params
         json_response = response.parsed_body
+
+        puts "Error response: #{json_response.inspect}" unless json_response['success']
 
         expect(json_response['success']).to be true
         expect(json_response['message']).to include('Cut-up poem successfully generated')
@@ -175,7 +183,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         allow(CutUpGenerator).to receive(:new).with(source_text).and_return(generator_instance)
         allow(generator_instance).to receive(:generate).and_return('Generated poem content')
 
-        post :generate_cut_up, params: valid_params
+        post :generate_poem, params: valid_params
 
         expect(CutUpGenerator).to have_received(:new).with(source_text)
         expect(generator_instance).to have_received(:generate).with(
@@ -186,7 +194,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'generates appropriate poem title' do
-        post :generate_cut_up, params: valid_params
+        post :generate_poem, params: valid_params
         json_response = response.parsed_body
 
         expect(json_response['poem']['title']).to include('Cutup:')
@@ -202,7 +210,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'returns error response' do
-        post :generate_cut_up, params: { id: empty_source_text.id }
+        post :generate_poem, params: { id: empty_source_text.id }
         json_response = response.parsed_body
 
         expect(response).to have_http_status(:unprocessable_entity)
@@ -217,7 +225,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         allow(CutUpGenerator).to receive(:new).and_return(generator_instance)
         allow(generator_instance).to receive(:generate).and_return('Generated content')
 
-        post :generate_cut_up, params: { id: source_text.id }
+        post :generate_poem, params: { id: source_text.id }
 
         expect(generator_instance).to have_received(:generate).with(
           method: 'cut_up',
@@ -236,7 +244,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'returns error response' do
-        post :generate_cut_up, params: valid_params
+        post :generate_poem, params: valid_params
         json_response = response.parsed_body
 
         expect(response).to have_http_status(:unprocessable_entity)
@@ -246,7 +254,7 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
   end
 
-  describe 'POST #generate_erasure' do
+  describe 'POST #generate_poem for erasure technique' do
     let(:valid_params) do
       {
         id: source_text.id,
@@ -259,12 +267,18 @@ RSpec.describe Api::PoemsController, type: :controller do
     end
 
     context 'with valid source text' do
+      before do
+        generator_instance = instance_double(ErasureGenerator)
+        allow(ErasureGenerator).to receive(:new).with(source_text).and_return(generator_instance)
+        allow(generator_instance).to receive(:generate).and_return('{}')
+      end
+
       it 'generates and saves an erasure poem' do
-        expect { post :generate_erasure, params: valid_params }.to change(Poem, :count).by(1)
+        expect { post :generate_poem, params: valid_params }.to change(Poem, :count).by(1)
       end
 
       it 'returns success response' do
-        post :generate_erasure, params: valid_params
+        post :generate_poem, params: valid_params
         json_response = response.parsed_body
 
         expect(json_response['success']).to be true
@@ -274,7 +288,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'returns erasure success response when is_blackout is false' do
         params = valid_params.merge(is_blackout: false)
-        post :generate_erasure, params: params
+        post :generate_poem, params: params
         json_response = response.parsed_body
 
         expect(json_response['success']).to be true
@@ -287,7 +301,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         allow(ErasureGenerator).to receive(:new).with(source_text).and_return(generator_instance)
         allow(generator_instance).to receive(:generate).and_return('{}')
 
-        post :generate_erasure, params: valid_params
+        post :generate_poem, params: valid_params
 
         expect(ErasureGenerator).to have_received(:new).with(source_text)
         expect(generator_instance).to have_received(:generate).with(
@@ -300,7 +314,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'sets technique_used to "blackout" when is_blackout is true' do
-        post :generate_erasure, params: valid_params
+        post :generate_poem, params: valid_params
         json_response = response.parsed_body
 
         expect(json_response['poem']['technique_used']).to eq('blackout')
@@ -308,7 +322,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
       it 'sets technique_used to "erasure" when is_blackout is false' do
         params = valid_params.merge(is_blackout: false)
-        post :generate_erasure, params: params
+        post :generate_poem, params: params
         json_response = response.parsed_body
 
         expect(json_response['poem']['technique_used']).to eq('erasure')
@@ -321,7 +335,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         allow(ErasureGenerator).to receive(:new).and_return(generator_instance)
         allow(generator_instance).to receive(:generate).and_return('{}')
 
-        post :generate_erasure, params: { id: source_text.id }
+        post :generate_poem, params: { id: source_text.id, method: 'erasure' }
 
         expect(generator_instance).to have_received(:generate).with(
           method: 'erasure',
@@ -341,7 +355,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'returns error response' do
-        post :generate_erasure, params: { id: empty_source_text.id }
+        post :generate_poem, params: { id: empty_source_text.id }
         json_response = response.parsed_body
 
         expect(response).to have_http_status(:unprocessable_entity)

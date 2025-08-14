@@ -47,18 +47,8 @@ export const sourceTextsAPI = {
 export const poemsAPI = {
   getAll: () => api.get("/poems"),
   getById: (id) => api.get(`/poems/${id}`),
-  generateCutUp: (sourceTextId, options) =>
-    api.post(`/source_texts/${sourceTextId}/generate_cut_up`, options),
-  generateErasure: (sourceTextId, options) =>
-    api.post(`/source_texts/${sourceTextId}/generate_erasure`, options),
-  generateSnowball: (sourceTextId, options) =>
-    api.post(`/source_texts/${sourceTextId}/generate_snowball`, options),
-  generateMesostic: (sourceTextId, options) =>
-    api.post(`/source_texts/${sourceTextId}/generate_mesostic`, options),
-  generateNPlusSeven: (sourceTextId, options) =>
-    api.post(`/source_texts/${sourceTextId}/generate_n_plus_seven`, options),
-  generateDefinitional: (sourceTextId, options) =>
-    api.post(`/source_texts/${sourceTextId}/generate_definitional`, options),
+  generatePoem: (sourceTextId, options) =>
+    api.post(`/source_texts/${sourceTextId}/generate_poem`, options),
 };
 
 export const authAPI = {
