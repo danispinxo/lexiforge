@@ -40,7 +40,7 @@ function PoemGenerationModal({
 
     try {
       let options = { method: technique };
-      
+
       switch (technique) {
         case "cut_up":
           options.num_lines = numLines;
@@ -67,12 +67,12 @@ function PoemGenerationModal({
           options.section_length = sectionLength;
           options.words_to_replace = wordsToReplace;
           break;
-        case "found_poem":
+        case "":
           options.num_lines = foundPoemLines;
           options.line_length = lineLength;
           break;
       }
-      
+
       const response = await poemsAPI.generatePoem(sourceText.id, options);
 
       if (response.data.success) {
@@ -225,7 +225,7 @@ function PoemGenerationModal({
                 <option value="mesostic">Mesostic Poetry</option>
                 <option value="n_plus_seven">N+7 Poetry</option>
                 <option value="definitional">Definitional Literature</option>
-                <option value="found_poem">Found Poetry</option>
+                <option value="found">Found Poetry</option>
               </select>
             </div>
 
@@ -530,14 +530,16 @@ function PoemGenerationModal({
               </>
             )}
 
-            {technique === "found_poem" && (
+            {technique === "found" && (
               <>
                 <div className="form-group">
                   <label htmlFor="found-poem-lines">Number of Lines:</label>
                   <select
                     id="found-poem-lines"
                     value={foundPoemLines}
-                    onChange={(e) => setFoundPoemLines(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setFoundPoemLines(parseInt(e.target.value))
+                    }
                     disabled={generating}
                   >
                     {foundPoemLineOptions.map((option) => (
@@ -566,10 +568,12 @@ function PoemGenerationModal({
 
                 <div className="form-description">
                   <p className="technique-description">
-                    Found poetry extracts consecutive lines from different sections of the source text. 
-                    Each line is taken from a different part of the book to ensure diversity, while 
-                    maintaining the natural flow of consecutive words within each line. This technique 
-                    creates new meaning by recontextualizing existing text fragments, allowing the 
+                    Found poetry extracts consecutive lines from different
+                    sections of the source text. Each line is taken from a
+                    different part of the book to ensure diversity, while
+                    maintaining the natural flow of consecutive words within
+                    each line. This technique creates new meaning by
+                    recontextualizing existing text fragments, allowing the
                     original work to speak in new and unexpected ways.
                   </p>
                 </div>
