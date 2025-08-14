@@ -22,6 +22,7 @@ Rails.application.routes.draw do
         post :generate_mesostic, to: 'poems#generate_mesostic'
         post :generate_n_plus_seven, to: 'poems#generate_n_plus_seven'
         post :generate_definitional, to: 'poems#generate_definitional'
+        post :generate_found_poem, to: 'poems#generate_found_poem'
       end
     end
 

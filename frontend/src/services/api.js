@@ -59,6 +59,8 @@ export const poemsAPI = {
     api.post(`/source_texts/${sourceTextId}/generate_n_plus_seven`, options),
   generateDefinitional: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_definitional`, options),
+  generateFoundPoem: (sourceTextId, options) =>
+    api.post(`/source_texts/${sourceTextId}/generate_found_poem`, options),
 };
 
 export const authAPI = {
