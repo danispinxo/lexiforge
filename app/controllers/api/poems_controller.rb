@@ -1,8 +1,6 @@
 class Api::PoemsController < ApiController
   before_action :set_poem, only: %i[show edit update destroy]
-  before_action :set_source_text,
-                only: %i[generate_cut_up generate_erasure generate_snowball generate_mesostic generate_n_plus_seven
-                         generate_definitional]
+  before_action :set_source_text, only: %i[generate_poem]
 
   def index
     @poems = Poem.includes(:source_text).order(created_at: :desc)
@@ -58,16 +56,18 @@ class Api::PoemsController < ApiController
     redirect_to poems_url, notice: t('poems.notices.deleted')
   end
 
-  def generate_cut_up
+  def generate_poem
     return render_blank_content_error if @source_text.content.blank?
 
-    options = build_cut_up_options
-    cut_up_content = generate_cut_up_content(options)
+    technique = determine_technique
+    options = build_options(technique)
+    content = generate_content(technique, options)
 
-    @poem = build_cut_up_poem(cut_up_content)
+    @poem = build_poem(technique, content, options)
 
     if @poem.save
-      render_poem_generation_success('cut-up')
+      technique_name = get_technique_display_name(technique, options)
+      render_poem_generation_success(technique_name)
     else
       render_poem_save_error
     end
@@ -75,32 +75,126 @@ class Api::PoemsController < ApiController
 
   private
 
-  def build_cut_up_options
+  def determine_technique
     permitted_params = generation_params
-    method = permitted_params[:method] || 'cut_up'
-    options = { method: method }
+    permitted_params[:method] || 'cut_up'
+  end
 
-    if method == 'cut_up'
-      options[:num_lines] = (permitted_params[:num_lines] || 12).to_i
-      options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
-    else
-      options[:size] = permitted_params[:size] || 'medium'
+  def build_options(technique)
+    permitted_params = generation_params
+    options = { method: technique }
+
+    case technique
+    when 'cut_up'
+      build_cut_up_options(options, permitted_params)
+    when 'erasure'
+      build_erasure_options(options, permitted_params)
+    when 'snowball'
+      build_snowball_options(options, permitted_params)
+    when 'mesostic'
+      build_mesostic_options(options, permitted_params)
+    when 'n_plus_seven'
+      build_n_plus_seven_options(options, permitted_params)
+    when 'definitional'
+      build_definitional_options(options, permitted_params)
+    when 'found'
+      build_found_poem_options(options, permitted_params)
     end
 
     options
   end
 
-  def generate_cut_up_content(options)
-    generator = CutUpGenerator.new(@source_text)
+  def build_cut_up_options(options, permitted_params)
+    options[:num_lines] = (permitted_params[:num_lines] || 12).to_i
+    options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
+  end
+
+  def build_erasure_options(options, permitted_params)
+    options[:num_pages] = (permitted_params[:num_pages] || 3).to_i
+    options[:words_per_page] = (permitted_params[:words_per_page] || 50).to_i
+    options[:words_to_keep] = (permitted_params[:words_to_keep] || 8).to_i
+    options[:is_blackout] = ['true', true].include?(permitted_params[:is_blackout])
+  end
+
+  def build_snowball_options(options, permitted_params)
+    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
+    options[:min_word_length] = (permitted_params[:min_word_length] || 1).to_i
+  end
+
+  def build_mesostic_options(options, permitted_params)
+    options[:spine_word] = permitted_params[:spine_word] if permitted_params[:spine_word].present?
+  end
+
+  def build_n_plus_seven_options(options, permitted_params)
+    options[:offset] = (permitted_params[:offset] || 7).to_i
+    options[:words_to_select] = (permitted_params[:words_to_select] || 50).to_i
+    options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
+  end
+
+  def build_definitional_options(options, permitted_params)
+    options[:section_length] = (permitted_params[:section_length] || 200).to_i
+    options[:words_to_replace] = (permitted_params[:words_to_replace] || 20).to_i
+    options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
+  end
+
+  def build_found_poem_options(options, permitted_params)
+    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
+    options[:line_length] = permitted_params[:line_length] || 'medium'
+  end
+
+  def generate_content(technique, options)
+    generator_class = case technique
+                      when 'cut_up' then CutUpGenerator
+                      when 'erasure' then ErasureGenerator
+                      when 'snowball' then SnowballGenerator
+                      when 'mesostic' then MesosticGenerator
+                      when 'n_plus_seven' then NPlusSevenGenerator
+                      when 'definitional' then DefinitionalGenerator
+                      when 'found' then FoundPoemGenerator
+                      else
+                        raise "Unknown technique: #{technique}"
+                      end
+
+    generator = generator_class.new(@source_text)
     generator.generate(options)
   end
 
-  def build_cut_up_poem(content)
+  def build_poem(technique, content, options)
+    technique_used = get_technique_used(technique, options)
+
     @source_text.poems.build(
-      title: generate_poem_title(@source_text, 'cutup'),
+      title: generate_poem_title(@source_text, technique_used),
       content: content,
-      technique_used: 'cutup'
+      technique_used: technique_used
     )
+  end
+
+  def get_technique_used(technique, options)
+    case technique
+    when 'cut_up'
+      'cutup'
+    when 'erasure'
+      options[:is_blackout] ? 'blackout' : 'erasure'
+    when 'n_plus_seven'
+      'n+7'
+    when 'found'
+      'found'
+    else
+      technique
+    end
+  end
+
+  def get_technique_display_name(technique, options)
+    case technique
+    when 'cut_up'
+      'cut-up'
+    when 'erasure'
+      options[:is_blackout] ? 'blackout' : 'erasure'
+    when 'n_plus_seven'
+      'n+7'
+    else
+      technique
+    end
   end
 
   def render_poem_generation_success(technique_name)
@@ -135,214 +229,6 @@ class Api::PoemsController < ApiController
     }, status: :unprocessable_entity
   end
 
-  public
-
-  def generate_erasure
-    return render_blank_content_error if @source_text.content.blank?
-
-    options = build_erasure_options
-    erasure_content = generate_erasure_content(options)
-
-    @poem = build_erasure_poem(erasure_content, options)
-
-    if @poem.save
-      technique_name = options[:is_blackout] ? 'blackout' : 'erasure'
-      render_poem_generation_success(technique_name)
-    else
-      render_poem_save_error
-    end
-  end
-
-  def build_erasure_options
-    permitted_params = generation_params
-    method = permitted_params[:method] || 'erasure'
-    options = { method: method }
-
-    if method == 'erasure'
-      options[:num_pages] = (permitted_params[:num_pages] || 3).to_i
-      options[:words_per_page] = (permitted_params[:words_per_page] || 50).to_i
-      options[:words_to_keep] = (permitted_params[:words_to_keep] || 8).to_i
-      options[:is_blackout] = ['true', true].include?(permitted_params[:is_blackout])
-    end
-
-    options
-  end
-
-  def generate_erasure_content(options)
-    generator = ErasureGenerator.new(@source_text)
-    generator.generate(options)
-  end
-
-  def build_erasure_poem(content, options)
-    technique_name = options[:is_blackout] ? 'blackout' : 'erasure'
-    @source_text.poems.build(
-      title: generate_poem_title(@source_text, technique_name),
-      content: content,
-      technique_used: technique_name
-    )
-  end
-
-  def generate_snowball
-    return render_blank_content_error if @source_text.content.blank?
-
-    options = build_snowball_options
-    snowball_content = generate_snowball_content(options)
-
-    @poem = build_snowball_poem(snowball_content)
-
-    if @poem.save
-      render_poem_generation_success('snowball')
-    else
-      render_poem_save_error
-    end
-  end
-
-  def generate_mesostic
-    return render_blank_content_error if @source_text.content.blank?
-
-    options = build_mesostic_options
-    mesostic_content = generate_mesostic_content(options)
-
-    @poem = build_mesostic_poem(mesostic_content)
-
-    if @poem.save
-      render_poem_generation_success('mesostic')
-    else
-      render_poem_save_error
-    end
-  end
-
-  def generate_n_plus_seven
-    return render_blank_content_error if @source_text.content.blank?
-
-    options = build_n_plus_seven_options
-    n_plus_seven_content = generate_n_plus_seven_content(options)
-
-    @poem = build_n_plus_seven_poem(n_plus_seven_content)
-
-    if @poem.save
-      render_poem_generation_success('n+7')
-    else
-      render_poem_save_error
-    end
-  end
-
-  def generate_definitional
-    return render_blank_content_error if @source_text.content.blank?
-
-    options = build_definitional_options
-    definitional_content = generate_definitional_content(options)
-
-    @poem = build_definitional_poem(definitional_content)
-
-    if @poem.save
-      render_poem_generation_success('definitional')
-    else
-      render_poem_save_error
-    end
-  end
-
-  def build_snowball_options
-    permitted_params = generation_params
-    method = permitted_params[:method] || 'snowball'
-    options = { method: method }
-
-    if method == 'snowball'
-      options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
-      options[:min_word_length] = (permitted_params[:min_word_length] || 1).to_i
-    end
-
-    options
-  end
-
-  def build_mesostic_options
-    permitted_params = generation_params
-    method = permitted_params[:method] || 'mesostic'
-    options = { method: method }
-
-    options[:spine_word] = permitted_params[:spine_word] if permitted_params[:spine_word].present?
-
-    options
-  end
-
-  def build_n_plus_seven_options
-    permitted_params = generation_params
-    method = permitted_params[:method] || 'n_plus_seven'
-    options = { method: method }
-
-    options[:offset] = (permitted_params[:offset] || 7).to_i
-    options[:words_to_select] = (permitted_params[:words_to_select] || 50).to_i
-    options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
-
-    options
-  end
-
-  def build_definitional_options
-    permitted_params = generation_params
-    method = permitted_params[:method] || 'definitional'
-    options = { method: method }
-
-    options[:section_length] = (permitted_params[:section_length] || 200).to_i
-    options[:words_to_replace] = (permitted_params[:words_to_replace] || 20).to_i
-    options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
-
-    options
-  end
-
-  def generate_snowball_content(options)
-    generator = SnowballGenerator.new(@source_text)
-    generator.generate(options)
-  end
-
-  def generate_mesostic_content(options)
-    generator = MesosticGenerator.new(@source_text)
-    generator.generate(options)
-  end
-
-  def generate_n_plus_seven_content(options)
-    generator = NPlusSevenGenerator.new(@source_text)
-    generator.generate(options)
-  end
-
-  def generate_definitional_content(options)
-    generator = DefinitionalGenerator.new(@source_text)
-    generator.generate(options)
-  end
-
-  def build_snowball_poem(content)
-    @source_text.poems.build(
-      title: generate_poem_title(@source_text, 'snowball'),
-      content: content,
-      technique_used: 'snowball'
-    )
-  end
-
-  def build_mesostic_poem(content)
-    @source_text.poems.build(
-      title: generate_poem_title(@source_text, 'mesostic'),
-      content: content,
-      technique_used: 'mesostic'
-    )
-  end
-
-  def build_n_plus_seven_poem(content)
-    @source_text.poems.build(
-      title: generate_poem_title(@source_text, 'n+7'),
-      content: content,
-      technique_used: 'n+7'
-    )
-  end
-
-  def build_definitional_poem(content)
-    @source_text.poems.build(
-      title: generate_poem_title(@source_text, 'definitional'),
-      content: content,
-      technique_used: 'definitional'
-    )
-  end
-
-  private
-
   def set_poem
     @poem = Poem.find(params[:id])
   end
@@ -359,7 +245,7 @@ class Api::PoemsController < ApiController
     params.permit(:method, :spine_word, :num_lines, :words_per_line, :size,
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
-                  :section_length, :words_to_replace)
+                  :section_length, :words_to_replace, :line_length)
   end
 
   def generate_poem_title(source_text, technique)

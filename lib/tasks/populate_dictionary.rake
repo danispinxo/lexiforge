@@ -20,6 +20,8 @@ namespace :dictionary do
       words.each_slice(batch_size) do |word_batch|
         ActiveRecord::Base.transaction do
           word_batch.each_with_index do |word, _batch_index|
+            processed_count += 1
+
             next if word.lemma.match?(/\s|\d/) || word.lemma.start_with?("'")
 
             synsets = word.synsets
@@ -33,8 +35,6 @@ namespace :dictionary do
                 dw.synsets = synset.words.map(&:lemma)
               end
             end
-
-            processed_count += 1
           end
         end
 
