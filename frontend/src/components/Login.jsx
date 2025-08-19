@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSignInAlt,
+  faEnvelope,
+  faLock,
+  faEye,
+  faEyeSlash,
+  faUserPlus,
+  faExclamationTriangle,
+} from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 
 function Login() {
@@ -39,14 +49,26 @@ function Login() {
             <Link to="/" className="back-link">
               Back to LexiForge
             </Link>
-            <h2>Login</h2>
+            <h2>
+              <FontAwesomeIcon icon={faSignInAlt} className="auth-icon" /> Login
+            </h2>
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && (
+            <div className="error-message">
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                className="error-icon"
+              />
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">
+                <FontAwesomeIcon icon={faEnvelope} /> <span>Email</span>
+              </label>
               <input
                 type="email"
                 id="email"
@@ -60,7 +82,9 @@ function Login() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">
+                <FontAwesomeIcon icon={faLock} /> <span>Password</span>
+              </label>
               <div className="password-input-container">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -78,7 +102,7 @@ function Login() {
                   onClick={togglePasswordVisibility}
                   disabled={loading}
                 >
-                  {showPassword ? "X" : "O"}
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                 </button>
               </div>
             </div>
@@ -88,7 +112,16 @@ function Login() {
               disabled={loading}
               className="btn btn-primary"
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? (
+                <>
+                  <FontAwesomeIcon icon={faSignInAlt} className="fa-spin" />{" "}
+                  <span>Logging in...</span>
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faSignInAlt} /> <span>Login</span>
+                </>
+              )}
             </button>
           </form>
 
@@ -96,7 +129,7 @@ function Login() {
             <p>
               Don't have an account?{" "}
               <Link to="/register" className="btn-link">
-                Register here
+                <FontAwesomeIcon icon={faUserPlus} /> <span>Register here</span>
               </Link>
             </p>
           </div>
