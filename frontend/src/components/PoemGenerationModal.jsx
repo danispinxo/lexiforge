@@ -67,7 +67,7 @@ function PoemGenerationModal({
           options.section_length = sectionLength;
           options.words_to_replace = wordsToReplace;
           break;
-        case "":
+        case "found":
           options.num_lines = foundPoemLines;
           options.line_length = lineLength;
           break;
@@ -90,102 +90,6 @@ function PoemGenerationModal({
   };
 
   if (!isOpen) return null;
-
-  const lineOptions = [
-    { value: 6, label: "6 lines" },
-    { value: 8, label: "8 lines" },
-    { value: 12, label: "12 lines" },
-    { value: 16, label: "16 lines" },
-    { value: 20, label: "20 lines" },
-  ];
-
-  const wordOptions = [
-    { value: 3, label: "3-4 words" },
-    { value: 6, label: "5-7 words" },
-    { value: 10, label: "8-12 words" },
-    { value: 15, label: "12-18 words" },
-  ];
-
-  const pageOptions = [
-    { value: 1, label: "1 page" },
-    { value: 2, label: "2 pages" },
-    { value: 3, label: "3 pages" },
-    { value: 4, label: "4 pages" },
-    { value: 5, label: "5 pages" },
-  ];
-
-  const wordsPerPageOptions = [
-    { value: 30, label: "30 words" },
-    { value: 50, label: "50 words" },
-    { value: 75, label: "75 words" },
-    { value: 100, label: "100 words" },
-  ];
-
-  const wordsToKeepOptions = [
-    { value: 5, label: "5 words" },
-    { value: 8, label: "8 words" },
-    { value: 12, label: "12 words" },
-    { value: 15, label: "15 words" },
-    { value: 20, label: "20 words" },
-  ];
-
-  const snowballLineOptions = [
-    { value: 5, label: "5 lines" },
-    { value: 8, label: "8 lines" },
-    { value: 10, label: "10 lines" },
-    { value: 12, label: "12 lines" },
-    { value: 15, label: "15 lines" },
-    { value: 20, label: "20 lines" },
-  ];
-
-  const minWordLengthOptions = [
-    { value: 1, label: "1 character" },
-    { value: 2, label: "2 characters" },
-    { value: 3, label: "3 characters" },
-    { value: 4, label: "4 characters" },
-    { value: 5, label: "5 characters" },
-  ];
-
-  const offsetOptions = [
-    { value: 3, label: "3 words ahead" },
-    { value: 5, label: "5 words ahead" },
-    { value: 7, label: "7 words ahead" },
-    { value: 10, label: "10 words ahead" },
-    { value: 15, label: "15 words ahead" },
-  ];
-
-  const wordsToSelectOptions = [
-    { value: 25, label: "25 words" },
-    { value: 50, label: "50 words" },
-    { value: 75, label: "75 words" },
-    { value: 100, label: "100 words" },
-    { value: 150, label: "150 words" },
-  ];
-
-  const sectionLengthOptions = [
-    { value: 100, label: "100 words" },
-    { value: 200, label: "200 words" },
-    { value: 300, label: "300 words" },
-    { value: 500, label: "500 words" },
-    { value: 1000, label: "1000 words" },
-  ];
-
-  const wordsToReplaceOptions = [
-    { value: 10, label: "10 words" },
-    { value: 20, label: "20 words" },
-    { value: 30, label: "30 words" },
-    { value: 50, label: "50 words" },
-    { value: 100, label: "100 words" },
-  ];
-
-  const foundPoemLineOptions = [
-    { value: 5, label: "5 lines" },
-    { value: 8, label: "8 lines" },
-    { value: 10, label: "10 lines" },
-    { value: 12, label: "12 lines" },
-    { value: 15, label: "15 lines" },
-    { value: 20, label: "20 lines" },
-  ];
 
   const lineLengthOptions = [
     { value: "very_short", label: "Very Short (1-2 words)" },
@@ -233,34 +137,30 @@ function PoemGenerationModal({
               <>
                 <div className="form-group">
                   <label htmlFor="num-lines">Number of Lines:</label>
-                  <select
+                  <input
+                    type="number"
                     id="num-lines"
                     value={numLines}
-                    onChange={(e) => setNumLines(parseInt(e.target.value))}
+                    onChange={(e) => setNumLines(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="50"
                     disabled={generating}
-                  >
-                    {lineOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="words-per-line">Words Per Line:</label>
-                  <select
+                  <input
+                    type="number"
                     id="words-per-line"
                     value={wordsPerLine}
-                    onChange={(e) => setWordsPerLine(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setWordsPerLine(parseInt(e.target.value) || 0)
+                    }
+                    min="1"
+                    max="30"
                     disabled={generating}
-                  >
-                    {wordOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-description">
@@ -278,50 +178,45 @@ function PoemGenerationModal({
               <>
                 <div className="form-group">
                   <label htmlFor="num-pages">Number of Pages:</label>
-                  <select
+                  <input
+                    type="number"
                     id="num-pages"
                     value={numPages}
-                    onChange={(e) => setNumPages(parseInt(e.target.value))}
+                    onChange={(e) => setNumPages(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="10"
                     disabled={generating}
-                  >
-                    {pageOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="words-per-page">Words Per Page:</label>
-                  <select
+                  <input
+                    type="number"
                     id="words-per-page"
                     value={wordsPerPage}
-                    onChange={(e) => setWordsPerPage(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setWordsPerPage(parseInt(e.target.value) || 0)
+                    }
+                    min="10"
+                    max="200"
                     disabled={generating}
-                  >
-                    {wordsPerPageOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="words-to-keep">Words to Keep Per Page:</label>
-                  <select
+                  <input
+                    type="number"
                     id="words-to-keep"
                     value={wordsToKeep}
-                    onChange={(e) => setWordsToKeep(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setWordsToKeep(parseInt(e.target.value) || 0)
+                    }
+                    min="1"
+                    max="50"
                     disabled={generating}
-                  >
-                    {wordsToKeepOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
@@ -354,34 +249,34 @@ function PoemGenerationModal({
               <>
                 <div className="form-group">
                   <label htmlFor="snowball-lines">Number of Lines:</label>
-                  <select
+                  <input
+                    type="number"
                     id="snowball-lines"
                     value={snowballLines}
-                    onChange={(e) => setSnowballLines(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setSnowballLines(parseInt(e.target.value) || 0)
+                    }
+                    min="1"
+                    max="30"
                     disabled={generating}
-                  >
-                    {snowballLineOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="min-word-length">Starting Word Length:</label>
-                  <select
+                  <label htmlFor="min-word-length">
+                    Starting Word Length (characters):
+                  </label>
+                  <input
+                    type="number"
                     id="min-word-length"
                     value={minWordLength}
-                    onChange={(e) => setMinWordLength(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setMinWordLength(parseInt(e.target.value) || 0)
+                    }
+                    min="1"
+                    max="10"
                     disabled={generating}
-                  >
-                    {minWordLengthOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-description">
@@ -434,34 +329,30 @@ function PoemGenerationModal({
               <>
                 <div className="form-group">
                   <label htmlFor="offset">Dictionary Offset:</label>
-                  <select
+                  <input
+                    type="number"
                     id="offset"
                     value={offset}
-                    onChange={(e) => setOffset(parseInt(e.target.value))}
+                    onChange={(e) => setOffset(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="200"
                     disabled={generating}
-                  >
-                    {offsetOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="words-to-select">Words to Select:</label>
-                  <select
+                  <input
+                    type="number"
                     id="words-to-select"
                     value={wordsToSelect}
-                    onChange={(e) => setWordsToSelect(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setWordsToSelect(parseInt(e.target.value) || 0)
+                    }
+                    min="10"
+                    max="1000"
                     disabled={generating}
-                  >
-                    {wordsToSelectOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-description">
@@ -483,36 +374,51 @@ function PoemGenerationModal({
               <>
                 <div className="form-group">
                   <label htmlFor="section-length">Section Length:</label>
-                  <select
+                  <input
+                    type="number"
                     id="section-length"
                     value={sectionLength}
-                    onChange={(e) => setSectionLength(parseInt(e.target.value))}
+                    onChange={(e) => {
+                      const newValue = parseInt(e.target.value) || 0;
+                      setSectionLength(newValue);
+                      if (wordsToReplace >= newValue) {
+                        setWordsToReplace(
+                          Math.max(1, Math.floor(newValue * 0.1))
+                        );
+                      }
+                    }}
+                    min="10"
+                    max="2000"
                     disabled={generating}
-                  >
-                    {sectionLengthOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="words-to-replace">Words to Replace:</label>
-                  <select
+                  <input
+                    type="number"
                     id="words-to-replace"
                     value={wordsToReplace}
-                    onChange={(e) =>
-                      setWordsToReplace(parseInt(e.target.value))
-                    }
+                    onChange={(e) => {
+                      const newValue = parseInt(e.target.value) || 0;
+                      if (newValue >= sectionLength) {
+                        setError(
+                          "Words to replace must be less than section length"
+                        );
+                        return;
+                      }
+                      setError("");
+                      setWordsToReplace(newValue);
+                    }}
+                    min="1"
+                    max={Math.min(1999, sectionLength - 1)}
                     disabled={generating}
-                  >
-                    {wordsToReplaceOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
+                  {wordsToReplace >= sectionLength && (
+                    <div className="message error">
+                      Words to replace must be less than section length
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-description">
@@ -534,20 +440,17 @@ function PoemGenerationModal({
               <>
                 <div className="form-group">
                   <label htmlFor="found-poem-lines">Number of Lines:</label>
-                  <select
+                  <input
+                    type="number"
                     id="found-poem-lines"
                     value={foundPoemLines}
                     onChange={(e) =>
-                      setFoundPoemLines(parseInt(e.target.value))
+                      setFoundPoemLines(parseInt(e.target.value) || 0)
                     }
+                    min="1"
+                    max="30"
                     disabled={generating}
-                  >
-                    {foundPoemLineOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
