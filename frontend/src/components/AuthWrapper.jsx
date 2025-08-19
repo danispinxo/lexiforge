@@ -1,5 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faSignOutAlt,
+  faSignInAlt,
+  faUserPlus,
+  faShieldAlt,
+  faChevronDown,
+} from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 
 function AuthWrapper() {
@@ -42,16 +51,23 @@ function AuthWrapper() {
       >
         {user ? (
           <>
+            <FontAwesomeIcon icon={faUser} className="user-icon" />
             <span className="user-email">
               {user.email}
-              {user.admin && <span className="admin-indicator">🔒</span>}
+              {user.admin && (
+                <FontAwesomeIcon
+                  icon={faShieldAlt}
+                  className="admin-indicator"
+                />
+              )}
             </span>
-            <span className="dropdown-arrow">▼</span>
+            <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
           </>
         ) : (
           <>
+            <FontAwesomeIcon icon={faUser} className="user-icon" />
             <span>Account</span>
-            <span className="dropdown-arrow">▼</span>
+            <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
           </>
         )}
       </button>
@@ -63,20 +79,25 @@ function AuthWrapper() {
               <div className="dropdown-header">
                 <span>
                   Welcome, {user.email}
-                  {user.admin && <span className="admin-indicator">🔒</span>}
+                  {user.admin && (
+                    <FontAwesomeIcon
+                      icon={faShieldAlt}
+                      className="admin-indicator"
+                    />
+                  )}
                 </span>
               </div>
               <button onClick={handleLogout} className="dropdown-item">
-                Logout
+                <FontAwesomeIcon icon={faSignOutAlt} /> <span>Logout</span>
               </button>
             </>
           ) : (
             <>
               <button onClick={handleLoginClick} className="dropdown-item">
-                Login
+                <FontAwesomeIcon icon={faSignInAlt} /> <span>Login</span>
               </button>
               <button onClick={handleRegisterClick} className="dropdown-item">
-                Register
+                <FontAwesomeIcon icon={faUserPlus} /> <span>Register</span>
               </button>
             </>
           )}
