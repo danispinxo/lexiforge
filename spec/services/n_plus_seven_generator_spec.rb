@@ -94,7 +94,7 @@ RSpec.describe NPlusSevenGenerator do
 
       words = generator_with_punct.send(:extract_words_with_positions)
 
-      expect(words.map { |w| w[:word] }).to include('Hello', 'world', 'How', 'are', 'you')
+      expect(words.pluck(:word)).to include('Hello', 'world', 'How', 'are', 'you')
     end
   end
 

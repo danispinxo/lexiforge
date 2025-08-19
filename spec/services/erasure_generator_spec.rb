@@ -197,7 +197,7 @@ RSpec.describe ErasureGenerator do
       word_items = result.select { |item| item[:type] == :word }
       space_items = result.select { |item| item[:type] == :space }
 
-      expect(word_items.map { |item| item[:text] }).to eq(%w[Hello world this is a test])
+      expect(word_items.pluck(:text)).to eq(%w[Hello world this is a test])
       expect(space_items.length).to be > 0
     end
 
@@ -207,13 +207,13 @@ RSpec.describe ErasureGenerator do
     end
 
     it 'handles different whitespace characters' do
-      space_texts = result.select { |item| item[:type] == :space }.map { |item| item[:text] }
+      space_texts = result.select { |item| item[:type] == :space }.pluck(:text)
       expect(space_texts.join).to include("\t")
       expect(space_texts.join).to include("\n")
     end
 
     it 'maintains correct order of elements' do
-      reconstructed = result.map { |item| item[:text] }.join
+      reconstructed = result.pluck(:text).join
       expect(reconstructed).to eq(text)
     end
 
