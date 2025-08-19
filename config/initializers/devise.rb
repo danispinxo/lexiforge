@@ -1,5 +1,7 @@
 Devise.setup do |config|
   config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  
+  config.secret_key = Rails.application.credentials.secret_key_base || ENV['SECRET_KEY_BASE']
 
   require 'devise/orm/active_record'
 
@@ -23,6 +25,6 @@ Devise.setup do |config|
 
   config.sign_out_via = :delete
 
-  config.responder.error_status = :unprocessable_entity
+  config.responder.error_status = :unprocessable_content
   config.responder.redirect_status = :see_other
 end

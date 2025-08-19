@@ -38,7 +38,7 @@ class Api::PoemsController < ApiController
       render json: {
         success: false,
         errors: @poem.errors.full_messages
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
     end
   end
 
@@ -47,7 +47,7 @@ class Api::PoemsController < ApiController
       redirect_to @poem, notice: t('poems.notices.updated')
     else
       @source_texts = SourceText.all
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -219,14 +219,14 @@ class Api::PoemsController < ApiController
     render json: {
       success: false,
       message: 'Cannot generate poem: source text has no content.'
-    }, status: :unprocessable_entity
+    }, status: :unprocessable_content
   end
 
   def render_poem_save_error
     render json: {
       success: false,
       message: "Failed to generate poem: #{@poem.errors.full_messages.join(', ')}"
-    }, status: :unprocessable_entity
+    }, status: :unprocessable_content
   end
 
   def set_poem

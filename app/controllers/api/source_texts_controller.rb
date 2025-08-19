@@ -29,7 +29,7 @@ class Api::SourceTextsController < ApiController
         render json: {
           success: false,
           message: "Failed to import text: #{source_text.errors.full_messages.join(', ')}"
-        }, status: :unprocessable_entity
+        }, status: :unprocessable_content
       end
     else
       render json: {
