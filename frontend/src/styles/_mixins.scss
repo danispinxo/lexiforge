@@ -72,7 +72,11 @@
 
 @mixin button-primary {
   @include button-base;
-  background: linear-gradient(135deg, variables.$primary-color 0%, variables.$primary-dark 100%);
+  background: linear-gradient(
+    135deg,
+    variables.$primary-color 0%,
+    variables.$primary-dark 100%
+  );
   color: variables.$black;
   box-shadow: variables.$shadow-medium;
 
@@ -174,7 +178,11 @@
 @mixin card-paper {
   @include card;
 
-  background: linear-gradient(145deg, variables.$paper-bg 0%, color.adjust(variables.$paper-bg, $lightness: -5%) 100%);
+  background: linear-gradient(
+    145deg,
+    variables.$paper-bg 0%,
+    color.adjust(variables.$paper-bg, $lightness: -5%) 100%
+  );
   color: variables.$ink-blue;
 
   &::before {
@@ -188,7 +196,6 @@
   }
 }
 
-// Layout utilities
 @mixin flex-center {
   display: flex;
   justify-content: center;
@@ -212,7 +219,6 @@
   gap: variables.$spacing-lg;
 }
 
-// Text effects
 @mixin text-glow($color: variables.$primary-color) {
   text-shadow: 0 0 10px rgba($color, 0.5);
 }
@@ -231,7 +237,6 @@
   animation: fadeInText 0.8s variables.$ease-out-expo;
 }
 
-// Academic elements
 @mixin manuscript-style {
   font-family: variables.$font-serif;
   line-height: 1.8;
@@ -242,7 +247,6 @@
   border-radius: variables.$border-radius-sm;
   box-shadow: inset 0 0 0 1px rgba(variables.$ink-blue, 0.1);
 
-  // Vintage paper effect
   background-image: linear-gradient(
       90deg,
       transparent 79px,
@@ -264,9 +268,12 @@
   border: 1px solid rgba(variables.$medium-gray, 0.3);
 }
 
-// Indie rock elements
 @mixin concert-poster {
-  background: linear-gradient(45deg, variables.$charcoal 0%, variables.$dark-gray 100%);
+  background: linear-gradient(
+    45deg,
+    variables.$charcoal 0%,
+    variables.$dark-gray 100%
+  );
   color: variables.$warm-white;
   padding: variables.$spacing-xl;
   border-radius: variables.$border-radius-lg;
@@ -298,11 +305,16 @@
       rgba(variables.$black, 0.1) 22%,
       transparent 23%
     ),
-    conic-gradient(from 0deg, variables.$charcoal, variables.$dark-gray, variables.$charcoal, variables.$dark-gray);
+    conic-gradient(
+      from 0deg,
+      variables.$charcoal,
+      variables.$dark-gray,
+      variables.$charcoal,
+      variables.$dark-gray
+    );
   border-radius: 50%;
 }
 
-// Modal styling
 @mixin modal-overlay {
   position: fixed;
   top: 0;
@@ -327,7 +339,6 @@
   animation: slideUpFadeIn 0.4s variables.$ease-out-expo;
 }
 
-// Responsive design mixins
 @mixin mobile {
   @media (max-width: #{variables.$breakpoint-sm - 1px}) {
     @content;
@@ -346,7 +357,6 @@
   }
 }
 
-// Accessibility
 @mixin visually-hidden {
   position: absolute !important;
   width: 1px !important;

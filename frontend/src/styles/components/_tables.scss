@@ -59,7 +59,6 @@
     }
   }
 
-  // Table body
   tbody {
     tr {
       border-bottom: 1px solid rgba(variables.$medium-gray, 0.2);
@@ -85,7 +84,6 @@
   }
 }
 
-// Table cell specific styling
 .title-cell {
   width: 40%;
   font-weight: variables.$weight-medium;
@@ -148,7 +146,6 @@
       border-radius: variables.$border-radius-sm;
     }
 
-    // Consistent styling for table action buttons
     &.btn-ghost {
       color: variables.$primary-color;
       border-color: rgba(variables.$primary-color, 0.3);
@@ -213,8 +210,6 @@
   }
 }
 
-
-
 @include mixins.tablet {
   .texts-table-container,
   .poems-table-container {
@@ -272,5 +267,3 @@
     font-size: variables.$font-size-xs;
   }
 }
-
-
