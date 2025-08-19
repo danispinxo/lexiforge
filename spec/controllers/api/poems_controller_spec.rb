@@ -128,7 +128,7 @@ RSpec.describe Api::PoemsController, type: :controller do
       before { post :create, params: { poem: invalid_attributes } }
 
       it 'returns unprocessable entity status' do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it 'returns error message and validation errors' do
@@ -213,7 +213,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         post :generate_poem, params: { id: empty_source_text.id }
         json_response = response.parsed_body
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(json_response['success']).to be false
         expect(json_response['message']).to include('Cannot generate poem')
       end
@@ -247,7 +247,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         post :generate_poem, params: valid_params
         json_response = response.parsed_body
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(json_response['success']).to be false
         expect(json_response['message']).to include('Failed to generate poem')
       end
@@ -358,7 +358,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         post :generate_poem, params: { id: empty_source_text.id }
         json_response = response.parsed_body
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(json_response['success']).to be false
         expect(json_response['message']).to include('Cannot generate poem')
       end

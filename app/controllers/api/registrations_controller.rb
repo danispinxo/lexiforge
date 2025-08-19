@@ -11,7 +11,7 @@ class Api::RegistrationsController < ApiController
         success: false,
         message: 'Email has already been taken',
         errors: ['Email has already been taken']
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
       return
     end
 
@@ -32,7 +32,7 @@ class Api::RegistrationsController < ApiController
         success: false,
         message: user.errors.full_messages.join(', '),
         errors: user.errors.full_messages
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
     end
   rescue StandardError => e
     render json: {
