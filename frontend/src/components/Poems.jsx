@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faExclamationTriangle,
+  faInfoCircle,
+  faCalendar,
+  faMagic,
+} from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
 
 function Poems() {
@@ -33,12 +41,24 @@ function Poems() {
         </Link>
       </div>
 
-      {error && <div className="message error">{error}</div>}
+      {error && (
+        <div className="message error">
+          <FontAwesomeIcon
+            icon={faExclamationTriangle}
+            className="message-icon"
+          />
+          {error}
+        </div>
+      )}
 
       {poems.length === 0 ? (
         <div className="empty-state">
-          <p>No poems generated yet.</p>
           <p>
+            <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
+            No poems generated yet.
+          </p>
+          <p>
+            <FontAwesomeIcon icon={faMagic} className="magic-icon" />
             <Link to="/source-texts">Import some source texts</Link> and
             generate cut-up poems!
           </p>
@@ -84,6 +104,10 @@ function Poems() {
                       )}
                     </td>
                     <td className="date-cell">
+                      <FontAwesomeIcon
+                        icon={faCalendar}
+                        className="date-icon"
+                      />{" "}
                       {new Date(poem.created_at).toLocaleDateString()}
                     </td>
                     <td className="actions-cell">
@@ -91,7 +115,7 @@ function Poems() {
                         to={`/poems/${poem.id}`}
                         className="btn btn-ghost btn-sm"
                       >
-                        View Poem
+                        <FontAwesomeIcon icon={faEye} />
                       </Link>
                     </td>
                   </tr>
