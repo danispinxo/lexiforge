@@ -23,6 +23,7 @@ import {
   faArrowLeft,
   faMagic,
   faCalendar,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -48,7 +49,8 @@ library.add(
   faEyeSlash,
   faArrowLeft,
   faMagic,
-  faCalendar
+  faCalendar,
+  faHome
 );
 
 // Export the icons so components can import them from here
@@ -76,4 +78,5 @@ export {
   faArrowLeft,
   faMagic,
   faCalendar,
+  faHome,
 };
