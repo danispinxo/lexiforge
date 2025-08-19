@@ -82,6 +82,9 @@
       font-family: variables.$font-sans;
       @include mixins.small-caps;
       transition: all variables.$transition-normal;
+      display: flex;
+      align-items: center;
+      gap: variables.$spacing-md;
 
       &:hover {
         background: rgba(variables.$primary-color, 0.05);
