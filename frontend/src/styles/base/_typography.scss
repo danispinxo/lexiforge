@@ -1,11 +1,8 @@
-// Typography styles
 @use "../variables";
 @use "../mixins";
 
-// Import Google Fonts for that academic + indie vibe
 @import url("https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Oswald:wght@400;600;700;900&family=Kalam:wght@400;700&display=swap");
 
-// Headings
 h1,
 h2,
 h3,
@@ -43,14 +40,12 @@ h6 {
   color: variables.$text-secondary;
 }
 
-// Paragraphs
 p {
   @include mixins.body-text;
   margin: 0 0 variables.$spacing-md 0;
   color: variables.$text-secondary;
 }
 
-// Links with that indie rock flair
 a {
   color: variables.$link-color;
   text-decoration: none;
@@ -58,7 +53,6 @@ a {
   transition: all variables.$transition-normal;
   position: relative;
 
-  // Subtle underline animation
   &::after {
     content: "";
     position: absolute;
@@ -66,7 +60,11 @@ a {
     height: 1px;
     bottom: -2px;
     left: 0;
-    background: linear-gradient(90deg, variables.$link-color, variables.$link-hover);
+    background: linear-gradient(
+      90deg,
+      variables.$link-color,
+      variables.$link-hover
+    );
     transition: width variables.$transition-normal variables.$ease-out-expo;
   }
 
@@ -84,7 +82,6 @@ a {
   }
 }
 
-// Code blocks - perfect for poems
 code,
 pre {
   font-family: variables.$font-mono;
@@ -112,7 +109,6 @@ pre {
   }
 }
 
-// Responsive text sizes
 @include mixins.mobile {
   :root {
     font-size: 16px;

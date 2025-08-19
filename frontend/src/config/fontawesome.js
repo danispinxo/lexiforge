@@ -53,7 +53,6 @@ library.add(
   faHome
 );
 
-// Export the icons so components can import them from here
 export {
   faBook,
   faFileText,
