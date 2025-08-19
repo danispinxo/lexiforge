@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUserPlus,
+  faEnvelope,
+  faLock,
+  faEye,
+  faEyeSlash,
+  faSignInAlt,
+  faExclamationTriangle,
+} from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 
 function Register() {
@@ -56,14 +66,27 @@ function Register() {
             <Link to="/" className="back-link">
               Back to LexiForge
             </Link>
-            <h2>Register</h2>
+            <h2>
+              <FontAwesomeIcon icon={faUserPlus} className="auth-icon" />{" "}
+              Register
+            </h2>
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && (
+            <div className="error-message">
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                className="error-icon"
+              />
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">
+                <FontAwesomeIcon icon={faEnvelope} /> <span>Email</span>
+              </label>
               <input
                 type="email"
                 id="email"
@@ -77,7 +100,9 @@ function Register() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">
+                <FontAwesomeIcon icon={faLock} /> <span>Password</span>
+              </label>
               <div className="password-input-container">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -96,13 +121,16 @@ function Register() {
                   onClick={togglePasswordVisibility}
                   disabled={loading}
                 >
-                  {showPassword ? "X" : "O"}
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                 </button>
               </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="passwordConfirmation">Confirm Password</label>
+              <label htmlFor="passwordConfirmation">
+                <FontAwesomeIcon icon={faLock} />
+                <span>Confirm Password</span>
+              </label>
               <div className="password-input-container">
                 <input
                   type={showPasswordConfirmation ? "text" : "password"}
@@ -121,7 +149,9 @@ function Register() {
                   onClick={togglePasswordConfirmationVisibility}
                   disabled={loading}
                 >
-                  {showPasswordConfirmation ? "X" : "O"}
+                  <FontAwesomeIcon
+                    icon={showPasswordConfirmation ? faEyeSlash : faEye}
+                  />
                 </button>
               </div>
             </div>
@@ -131,7 +161,16 @@ function Register() {
               disabled={loading}
               className="btn btn-primary"
             >
-              {loading ? "Creating account..." : "Register"}
+              {loading ? (
+                <>
+                  <FontAwesomeIcon icon={faUserPlus} className="fa-spin" />{" "}
+                  <span>Creating account...</span>
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faUserPlus} /> <span>Register</span>
+                </>
+              )}
             </button>
           </form>
 
@@ -139,7 +178,7 @@ function Register() {
             <p>
               Already have an account?{" "}
               <Link to="/login" className="btn-link">
-                Login here
+                <FontAwesomeIcon icon={faSignInAlt} /> <span>Login here</span>
               </Link>
             </p>
           </div>
