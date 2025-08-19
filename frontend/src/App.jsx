@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faPenNib } from "./config/fontawesome";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 import AuthWrapper from "./components/AuthWrapper";
 import Login from "./components/Login";
@@ -15,10 +17,18 @@ function App() {
       <Router>
         <div className="app">
           <header className="app-header">
-            <h1>LexiForge</h1>
+            <div className="header-left">
+              <Link to="/" className="logo">
+                <h1>LexiForge</h1>
+              </Link>
+            </div>
             <nav>
-              <Link to="/source-texts">Source Texts</Link>
-              <Link to="/poems">Poems</Link>
+              <Link to="/source-texts" className="nav-link">
+                <FontAwesomeIcon icon={faBook} /> <span>Source Texts</span>
+              </Link>
+              <Link to="/poems" className="nav-link">
+                <FontAwesomeIcon icon={faPenNib} /> <span>Poems</span>
+              </Link>
             </nav>
             <div className="auth-section">
               <AuthWrapper />

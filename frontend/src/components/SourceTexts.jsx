@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faInfoCircle,
+  faFileText,
+  faDownload,
+  faPlus,
+  faCheckCircle,
+  faExclamationTriangle,
+} from "../config/fontawesome";
 import { sourceTextsAPI } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 
@@ -82,7 +92,10 @@ function SourceTexts() {
 
           <form onSubmit={handleImport}>
             <div className="form-group">
-              <label htmlFor="gutenberg-id">Enter Gutenberg ID:</label>
+              <label htmlFor="gutenberg-id">
+                <FontAwesomeIcon icon={faFileText} />
+                Enter Gutenberg ID:
+              </label>
               <input
                 id="gutenberg-id"
                 type="number"
@@ -92,7 +105,17 @@ function SourceTexts() {
                 disabled={loading}
               />
               <button type="submit" disabled={loading || !gutenbergId}>
-                {loading ? "Importing..." : "Import Text"}
+                {loading ? (
+                  <>
+                    <FontAwesomeIcon icon={faDownload} className="fa-spin" />
+                    {""}
+                    <span>Importing...</span>
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faPlus} /> <span>Import Text</span>
+                  </>
+                )}
               </button>
             </div>
           </form>
@@ -103,12 +126,21 @@ function SourceTexts() {
                 message.includes("Error") ? "error" : "success"
               }`}
             >
+              <FontAwesomeIcon
+                icon={
+                  message.includes("Error")
+                    ? faExclamationTriangle
+                    : faCheckCircle
+                }
+                className="message-icon"
+              />
               {message}
             </div>
           )}
 
           <details className="popular-books">
             <summary>
+              <FontAwesomeIcon icon={faInfoCircle} className="summary-icon" />
               <strong>Popular Books to Try:</strong>
             </summary>
             <div className="books-list">
@@ -121,6 +153,7 @@ function SourceTexts() {
           </details>
 
           <p className="help-text">
+            <FontAwesomeIcon icon={faInfoCircle} className="help-icon" />
             <strong>How to find Gutenberg IDs:</strong> Visit{" "}
             <a
               href="https://www.gutenberg.org/"
@@ -136,10 +169,14 @@ function SourceTexts() {
       )}
 
       <div className="texts-section">
-        <h3>Available Source Texts ({sourceTexts.length})</h3>
+        <h3>
+          <FontAwesomeIcon icon={faFileText} className="section-icon" />
+          Available Source Texts ({sourceTexts.length})
+        </h3>
 
         {sourceTexts.length === 0 ? (
           <p>
+            <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
             {user?.admin
               ? "No source texts imported yet. Import one from Project Gutenberg above!"
               : "No source texts available yet."}
@@ -177,7 +214,7 @@ function SourceTexts() {
                         to={`/source-texts/${text.id}`}
                         className="btn btn-ghost btn-sm"
                       >
-                        View Details
+                        <FontAwesomeIcon icon={faEye} />
                       </Link>
                     </td>
                   </tr>
