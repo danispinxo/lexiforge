@@ -196,12 +196,14 @@ RSpec.describe Api::PoemsController, type: :controller do
         )
       end
 
-      it 'generates appropriate poem title' do
+      it 'generates appropriate poem title from content' do
         post :generate_poem, params: valid_params
         json_response = response.parsed_body
 
-        expect(json_response['poem']['title']).to include('Cutup:')
-        expect(json_response['poem']['title']).to include(source_text.title.split.first(3).join(' '))
+        title = json_response['poem']['title']
+        expect(title).to be_present
+        expect(title.split.length).to be_between(1, 4)
+        expect(title[0]).to eq(title[0].upcase)
       end
     end
 
@@ -372,27 +374,103 @@ RSpec.describe Api::PoemsController, type: :controller do
 
   describe 'private methods' do
     describe '#generate_poem_title' do
-      let(:timestamp_regex) { %r{\d{2}/\d{2} \d{2}:\d{2}} }
+      let(:poem_content) { 'The quick brown fox jumps over the lazy dog' }
 
-      it 'generates appropriate title for cutup technique' do
-        title = controller.send(:generate_poem_title, source_text, 'cutup')
+      it 'generates title from poem content' do
+        title = controller.send(:generate_poem_title, poem_content, 'cutup')
 
-        expect(title).to include('Cutup:')
-        expect(title).to match(timestamp_regex)
-        expect(title).to include(source_text.title.split.first(3).join(' '))
+        expect(title).to be_present
+        expect(title.split.length).to be_between(1, 4)
+        expect(title[0]).to eq(title[0].upcase) # Should be capitalized
       end
 
-      it 'generates appropriate title for erasure technique' do
-        title = controller.send(:generate_poem_title, source_text, 'erasure')
+      it 'handles empty content gracefully' do
+        title = controller.send(:generate_poem_title, '', 'erasure')
 
-        expect(title).to include('Erasure:')
-        expect(title).to match(timestamp_regex)
+        expect(title).to eq('Untitled Erasure')
       end
 
-      it 'handles technique names with underscores' do
-        title = controller.send(:generate_poem_title, source_text, 'blackout_poetry')
+      it 'handles content with only punctuation' do
+        title = controller.send(:generate_poem_title, '!@#$%^&*()', 'blackout')
 
-        expect(title).to include('Blackout-poetry:')
+        expect(title).to eq('Untitled Blackout')
+      end
+
+      it 'selects consecutive words from content' do
+        # Set a seed for reproducible testing
+        srand(12_345)
+        title = controller.send(:generate_poem_title, poem_content, 'found')
+
+        words = poem_content.split
+        title_words = title.split
+
+        # Find if the title words appear consecutively in the content
+        found_consecutive = false
+        (0..(words.length - title_words.length)).each do |i|
+          if words[i, title_words.length].map(&:downcase) == title_words.map(&:downcase)
+            found_consecutive = true
+            break
+          end
+        end
+
+        expect(found_consecutive).to be true
+      end
+
+      it 'handles JSON content from erasure poems' do
+        json_content = {
+          type: 'erasure_pages',
+          is_blackout: false,
+          pages: [
+            { number: 1, content: 'The quick brown fox' },
+            { number: 2, content: 'jumps over the lazy dog' }
+          ]
+        }.to_json
+
+        title = controller.send(:generate_poem_title, json_content, 'erasure')
+
+        expect(title).to be_present
+        expect(title.split.length).to be_between(1, 4)
+        expect(title[0]).to eq(title[0].upcase)
+
+        # Should extract from visible text, not JSON structure
+        expect(title.downcase).not_to include('type')
+        expect(title.downcase).not_to include('pages')
+        expect(title.downcase).not_to include('number')
+      end
+
+      it 'handles multi-line content with empty lines' do
+        multiline_content = "First line\n\n\nSecond line\n\nThird line"
+
+        title = controller.send(:generate_poem_title, multiline_content, 'cutup')
+
+        expect(title).to be_present
+        expect(title.split.length).to be_between(1, 4)
+        expect(title[0]).to eq(title[0].upcase)
+      end
+
+      it 'strips HTML tags from blackout poem content' do
+        json_content = {
+          type: 'erasure_pages',
+          is_blackout: true,
+          pages: [
+            { number: 1, content: "The <span class='blackout-word'>████</span> brown fox jumps" },
+            { number: 2, content: "over the <span class='blackout-word'>████</span> dog" }
+          ]
+        }.to_json
+
+        title = controller.send(:generate_poem_title, json_content, 'blackout')
+
+        expect(title).to be_present
+        expect(title.split.length).to be_between(1, 4)
+        expect(title[0]).to eq(title[0].upcase)
+
+        # Should not contain HTML tags, blackout characters, or class names
+        expect(title.downcase).not_to include('span')
+        expect(title.downcase).not_to include('class')
+        expect(title.downcase).not_to include('blackout')
+        expect(title).not_to include('█')
+        expect(title).not_to include('<')
+        expect(title).not_to include('>')
       end
     end
 
