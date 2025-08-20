@@ -29,10 +29,8 @@ class KwicGenerator
     return 'Not enough sentences in source text' if sentences.length < 3
 
     kwic_lines = find_keyword_contexts(sentences, keyword, context_window)
-    
-    if kwic_lines.empty?
-      return "Keyword '#{keyword}' not found in source text. Try a different word."
-    end
+
+    return "Keyword '#{keyword}' not found in source text. Try a different word." if kwic_lines.empty?
 
     selected_lines = kwic_lines.sample(num_lines)
     selected_lines.join("\n")
@@ -40,27 +38,27 @@ class KwicGenerator
 
   def extract_sentences
     @source_text.content
-      .gsub(/\s+/, ' ')
-      .split(/[.!?]+/)
-      .map(&:strip)
-      .reject { |sentence| sentence.length < 10 || sentence.split.length < 3 }
-      .map { |sentence| sentence.gsub(/[^\w\s]/, '') }
+                .gsub(/\s+/, ' ')
+                .split(/[.!?]+/)
+                .map(&:strip)
+                .reject { |sentence| sentence.length < 10 || sentence.split.length < 3 }
+                .map { |sentence| sentence.gsub(/[^\w\s]/, '') }
   end
 
   def find_keyword_contexts(sentences, keyword, context_window)
     kwic_lines = []
-    
+
     sentences.each do |sentence|
       words = sentence.downcase.split
-      
+
       keyword_positions = words.each_index.select { |i| words[i] == keyword }
-      
+
       keyword_positions.each do |pos|
         line = build_context_line(words, pos, context_window)
         kwic_lines << line if line
       end
     end
-    
+
     kwic_lines.uniq
   end
 
@@ -69,12 +67,12 @@ class KwicGenerator
 
     start_pos = [0, keyword_pos - context_window].max
     end_pos = [words.length - 1, keyword_pos + context_window].min
-    
+
     context_words = words[start_pos..end_pos]
-    
+
     line = context_words.join(' ')
     line[0] = line[0].upcase if line.length > 0
-    
+
     line
   end
 

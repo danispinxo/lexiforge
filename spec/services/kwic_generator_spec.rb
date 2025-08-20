@@ -25,7 +25,7 @@ RSpec.describe KwicGenerator do
 
         expect(lines.length).to be >= 1
         expect(lines.length).to be <= 10
-        
+
         lines.each do |line|
           expect(line.downcase).to include('wind')
         end
@@ -47,8 +47,6 @@ RSpec.describe KwicGenerator do
           expect(words.length).to be <= 5 # keyword + 2 on each side
         end
       end
-
-
 
       it 'capitalizes the first letter of each line' do
         result = generator.generate(keyword: 'wind')
@@ -163,10 +161,10 @@ RSpec.describe KwicGenerator do
         duplicate_content = 'The wind blows. The wind blows. The wind blows.'
         source_text_with_duplicates = create(:source_text, content: duplicate_content)
         generator_with_duplicates = described_class.new(source_text_with_duplicates)
-        
+
         result = generator_with_duplicates.generate(keyword: 'wind')
         lines = result.split("\n")
-        
+
         unique_lines = lines.uniq
         expect(lines.length).to eq(unique_lines.length)
       end
@@ -177,10 +175,10 @@ RSpec.describe KwicGenerator do
         content_with_start_keyword = 'Wind is everywhere. The air moves with wind power.'
         source_with_start = create(:source_text, content: content_with_start_keyword)
         generator_with_start = described_class.new(source_with_start)
-        
+
         result = generator_with_start.generate(keyword: 'wind')
         lines = result.split("\n")
-        
+
         expect(lines.length).to be >= 1
         lines.each do |line|
           expect(line.downcase).to include('wind')
@@ -191,10 +189,10 @@ RSpec.describe KwicGenerator do
         content_with_end_keyword = 'The power comes from wind. She loves the strong wind.'
         source_with_end = create(:source_text, content: content_with_end_keyword)
         generator_with_end = described_class.new(source_with_end)
-        
+
         result = generator_with_end.generate(keyword: 'wind')
         lines = result.split("\n")
-        
+
         expect(lines.length).to be >= 1
         lines.each do |line|
           expect(line.downcase).to include('wind')
@@ -205,9 +203,9 @@ RSpec.describe KwicGenerator do
         short_content = 'Wind blows. Strong wind. The wind.'
         source_short = create(:source_text, content: short_content)
         generator_short = described_class.new(source_short)
-        
+
         result = generator_short.generate(keyword: 'wind')
-        
+
         # Should either generate lines or return an error about insufficient content
         expect(result).to be_a(String)
         expect(result.length).to be > 0
