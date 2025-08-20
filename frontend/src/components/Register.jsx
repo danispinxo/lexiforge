@@ -9,11 +9,16 @@ import {
   faEyeSlash,
   faSignInAlt,
   faExclamationTriangle,
+  faUser,
+  faIdCard,
 } from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 
 function Register() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +42,9 @@ function Register() {
 
     const result = await register({
       email,
+      username,
+      first_name: firstName,
+      last_name: lastName,
       password,
       password_confirmation: passwordConfirmation,
     });
@@ -97,6 +105,62 @@ function Register() {
                 disabled={loading}
                 autoComplete="email"
               />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="username">
+                <FontAwesomeIcon icon={faUser} /> <span>Username</span>
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                disabled={loading}
+                minLength={3}
+                maxLength={30}
+                pattern="[a-zA-Z0-9_]+"
+                title="Username can only contain letters, numbers, and underscores"
+                autoComplete="username"
+              />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="firstName">
+                  <FontAwesomeIcon icon={faIdCard} /> <span>First Name</span>
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  disabled={loading}
+                  maxLength={50}
+                  autoComplete="given-name"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="lastName">
+                  <FontAwesomeIcon icon={faIdCard} /> <span>Last Name</span>
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  disabled={loading}
+                  maxLength={50}
+                  autoComplete="family-name"
+                />
+              </div>
             </div>
 
             <div className="form-group">

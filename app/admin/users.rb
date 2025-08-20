@@ -16,12 +16,45 @@ ActiveAdmin.register User do
     attributes_table do
       row :id
       row :email
+      row :username
+      row :first_name
+      row :last_name
+      row :bio do |user|
+        simple_format(user.bio) if user.bio.present?
+      end
+      row :full_name
       row :created_at
       row :updated_at
       row :sign_in_count
       row :last_sign_in_at
       row :last_sign_in_ip
       row :reset_password_sent_at
+    end
+
+    panel "Authored Poems (#{user.authored_poems.count})" do
+      if user.authored_poems.any?
+        table_for user.authored_poems.includes(:source_text).order(created_at: :desc) do
+          column :title do |poem|
+            link_to poem.title, admin_poem_path(poem)
+          end
+          column :technique_used
+          column :source_text do |poem|
+            link_to poem.source_text.title, admin_source_text_path(poem.source_text) if poem.source_text
+          end
+          column 'Content Preview' do |poem|
+            truncate(poem.content, length: 100) if poem.content
+          end
+          column :created_at do |poem|
+            poem.created_at.strftime('%m/%d/%Y')
+          end
+        end
+      else
+        div class: 'blank_slate_container' do
+          span class: 'blank_slate' do
+            span 'No poems authored yet'
+          end
+        end
+      end
     end
   end
 

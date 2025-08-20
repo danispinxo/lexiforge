@@ -1,4 +1,6 @@
 class Api::PoemsController < ApiController
+  skip_before_action :verify_authenticity_token
+  before_action :authenticate_any_user!, only: [:generate_poem]
   before_action :set_poem, only: %i[show edit update destroy]
   before_action :set_source_text, only: %i[generate_poem]
 
@@ -170,11 +172,13 @@ class Api::PoemsController < ApiController
 
   def build_poem(technique, content, options)
     technique_used = get_technique_used(technique, options)
+    author = current_api_user || current_admin_user
 
     @source_text.poems.build(
       title: generate_poem_title(@source_text, technique_used),
       content: content,
-      technique_used: technique_used
+      technique_used: technique_used,
+      author: author
     )
   end
 
@@ -255,6 +259,15 @@ class Api::PoemsController < ApiController
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
                   :section_length, :words_to_replace, :line_length, :keyword, :context_window)
+  end
+
+  def authenticate_any_user!
+    return if current_api_user || current_admin_user
+
+    render json: {
+      success: false,
+      message: 'Authentication required'
+    }, status: :unauthorized
   end
 
   def generate_poem_title(source_text, technique)

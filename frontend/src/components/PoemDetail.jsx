@@ -48,6 +48,9 @@ function PoemDetail() {
 
         <div className="metadata">
           <span className="technique">Technique: {poem.technique_used}</span>
+          <span className="author">
+            Author: {poem.author_name || "Anonymous"}
+          </span>
           <span className="date">
             Created: {new Date(poem.created_at).toLocaleDateString()}
           </span>

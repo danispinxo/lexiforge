@@ -6,6 +6,12 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.server_timing = true
 
+  config.hosts << 'localhost'
+  config.hosts << '127.0.0.1'
+  config.force_ssl = false
+
+  config.action_controller.forgery_protection_origin_check = false
+
   if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true

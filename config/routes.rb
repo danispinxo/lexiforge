@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
     resources :poems
     get 'user/current', to: 'users#current_user_info'
+    put 'user/profile', to: 'users#update_profile'
+    put 'user/password', to: 'users#change_password'
   end
 
   match '*path', to: 'application#handle_options_request', via: :options

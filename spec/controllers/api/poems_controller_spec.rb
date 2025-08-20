@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::PoemsController, type: :controller do
+  let(:user) { create(:user) }
   let(:source_text) { create(:source_text, :long_content) }
   let(:poem) { create(:poem, source_text: source_text) }
 
@@ -146,6 +147,8 @@ RSpec.describe Api::PoemsController, type: :controller do
   end
 
   describe 'POST #generate_poem for cut_up technique' do
+    before { sign_in user }
+
     let(:valid_params) do
       {
         id: source_text.id,
@@ -255,6 +258,8 @@ RSpec.describe Api::PoemsController, type: :controller do
   end
 
   describe 'POST #generate_poem for erasure technique' do
+    before { sign_in user }
+
     let(:valid_params) do
       {
         id: source_text.id,

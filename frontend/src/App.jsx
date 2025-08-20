@@ -9,6 +9,7 @@ import SourceTexts from "./components/SourceTexts";
 import SourceTextDetail from "./components/SourceTextDetail";
 import Poems from "./components/Poems";
 import PoemDetail from "./components/PoemDetail";
+import Profile from "./components/Profile";
 import NotFound from "./components/NotFound";
 import "./styles/App.scss";
 
@@ -43,6 +44,7 @@ function App() {
               <Route path="/source-texts/:id" element={<SourceTextDetail />} />
               <Route path="/poems" element={<Poems />} />
               <Route path="/poems/:id" element={<PoemDetail />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="*" element={<NotFound />} />
