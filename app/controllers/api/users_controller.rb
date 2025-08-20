@@ -2,7 +2,8 @@ class Api::UsersController < ApiController
   include Devise::Controllers::Helpers
   include Devise::Controllers::SignInOut
 
-  before_action :authenticate_api_user!, except: [:current_user_info]
+  skip_before_action :verify_authenticity_token
+  before_action :authenticate_any_user!, except: [:current_user_info]
 
   def current_user_info
     if current_api_user
@@ -23,17 +24,20 @@ class Api::UsersController < ApiController
   end
 
   def update_profile
-    if current_api_user.update(profile_params)
+    user = current_api_user || current_admin_user
+
+    if user.update(profile_params)
+      serializer_class = user.is_a?(AdminUser) ? AdminUserSerializer : UserSerializer
       render json: {
         success: true,
-        user: UserSerializer.new(current_api_user).as_json,
+        user: serializer_class.new(user).as_json,
         message: 'Profile updated successfully'
       }
     else
       render json: {
         success: false,
-        message: current_api_user.errors.full_messages.join(', '),
-        errors: current_api_user.errors.full_messages
+        message: user.errors.full_messages.join(', '),
+        errors: user.errors.full_messages
       }, status: :unprocessable_content
     end
   rescue StandardError => e
@@ -45,7 +49,9 @@ class Api::UsersController < ApiController
   end
 
   def change_password
-    unless current_api_user.valid_password?(password_params[:current_password])
+    user = current_api_user || current_admin_user
+
+    unless user.valid_password?(password_params[:current_password])
       render json: {
         success: false,
         message: 'Current password is incorrect',
@@ -54,7 +60,7 @@ class Api::UsersController < ApiController
       return
     end
 
-    if current_api_user.update(password: password_params[:new_password])
+    if user.update(password: password_params[:new_password])
       render json: {
         success: true,
         message: 'Password changed successfully'
@@ -62,8 +68,8 @@ class Api::UsersController < ApiController
     else
       render json: {
         success: false,
-        message: current_api_user.errors.full_messages.join(', '),
-        errors: current_api_user.errors.full_messages
+        message: user.errors.full_messages.join(', '),
+        errors: user.errors.full_messages
       }, status: :unprocessable_content
     end
   rescue StandardError => e
@@ -75,6 +81,15 @@ class Api::UsersController < ApiController
   end
 
   private
+
+  def authenticate_any_user!
+    return if current_api_user || current_admin_user
+
+    render json: {
+      success: false,
+      message: 'Authentication required'
+    }, status: :unauthorized
+  end
 
   def profile_params
     params.require(:user).permit(:username, :first_name, :last_name, :bio)
