@@ -6,7 +6,7 @@ class AdminUser < ApplicationRecord
 
   validates :username, presence: true, uniqueness: { case_sensitive: false },
                        length: { minimum: 3, maximum: 30 },
-                       format: { with: /\A[a-zA-Z0-9_]+\z/, message: 'can only contain letters, numbers, and underscores' },
+                       format: { with: /\A[a-zA-Z0-9_]+\z/ },
                        allow_nil: true
   validates :first_name, length: { maximum: 50 }, allow_blank: true
   validates :last_name, length: { maximum: 50 }, allow_blank: true
@@ -26,7 +26,7 @@ class AdminUser < ApplicationRecord
 
   def gravatar_url(size = 80)
     email_hash = Digest::MD5.hexdigest(email.downcase.strip)
-    "https://www.gravatar.com/avatar/#{email_hash}?s=#{size}&d=identicon"
+    "https://www.gravatar.com/avatar/#{email_hash}?s=#{size}&d=retro"
   end
 
   def self.ransackable_attributes(_auth_object = nil)

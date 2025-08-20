@@ -239,20 +239,20 @@ RSpec.describe User, type: :model do
 
     it 'returns a gravatar URL with default size' do
       expected_hash = Digest::MD5.hexdigest('test@example.com')
-      expected_url = "https://www.gravatar.com/avatar/#{expected_hash}?s=80&d=identicon"
+      expected_url = "https://www.gravatar.com/avatar/#{expected_hash}?s=80&d=retro"
       expect(user.gravatar_url).to eq(expected_url)
     end
 
     it 'returns a gravatar URL with custom size' do
       expected_hash = Digest::MD5.hexdigest('test@example.com')
-      expected_url = "https://www.gravatar.com/avatar/#{expected_hash}?s=150&d=identicon"
+      expected_url = "https://www.gravatar.com/avatar/#{expected_hash}?s=150&d=retro"
       expect(user.gravatar_url(150)).to eq(expected_url)
     end
 
     it 'handles email with uppercase and whitespace' do
       user = build(:user, email: ' TEST@EXAMPLE.COM ')
       expected_hash = Digest::MD5.hexdigest('test@example.com')
-      expected_url = "https://www.gravatar.com/avatar/#{expected_hash}?s=80&d=identicon"
+      expected_url = "https://www.gravatar.com/avatar/#{expected_hash}?s=80&d=retro"
       expect(user.gravatar_url).to eq(expected_url)
     end
   end
