@@ -56,6 +56,10 @@ export const authAPI = {
   login: (credentials) => api.post("/users/sign_in", credentials),
   logout: () => api.delete("/users/sign_out"),
   getCurrentUser: () => api.get("/user/current"),
+  updateProfile: (profileData) =>
+    api.put("/user/profile", { user: profileData }),
+  changePassword: (passwordData) =>
+    api.put("/user/password", { password_change: passwordData }),
 };
 
 export default api;
