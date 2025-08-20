@@ -40,20 +40,6 @@ interaction:
       TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
       TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
 
-  rspec-doc:
-    description: Run RSpec tests with documentation format
-    service: api
-    command: bundle exec rspec --format documentation
-    compose:
-      run_options: [no-deps]
-    environment:
-      RAILS_ENV: test
-      TEST_DB_HOST: db_test
-      TEST_DB_PORT: 5432
-      TEST_DB_NAME: lexiforge_test
-      TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
-      TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
-
   test-setup:
     description: Setup test database
     service: api
@@ -83,41 +69,12 @@ interaction:
     service: db
     command: psql -U lexiforge -d lexiforge_development
 
-  createdb:
-    description: Create database
-    service: api
-    command: ./bin/rails db:create
-    compose:
-      run_options: [no-deps]
-
-  migrate:
-    description: Run migrations
-    service: api
-    command: ./bin/rails db:migrate
-
-  seed:
-    description: Seed database
-    service: api
-    command: ./bin/rails db:seed
-
-  reset:
-    description: Reset database
-    service: api
-    command: ./bin/rails db:reset
-
   npm:
     description: Run NPM commands for frontend
     service: frontend
     command: npm
     compose:
       run_options: [no-deps]
-
-  server:
-    description: Start Rails server
-    service: api
-    command: ./bin/rails server -b 0.0.0.0
-    compose:
-      run_options: [service-ports, use-aliases]
 
   bash:
     description: Open bash in API container
