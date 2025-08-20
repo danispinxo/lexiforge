@@ -82,6 +82,17 @@ Implementation of the snowball technique where each line contains words of incre
 - Prevents word repetition using Set data structures
 - Validates source text vocabulary diversity requirements
 
+### KWIC (KeyWord In Context) Poetry
+
+Implementation of the KWIC technique that creates poetry by showcasing a keyword in various contexts. The `KwicGenerator` service:
+
+- Searches source text for all instances of a specified keyword
+- Extracts surrounding context words for each keyword occurrence
+- Configurable context window size for varying line lengths
+- Removes duplicate lines to ensure unique perspectives
+- Generates poems that explore how a single word functions across different contexts
+- Supports case-insensitive keyword matching while preserving original text structure
+
 ## Data Models
 
 ### SourceText Model
