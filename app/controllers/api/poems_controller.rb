@@ -175,7 +175,7 @@ class Api::PoemsController < ApiController
     author = current_api_user || current_admin_user
 
     @source_text.poems.build(
-      title: generate_poem_title(@source_text, technique_used),
+      title: generate_poem_title(content, technique_used),
       content: content,
       technique_used: technique_used,
       author: author
@@ -270,10 +270,49 @@ class Api::PoemsController < ApiController
     }, status: :unauthorized
   end
 
-  def generate_poem_title(source_text, technique)
-    base_title = source_text.title.split.first(3).join(' ')
-    timestamp = Time.current.strftime('%m/%d %H:%M')
-    technique_label = technique.capitalize.tr('_', '-')
-    "#{technique_label}: #{base_title} (#{timestamp})"
+  def generate_poem_title(poem_content, technique)
+    visible_text = extract_visible_text_from_content(poem_content)
+
+    words = visible_text.gsub(/[^\w\s]/, ' ').split.reject(&:empty?)
+
+    return "Untitled #{technique.capitalize}" if words.empty?
+
+    num_words = rand(1..4)
+    max_start_index = [0, words.length - num_words].max
+    start_index = rand(0..max_start_index)
+
+    selected_words = words[start_index, num_words]
+    selected_words.join(' ').capitalize
+  end
+
+  def extract_visible_text_from_content(content)
+    visible_text = if content.strip.start_with?('{') && content.strip.end_with?('}')
+                     begin
+                       parsed_json = JSON.parse(content)
+                       if parsed_json.is_a?(Hash) && parsed_json['pages']
+                         visible_pages = parsed_json['pages'].pluck('content').compact
+                         visible_pages.join(' ')
+                       else
+                         content
+                       end
+                     rescue JSON::ParserError
+                       content
+                     end
+                   else
+                     content.lines
+                            .map(&:strip)
+                            .reject(&:empty?)
+                            .join(' ')
+                   end
+
+    strip_html_tags(visible_text)
+  end
+
+  def strip_html_tags(text)
+    text.gsub(/<[^>]*>/, '')
+        .gsub(/&[a-zA-Z]+;/, '')
+        .gsub(/█+/, '')
+        .squeeze(' ')
+        .strip
   end
 end
