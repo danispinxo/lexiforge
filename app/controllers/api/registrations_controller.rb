@@ -53,14 +53,14 @@ class Api::RegistrationsController < ApiController
   end
 
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password password_confirmation])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password password_confirmation username first_name last_name bio])
   end
 
   def sign_up_params
     if params[:registration]
-      params.require(:registration).permit(:email, :password, :password_confirmation)
+      params.require(:registration).permit(:email, :password, :password_confirmation, :username, :first_name, :last_name, :bio)
     else
-      params.permit(:email, :password, :password_confirmation)
+      params.permit(:email, :password, :password_confirmation, :username, :first_name, :last_name, :bio)
     end
   end
 end
