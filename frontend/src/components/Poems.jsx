@@ -74,6 +74,7 @@ function Poems() {
                   <th>Title</th>
                   <th>Technique</th>
                   <th>Source Text</th>
+                  <th>Author</th>
                   <th>Date Created</th>
                   <th>Actions</th>
                 </tr>
@@ -102,6 +103,11 @@ function Poems() {
                       ) : (
                         <span className="unknown-source">Unknown source</span>
                       )}
+                    </td>
+                    <td className="author-cell">
+                      <span className="author-name">
+                        {poem.author_name || 'Anonymous'}
+                      </span>
                     </td>
                     <td className="date-cell">
                       <FontAwesomeIcon
