@@ -71,10 +71,6 @@
         a {
           color: $primary-color;
           text-decoration: none;
-
-          &:hover {
-            text-decoration: underline;
-          }
         }
       }
     }
@@ -150,7 +146,6 @@
     }
   }
 
-  // Bio field specific styling to ensure character count appears below
   .form-group:has(textarea[name="bio"]) {
     display: block;
 
@@ -227,7 +222,6 @@
     &:hover {
       background: $primary-dark;
       border-color: $primary-dark;
-      box-shadow: $glow-gold;
     }
 
     &:disabled {

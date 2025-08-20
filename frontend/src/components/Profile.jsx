@@ -25,6 +25,7 @@ function Profile() {
   const [passwordSuccess, setPasswordSuccess] = useState("");
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [profileData, setProfileData] = useState({
     username: "",
@@ -367,19 +368,31 @@ function Profile() {
                 <FontAwesomeIcon icon={faLock} />{" "}
                 <span>Confirm New Password</span>
               </label>
-              <input
-                type="password"
-                id="confirm_password"
-                name="confirm_password"
-                value={passwordData.confirm_password}
-                onChange={(e) =>
-                  handlePasswordChange("confirm_password", e.target.value)
-                }
-                required
-                disabled={loading}
-                minLength={6}
-                autoComplete="new-password"
-              />
+              <div className="password-input-container">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirm_password"
+                  name="confirm_password"
+                  value={passwordData.confirm_password}
+                  onChange={(e) =>
+                    handlePasswordChange("confirm_password", e.target.value)
+                  }
+                  required
+                  disabled={loading}
+                  minLength={6}
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  disabled={loading}
+                >
+                  <FontAwesomeIcon
+                    icon={showConfirmPassword ? faEyeSlash : faEye}
+                  />
+                </button>
+              </div>
             </div>
 
             <button
