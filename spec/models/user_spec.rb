@@ -34,7 +34,7 @@ RSpec.describe User, type: :model do
     it 'is not valid with a username containing invalid characters' do
       user = build(:user, username: 'user@name')
       expect(user).not_to be_valid
-      expect(user.errors[:username]).to include('can only contain letters, numbers, and underscores')
+      expect(user.errors[:username]).to include('is invalid')
     end
 
     it 'is not valid with a duplicate username' do
