@@ -1,8 +1,10 @@
 class AdminUser < ApplicationRecord
   require 'digest'
-
+  
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
+
+  has_many :authored_poems, class_name: 'Poem', as: :author, dependent: :nullify
 
   validates :username, presence: true, uniqueness: { case_sensitive: false },
                        length: { minimum: 3, maximum: 30 },
