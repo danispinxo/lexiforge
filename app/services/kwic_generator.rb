@@ -26,7 +26,7 @@ class KwicGenerator
     return 'Keyword is required for KWIC generation' if keyword.blank?
 
     sentences = extract_sentences
-    return 'Not enough sentences in source text' if sentences.length < 1
+    return 'Not enough sentences in source text' if sentences.empty?
 
     kwic_lines = find_keyword_contexts(sentences, keyword, context_window)
 
@@ -71,7 +71,7 @@ class KwicGenerator
     context_words = words[start_pos..end_pos]
 
     line = context_words.join(' ')
-    line[0] = line[0].upcase if line.length > 0
+    line[0] = line[0].upcase if line.length.positive?
 
     line
   end
