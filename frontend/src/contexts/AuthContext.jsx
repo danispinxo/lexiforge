@@ -79,12 +79,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = (userData) => setUser(userData);
+
   const value = {
     user,
     loading,
     login,
     register,
     logout,
+    updateUser,
     isAuthenticated: !!user,
   };
 
