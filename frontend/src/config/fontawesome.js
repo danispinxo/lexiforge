@@ -29,6 +29,7 @@ import {
   faSave,
   faKey,
   faImage,
+  faCog,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -60,7 +61,8 @@ library.add(
   faIdCard,
   faSave,
   faKey,
-  faImage
+  faImage,
+  faCog
 );
 
 export {
@@ -93,4 +95,5 @@ export {
   faSave,
   faKey,
   faImage,
+  faCog,
 };
