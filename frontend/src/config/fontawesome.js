@@ -24,6 +24,11 @@ import {
   faMagic,
   faCalendar,
   faHome,
+  faUserEdit,
+  faIdCard,
+  faSave,
+  faKey,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -50,7 +55,12 @@ library.add(
   faArrowLeft,
   faMagic,
   faCalendar,
-  faHome
+  faHome,
+  faUserEdit,
+  faIdCard,
+  faSave,
+  faKey,
+  faImage
 );
 
 export {
@@ -78,4 +88,9 @@ export {
   faMagic,
   faCalendar,
   faHome,
+  faUserEdit,
+  faIdCard,
+  faSave,
+  faKey,
+  faImage,
 };
