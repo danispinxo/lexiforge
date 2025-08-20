@@ -6,9 +6,9 @@ import {
   faSignOutAlt,
   faSignInAlt,
   faUserPlus,
-  faShieldAlt,
   faChevronDown,
   faUserEdit,
+  faCog,
 } from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 
@@ -49,6 +49,14 @@ function AuthWrapper() {
     setIsDropdownOpen(false);
   };
 
+  const handleAdminPanelClick = () => {
+    const backendUrl =
+      import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+    const adminUrl = backendUrl.replace("/api", "/admin");
+    window.open(`${adminUrl}`, "_blank");
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className="auth-dropdown" ref={dropdownRef}>
       <button
@@ -66,12 +74,6 @@ function AuthWrapper() {
             )}
             <span className="user-display-name">
               {user.full_name || user.username || user.email}
-              {user.admin && (
-                <FontAwesomeIcon
-                  icon={faShieldAlt}
-                  className="admin-indicator"
-                />
-              )}
             </span>
             <FontAwesomeIcon icon={faChevronDown} className="dropdown-arrow" />
           </>
@@ -91,28 +93,35 @@ function AuthWrapper() {
               <div className="dropdown-header">
                 <span>
                   Welcome, {user.full_name || user.username || user.email}
-                  {user.admin && (
-                    <FontAwesomeIcon
-                      icon={faShieldAlt}
-                      className="admin-indicator"
-                    />
-                  )}
                 </span>
               </div>
               <button onClick={handleProfileClick} className="dropdown-item">
-                <FontAwesomeIcon icon={faUserEdit} /> <span>Edit Profile</span>
+                <FontAwesomeIcon icon={faUserEdit} />
+                <span>Edit Profile</span>
               </button>
+              {user.admin && (
+                <button
+                  onClick={handleAdminPanelClick}
+                  className="dropdown-item"
+                >
+                  <FontAwesomeIcon icon={faCog} />
+                  <span>Admin Panel</span>
+                </button>
+              )}
               <button onClick={handleLogout} className="dropdown-item">
-                <FontAwesomeIcon icon={faSignOutAlt} /> <span>Logout</span>
+                <FontAwesomeIcon icon={faSignOutAlt} />
+                <span>Logout</span>
               </button>
             </>
           ) : (
             <>
               <button onClick={handleLoginClick} className="dropdown-item">
-                <FontAwesomeIcon icon={faSignInAlt} /> <span>Login</span>
+                <FontAwesomeIcon icon={faSignInAlt} />
+                <span>Login</span>
               </button>
               <button onClick={handleRegisterClick} className="dropdown-item">
-                <FontAwesomeIcon icon={faUserPlus} /> <span>Register</span>
+                <FontAwesomeIcon icon={faUserPlus} />
+                <span>Register</span>
               </button>
             </>
           )}
