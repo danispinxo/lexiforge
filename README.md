@@ -119,24 +119,6 @@ Implementation of the KWIC technique that creates poetry by showcasing a keyword
 - Supports fuzzy matching and fallback search strategies
 - Enables systematic word substitution patterns
 
-## API Endpoints
-
-### Poetry Generation
-
-- `POST /api/source_texts/:id/generate_cut_up` - Cut-up poetry generation
-- `POST /api/source_texts/:id/generate_erasure` - Erasure poetry generation
-- `POST /api/source_texts/:id/generate_snowball` - Snowball poetry generation
-- `POST /api/source_texts/:id/generate_mesostic` - Mesostic poetry generation
-- `POST /api/source_texts/:id/generate_n_plus_seven` - N+7 poetry generation
-
-### Content Management
-
-- `GET /api/poems` - Retrieve all generated poems
-- `GET /api/poems/:id` - Retrieve specific poem details
-- `POST /api/poems` - Create new poem entries
-- `GET /api/source_texts` - Retrieve available source texts
-- `GET /api/source_texts/:id` - Retrieve specific source text details
-
 ## Project Gutenberg Integration
 
 The `ProjectGutenbergService` provides automated text import functionality:
@@ -180,12 +162,62 @@ The `ProjectGutenbergService` provides automated text import functionality:
 
 ## Literary Context
 
-The application implements five major experimental poetry techniques from the 20th century avant-garde movement:
+The application implements multiple experimental poetry techniques from the 20th century avant-garde movement, each with rich literary histories and notable practitioners:
 
-1. **Cut-up** (1950s-60s) - William S. Burroughs and Brion Gysin's randomization technique
-2. **Erasure** (1960s-present) - Selective word removal to reveal hidden meanings
-3. **Mesostic** (1960s-70s) - John Cage's spine word technique
-4. **N+7** (1960s) - Oulipo's systematic word replacement method
-5. **Snowball** (1960s) - Progressive word length patterns
+### Cut-up Technique (1950s-1960s)
 
-Each technique is implemented with respect to its original literary principles while leveraging modern computational capabilities for automated generation and analysis.
+**Origins**: Developed by painter and writer Brion Gysin and popularized by William S. Burroughs.
+
+**Literary Significance**: The cut-up method involves literally cutting up text and rearranging pieces to create new, often surprising juxtapositions and meanings. It challenges linear narrative and conventional meaning-making, embodying postmodern questioning of authorship and textual authority.
+
+### Erasure Poetry (1960s-Present)
+
+**Origins**: Rooted in concrete poetry and conceptual art movements, where existing texts become raw material for new creative works.
+
+**Literary Significance**: Erasure reveals hidden meanings by removing words from source texts, creating new poems from the "negative space" of literature. The technique questions the permanence of textual meaning and explores the relationship between presence and absence in language.
+
+### Blackout Poetry
+
+**Origins**: A variant of erasure poetry where removed words are visually obscured rather than simply deleted.
+
+**Literary Significance**: Creates visual poetry that emphasizes the materiality of text and the relationship between reading and seeing. The technique transforms pages into artistic objects where meaning emerges from both visible and hidden elements.
+
+### Mesostic Poetry (1960s-1970s)
+
+**Origins**: Developed by composer and artist John Cage as part of his exploration of chance operations and indeterminate structures in art.
+
+**Literary Significance**: Uses "spine words" where each letter appears at specific positions within lines, creating vertical reading paths through horizontal text. Reflects Cage's interest in non-intentional art and the removal of personal taste from creative processes.
+
+### N+7 Technique (1960s)
+
+**Origins**: Created by Jean Lescure of Oulipo (Ouvroir de littérature potentielle), the French workshop for potential literature founded by Raymond Queneau and François Le Lionnais.
+
+**Literary Significance**: Systematic replacement of nouns with words appearing seven positions later in the dictionary creates unexpected linguistic combinations that reveal the arbitrary nature of language. The technique explores how meaning shifts through methodical word substitution. Part of Oulipo's exploration of "potential literature," works created through mathematical and formal constraints rather than inspiration alone.
+
+### Snowball Poetry (1960s)
+
+**Origins**: Part of the concrete poetry movement where visual and structural elements of text become as important as semantic content.
+
+**Literary Significance**: Creates visual and rhythmic patterns through systematic word length progression, exploring the relationship between form and meaning in poetry. The technique emphasizes the materiality of language and the visual aspects of text.
+
+### KWIC (KeyWord In Context) Poetry (1950s-1960s)
+
+**Origins**: Adapted from computational linguistics and early computer-assisted text analysis, where KWIC concordances were used to study word usage patterns in large text corpora.
+
+**Literary Significance**: Explores how individual words function across different contexts, revealing semantic ranges and unexpected connections. The technique bridges computational text analysis with creative poetry, demonstrating how systematic approaches can generate artistic insights.
+
+### Definitional Poetry
+
+**Origins**: Replaces words with their dictionary definitions in a source text.
+
+**Literary Significance**: Transforms dictionary definitions into poetry, exploring the relationship between denotative and connotative meaning. The technique reveals the poetic potential hidden within seemingly neutral, descriptive language.
+
+### Found Poetry
+
+**Origins**: Rooted in Marcel Duchamp's "readymades" and the broader modernist practice of incorporating existing materials into art.
+
+**Literary Significance**: Elevates non-literary text to poetic status through selection and framing, questioning traditional notions of authorship and originality. The technique demonstrates that poetry exists latently in all forms of language.
+
+---
+
+Each technique implemented in LexiForge respects its original literary principles while leveraging computational capabilities for automated generation and analysis. The platform serves as both a creative tool and a digital archive of experimental poetry techniques, making these avant-garde methods accessible to contemporary writers and researchers.
