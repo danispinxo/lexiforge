@@ -24,6 +24,9 @@ function PoemGenerationModal({
   const [wordsToReplace, setWordsToReplace] = useState(20);
   const [foundPoemLines, setFoundPoemLines] = useState(10);
   const [lineLength, setLineLength] = useState("medium");
+  const [keyword, setKeyword] = useState("");
+  const [kwicLines, setKwicLines] = useState(10);
+  const [contextWindow, setContextWindow] = useState(3);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -34,6 +37,12 @@ function PoemGenerationModal({
 
     if (technique === "mesostic" && !spineWord.trim()) {
       setError("Spine word is required for mesostic poetry");
+      setGenerating(false);
+      return;
+    }
+
+    if (technique === "kwic" && !keyword.trim()) {
+      setError("Keyword is required for KWIC poetry");
       setGenerating(false);
       return;
     }
@@ -70,6 +79,11 @@ function PoemGenerationModal({
         case "found":
           options.num_lines = foundPoemLines;
           options.line_length = lineLength;
+          break;
+        case "kwic":
+          options.keyword = keyword;
+          options.num_lines = kwicLines;
+          options.context_window = contextWindow;
           break;
       }
 
@@ -123,13 +137,14 @@ function PoemGenerationModal({
                 onChange={(e) => setTechnique(e.target.value)}
                 disabled={generating}
               >
-                <option value="cut_up">Cut-Up Poetry</option>
-                <option value="erasure">Erasure Poetry</option>
-                <option value="snowball">Snowball Poetry</option>
-                <option value="mesostic">Mesostic Poetry</option>
-                <option value="n_plus_seven">N+7 Poetry</option>
-                <option value="definitional">Definitional Literature</option>
-                <option value="found">Found Poetry</option>
+                <option value="cut_up">Cut-Up</option>
+                <option value="erasure">Erasure</option>
+                <option value="snowball">Snowball</option>
+                <option value="mesostic">Mesostic</option>
+                <option value="n_plus_seven">N+7</option>
+                <option value="definitional">Definitional</option>
+                <option value="found">Found</option>
+                <option value="kwic">KWIC (KeyWord In Context)</option>
               </select>
             </div>
 
@@ -478,6 +493,66 @@ function PoemGenerationModal({
                     each line. This technique creates new meaning by
                     recontextualizing existing text fragments, allowing the
                     original work to speak in new and unexpected ways.
+                  </p>
+                </div>
+              </>
+            )}
+
+            {technique === "kwic" && (
+              <>
+                <div className="form-group">
+                  <label htmlFor="keyword">Keyword (Required):</label>
+                  <input
+                    type="text"
+                    id="keyword"
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    placeholder="Enter a keyword (e.g., 'love', 'wind', 'heart')"
+                    disabled={generating}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="kwic-lines">Number of Lines:</label>
+                  <input
+                    type="number"
+                    id="kwic-lines"
+                    value={kwicLines}
+                    onChange={(e) =>
+                      setKwicLines(parseInt(e.target.value) || 0)
+                    }
+                    min="1"
+                    max="30"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="context-window">
+                    Context Window (words on each side):
+                  </label>
+                  <input
+                    type="number"
+                    id="context-window"
+                    value={contextWindow}
+                    onChange={(e) =>
+                      setContextWindow(parseInt(e.target.value) || 0)
+                    }
+                    min="1"
+                    max="10"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-description">
+                  <p className="technique-description">
+                    KWIC (KeyWord In Context) poetry creates a poem by finding
+                    all instances of a chosen keyword in the source text and
+                    displaying each occurrence with its surrounding context.
+                    Each line shows the keyword with a few words before and
+                    after it, creating a unique perspective on how that word is
+                    used throughout the text.
                   </p>
                 </div>
               </>
