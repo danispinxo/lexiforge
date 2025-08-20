@@ -8,6 +8,7 @@ import {
   faUserPlus,
   faShieldAlt,
   faChevronDown,
+  faUserEdit,
 } from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 
@@ -43,6 +44,11 @@ function AuthWrapper() {
     setIsDropdownOpen(false);
   };
 
+  const handleProfileClick = () => {
+    navigate("/profile");
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className="auth-dropdown" ref={dropdownRef}>
       <button
@@ -51,9 +57,15 @@ function AuthWrapper() {
       >
         {user ? (
           <>
-            <FontAwesomeIcon icon={faUser} className="user-icon" />
-            <span className="user-email">
-              {user.email}
+            {user.gravatar_url && (
+              <img
+                src={user.gravatar_url}
+                alt={user.full_name || user.username || "User avatar"}
+                className="user-avatar-small"
+              />
+            )}
+            <span className="user-display-name">
+              {user.full_name || user.username || user.email}
               {user.admin && (
                 <FontAwesomeIcon
                   icon={faShieldAlt}
@@ -78,7 +90,7 @@ function AuthWrapper() {
             <>
               <div className="dropdown-header">
                 <span>
-                  Welcome, {user.email}
+                  Welcome, {user.full_name || user.username || user.email}
                   {user.admin && (
                     <FontAwesomeIcon
                       icon={faShieldAlt}
@@ -87,6 +99,9 @@ function AuthWrapper() {
                   )}
                 </span>
               </div>
+              <button onClick={handleProfileClick} className="dropdown-item">
+                <FontAwesomeIcon icon={faUserEdit} /> <span>Edit Profile</span>
+              </button>
               <button onClick={handleLogout} className="dropdown-item">
                 <FontAwesomeIcon icon={faSignOutAlt} /> <span>Logout</span>
               </button>
