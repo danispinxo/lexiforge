@@ -99,6 +99,8 @@ class Api::PoemsController < ApiController
       build_definitional_options(options, permitted_params)
     when 'found'
       build_found_poem_options(options, permitted_params)
+    when 'kwic'
+      build_kwic_options(options, permitted_params)
     end
 
     options
@@ -142,6 +144,12 @@ class Api::PoemsController < ApiController
     options[:line_length] = permitted_params[:line_length] || 'medium'
   end
 
+  def build_kwic_options(options, permitted_params)
+    options[:keyword] = permitted_params[:keyword] if permitted_params[:keyword].present?
+    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
+    options[:context_window] = (permitted_params[:context_window] || 3).to_i
+  end
+
   def generate_content(technique, options)
     generator_class = case technique
                       when 'cut_up' then CutUpGenerator
@@ -151,6 +159,7 @@ class Api::PoemsController < ApiController
                       when 'n_plus_seven' then NPlusSevenGenerator
                       when 'definitional' then DefinitionalGenerator
                       when 'found' then FoundPoemGenerator
+                      when 'kwic' then KwicGenerator
                       else
                         raise "Unknown technique: #{technique}"
                       end
@@ -177,8 +186,6 @@ class Api::PoemsController < ApiController
       options[:is_blackout] ? 'blackout' : 'erasure'
     when 'n_plus_seven'
       'n+7'
-    when 'found'
-      'found'
     else
       technique
     end
@@ -192,6 +199,8 @@ class Api::PoemsController < ApiController
       options[:is_blackout] ? 'blackout' : 'erasure'
     when 'n_plus_seven'
       'n+7'
+    when 'kwic'
+      'KWIC'
     else
       technique
     end
@@ -245,7 +254,7 @@ class Api::PoemsController < ApiController
     params.permit(:method, :spine_word, :num_lines, :words_per_line, :size,
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
-                  :section_length, :words_to_replace, :line_length)
+                  :section_length, :words_to_replace, :line_length, :keyword, :context_window)
   end
 
   def generate_poem_title(source_text, technique)
