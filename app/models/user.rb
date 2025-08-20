@@ -1,12 +1,12 @@
 class User < ApplicationRecord
   require 'digest'
-  
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable
 
-  validates :username, presence: true, uniqueness: { case_sensitive: false }, 
-            length: { minimum: 3, maximum: 30 },
-            format: { with: /\A[a-zA-Z0-9_]+\z/, message: "can only contain letters, numbers, and underscores" }
+  validates :username, presence: true, uniqueness: { case_sensitive: false },
+                       length: { minimum: 3, maximum: 30 },
+                       format: { with: /\A[a-zA-Z0-9_]+\z/, message: 'can only contain letters, numbers, and underscores' }
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
   validates :bio, length: { maximum: 500 }
