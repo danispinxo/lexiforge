@@ -185,9 +185,31 @@
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
 
     input {
+      width: 100%;
+      padding: $spacing-md;
       padding-right: 3rem;
+      border: 2px solid $medium-gray;
+      border-radius: $border-radius-md;
+      font-size: $font-size-base;
+      font-family: $font-sans;
+      background: white;
+      color: $ink-blue;
+      transition: all $transition-normal;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        background: white;
+        box-shadow: $glow-gold;
+      }
+
+      &:disabled {
+        background-color: $parchment;
+        cursor: not-allowed;
+      }
     }
 
     .password-toggle {
