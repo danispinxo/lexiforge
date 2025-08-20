@@ -12,6 +12,20 @@ ActiveAdmin.register Poem do
     column :source_text do |poem|
       link_to poem.source_text.title, admin_source_text_path(poem.source_text) if poem.source_text
     end
+    column :author do |poem|
+      if poem.author
+        case poem.author_type
+        when 'User'
+          link_to poem.author_name, admin_user_path(poem.author)
+        when 'AdminUser'
+          link_to poem.author_name, admin_admin_user_path(poem.author)
+        else
+          poem.author_name
+        end
+      else
+        'Anonymous'
+      end
+    end
     column :created_at
     actions
   end
@@ -23,6 +37,20 @@ ActiveAdmin.register Poem do
       row :technique_used
       row :source_text do |poem|
         link_to poem.source_text.title, admin_source_text_path(poem.source_text) if poem.source_text
+      end
+      row :author do |poem|
+        if poem.author
+          case poem.author_type
+          when 'User'
+            link_to poem.author_name, admin_user_path(poem.author)
+          when 'AdminUser'
+            link_to poem.author_name, admin_admin_user_path(poem.author)
+          else
+            poem.author_name
+          end
+        else
+          'Anonymous'
+        end
       end
       row :content do |poem|
         simple_format(truncate(poem.content, length: 300)) if poem.content
