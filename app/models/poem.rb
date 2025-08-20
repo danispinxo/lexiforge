@@ -1,5 +1,6 @@
 class Poem < ApplicationRecord
   belongs_to :source_text
+  belongs_to :author, polymorphic: true, optional: true
 
   ALLOWED_TECHNIQUES = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball', 'mesostic',
                         'found', 'kwic'].freeze
@@ -32,11 +33,24 @@ class Poem < ApplicationRecord
     content.truncate(limit, separator: ' ')
   end
 
+  def author_name
+    return 'Anonymous' unless author
+
+    if author.respond_to?(:full_name) && author.full_name.present?
+      author.full_name
+    elsif author.respond_to?(:username) && author.username.present?
+      author.username
+    else
+      author.email
+    end
+  end
+
   def self.ransackable_associations(_auth_object = nil)
-    ['source_text']
+    %w[source_text author]
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[content created_at id id_value source_text_id technique_used title updated_at]
+    %w[content created_at id id_value source_text_id technique_used title updated_at
+       author_id author_type]
   end
 end

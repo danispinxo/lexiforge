@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   require 'digest'
-  
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable
 

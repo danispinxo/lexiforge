@@ -262,12 +262,12 @@ class Api::PoemsController < ApiController
   end
 
   def authenticate_any_user!
-    unless current_api_user || current_admin_user
-      render json: {
-        success: false,
-        message: 'Authentication required'
-      }, status: :unauthorized
-    end
+    return if current_api_user || current_admin_user
+
+    render json: {
+      success: false,
+      message: 'Authentication required'
+    }, status: :unauthorized
   end
 
   def generate_poem_title(source_text, technique)

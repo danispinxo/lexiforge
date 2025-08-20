@@ -1,6 +1,6 @@
 class AdminUser < ApplicationRecord
   require 'digest'
-  
+
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
 
