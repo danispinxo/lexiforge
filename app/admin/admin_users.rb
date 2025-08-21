@@ -1,10 +1,12 @@
 ActiveAdmin.register AdminUser do
-  permit_params :email, :password, :password_confirmation
+  permit_params :email, :username, :first_name, :last_name, :bio, :password, :password_confirmation
 
   index do
     selectable_column
     id_column
     column :email
+    column :username
+    column :full_name
     column :current_sign_in_at
     column :sign_in_count
     column :created_at
@@ -60,16 +62,46 @@ ActiveAdmin.register AdminUser do
   end
 
   filter :email
+  filter :username
+  filter :first_name
+  filter :last_name
   filter :current_sign_in_at
   filter :sign_in_count
   filter :created_at
 
   form do |f|
-    f.inputs do
+    f.inputs 'Admin User Details' do
       f.input :email
-      f.input :password
-      f.input :password_confirmation
+      f.input :username, required: false,
+                         hint: 'Optional - Must be 3-30 characters, letters, numbers and underscores only'
+      f.input :first_name, required: false, hint: 'Optional'
+      f.input :last_name, required: false, hint: 'Optional'
+      f.input :bio, as: :text, required: false, input_html: { rows: 4 }, hint: 'Optional - Maximum 500 characters'
     end
+
+    f.inputs 'Password' do
+      f.input :password, hint: 'Leave blank to keep current password'
+      f.input :password_confirmation, hint: 'Required only if changing password'
+    end
+
     f.actions
+  end
+
+  controller do
+    def update
+      if params[:admin_user][:password].blank?
+        params[:admin_user].delete(:password)
+        params[:admin_user].delete(:password_confirmation)
+      end
+      super
+    end
+
+    def create
+      if params[:admin_user][:password].blank?
+        params[:admin_user].delete(:password)
+        params[:admin_user].delete(:password_confirmation)
+      end
+      super
+    end
   end
 end

@@ -1,12 +1,13 @@
 ActiveAdmin.register User do
-  permit_params :email, :password, :password_confirmation
+  permit_params :email, :username, :first_name, :last_name, :bio, :password, :password_confirmation
 
   index do
     selectable_column
     id_column
     column :email
+    column :username
+    column :full_name
     column :created_at
-    column :updated_at
     column :sign_in_count
     column :last_sign_in_at
     actions
@@ -59,17 +60,27 @@ ActiveAdmin.register User do
   end
 
   form do |f|
-    f.inputs do
+    f.inputs 'User Details' do
       f.input :email
-      f.input :password
-      f.input :password_confirmation
+      f.input :username, hint: 'Required - Must be 3-30 characters, letters, numbers and underscores only'
+      f.input :first_name, hint: 'Required'
+      f.input :last_name, hint: 'Required'
+      f.input :bio, as: :text, input_html: { rows: 4 }, hint: 'Optional - Maximum 500 characters'
     end
+
+    f.inputs 'Password' do
+      f.input :password, hint: 'Leave blank to keep current password'
+      f.input :password_confirmation, hint: 'Required only if changing password'
+    end
+
     f.actions
   end
 
   filter :email
+  filter :username
+  filter :first_name
+  filter :last_name
   filter :created_at
-  filter :updated_at
   filter :sign_in_count
   filter :last_sign_in_at
 
@@ -91,5 +102,23 @@ ActiveAdmin.register User do
     user = User.find(params[:id])
     user.send_reset_password_instructions
     redirect_to admin_user_path(user), notice: t('admin.users.password_reset_sent')
+  end
+
+  controller do
+    def update
+      if params[:user][:password].blank?
+        params[:user].delete(:password)
+        params[:user].delete(:password_confirmation)
+      end
+      super
+    end
+
+    def create
+      if params[:user][:password].blank?
+        params[:user].delete(:password)
+        params[:user].delete(:password_confirmation)
+      end
+      super
+    end
   end
 end
