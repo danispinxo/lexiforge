@@ -72,17 +72,18 @@ ActiveAdmin.register AdminUser do
   form do |f|
     f.inputs 'Admin User Details' do
       f.input :email
-      f.input :username, required: false, hint: 'Optional - Must be 3-30 characters, letters, numbers and underscores only'
+      f.input :username, required: false,
+                         hint: 'Optional - Must be 3-30 characters, letters, numbers and underscores only'
       f.input :first_name, required: false, hint: 'Optional'
       f.input :last_name, required: false, hint: 'Optional'
       f.input :bio, as: :text, required: false, input_html: { rows: 4 }, hint: 'Optional - Maximum 500 characters'
     end
-    
+
     f.inputs 'Password' do
       f.input :password, hint: 'Leave blank to keep current password'
       f.input :password_confirmation, hint: 'Required only if changing password'
     end
-    
+
     f.actions
   end
 

@@ -28,7 +28,7 @@ class AdminUser < ApplicationRecord
 
   def gravatar_url(size = 80)
     return nil if email.blank?
-    
+
     email_hash = Digest::MD5.hexdigest(email.downcase.strip)
     "https://www.gravatar.com/avatar/#{email_hash}?s=#{size}&d=retro"
   end

@@ -67,12 +67,12 @@ ActiveAdmin.register User do
       f.input :last_name, hint: 'Required'
       f.input :bio, as: :text, input_html: { rows: 4 }, hint: 'Optional - Maximum 500 characters'
     end
-    
+
     f.inputs 'Password' do
       f.input :password, hint: 'Leave blank to keep current password'
       f.input :password_confirmation, hint: 'Required only if changing password'
     end
-    
+
     f.actions
   end
 
