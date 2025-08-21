@@ -11,6 +11,18 @@ class ApiController < ApplicationController
 
   private
 
+  def current_api_user
+    return @current_api_user if defined?(@current_api_user)
+
+    @current_api_user = warden.user(:api_user)
+  end
+
+  def current_admin_user
+    return @current_admin_user if defined?(@current_admin_user)
+
+    @current_admin_user = warden.user(:admin_user)
+  end
+
   def authenticate_any_user!
     return if current_api_user || current_admin_user
 
