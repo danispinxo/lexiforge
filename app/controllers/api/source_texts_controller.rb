@@ -1,13 +1,20 @@
 class Api::SourceTextsController < ApiController
+  before_action :authenticate_any_user!, only: [:my_source_texts, :import_from_gutenberg]
   before_action :set_source_text, only: [:show]
 
   def index
-    @source_texts = SourceText.all
+    @source_texts = SourceText.public_texts.includes(:user)
     render json: @source_texts, each_serializer: SourceTextSerializer
   end
 
   def show
     render json: @source_text, serializer: SourceTextDetailSerializer
+  end
+
+  def my_source_texts
+    current_user = current_api_user || current_admin_user
+    @source_texts = SourceText.for_user(current_user).includes(:user)
+    render json: @source_texts, each_serializer: SourceTextSerializer
   end
 
   def import_from_gutenberg
@@ -16,13 +23,17 @@ class Api::SourceTextsController < ApiController
       source_text = service.import_text(params[:gutenberg_id])
 
       if source_text.persisted?
+        current_user = current_api_user || current_admin_user
+        source_text.update(user: current_user, is_public: params[:is_public] != 'false') if current_user
+
         render json: {
           success: true,
           message: "Successfully imported '#{source_text.title}'",
           source_text: {
             id: source_text.id,
             title: source_text.title,
-            gutenberg_id: source_text.gutenberg_id
+            gutenberg_id: source_text.gutenberg_id,
+            is_public: source_text.is_public
           }
         }
       else
