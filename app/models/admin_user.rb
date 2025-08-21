@@ -6,10 +6,10 @@ class AdminUser < ApplicationRecord
 
   has_many :authored_poems, class_name: 'Poem', as: :author, dependent: :nullify
 
-  validates :username, presence: true, uniqueness: { case_sensitive: false },
+  validates :username, uniqueness: { case_sensitive: false },
                        length: { minimum: 3, maximum: 30 },
                        format: { with: /\A[a-zA-Z0-9_]+\z/ },
-                       allow_nil: true
+                       allow_blank: true
   validates :first_name, length: { maximum: 50 }, allow_blank: true
   validates :last_name, length: { maximum: 50 }, allow_blank: true
   validates :bio, length: { maximum: 500 }
