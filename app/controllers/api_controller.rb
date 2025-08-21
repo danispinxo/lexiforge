@@ -1,4 +1,7 @@
 class ApiController < ApplicationController
+  include Devise::Controllers::Helpers
+  include Devise::Controllers::SignInOut
+
   protect_from_forgery with: :null_session
   before_action :set_cors_headers
 
@@ -7,6 +10,24 @@ class ApiController < ApplicationController
   end
 
   private
+
+  def authenticate_any_user!
+    return if current_api_user || current_admin_user
+
+    render json: {
+      success: false,
+      message: 'Authentication required'
+    }, status: :unauthorized
+  end
+
+  def authenticate_admin!
+    return if current_admin_user || current_api_user&.admin?
+
+    render json: {
+      success: false,
+      message: 'Admin access required'
+    }, status: :forbidden
+  end
 
   def set_cors_headers
     allowed_origins = ENV.fetch('ALLOWED_ORIGINS', 'http://localhost:3001').split(',')
