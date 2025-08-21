@@ -6,7 +6,7 @@ class SourceText < ApplicationRecord
   validates :content, presence: true
   validates :gutenberg_id, uniqueness: {
     conditions: -> { where(is_public: true) },
-    message: 'already exists as a public source text'
+    message: ->(_object, _data) { I18n.t('source_texts.errors.gutenberg_id_taken_public') }
   }, allow_nil: true
 
   scope :from_gutenberg, -> { where.not(gutenberg_id: nil) }

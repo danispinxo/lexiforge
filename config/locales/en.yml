@@ -35,6 +35,10 @@ en:
       updated: "Poem was successfully updated."
       deleted: "Poem was successfully deleted."
 
+  source_texts:
+    errors:
+      gutenberg_id_taken_public: "already exists as a public source text"
+
   admin:
     users:
       password_reset_sent: "Password reset instructions sent to user."
