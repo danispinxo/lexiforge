@@ -210,6 +210,18 @@
   }
 }
 
+.privacy-badge,
+.privacy-status {
+  @include mixins.library-label;
+  font-size: variables.$font-size-xs;
+  padding: variables.$spacing-xs variables.$spacing-sm;
+  border-radius: variables.$border-radius-sm;
+  display: inline-flex;
+  align-items: center;
+  gap: variables.$spacing-xs;
+  font-weight: variables.$weight-medium;
+}
+
 @include mixins.tablet {
   .texts-table-container,
   .poems-table-container {

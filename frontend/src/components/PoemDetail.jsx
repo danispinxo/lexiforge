@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faGlobe } from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
 
 function PoemDetail() {
@@ -47,6 +49,10 @@ function PoemDetail() {
           <span className="technique">Technique: {poem.technique_used}</span>
           <span className="author">Author: {poem.author_name || "Anonymous"}</span>
           <span className="date">Created: {new Date(poem.created_at).toLocaleDateString()}</span>
+          <span className={`privacy-status ${poem.is_public ? "public" : "private"}`}>
+            <FontAwesomeIcon icon={poem.is_public ? faGlobe : faLock} />
+            {poem.is_public ? "Public" : "Private"}
+          </span>
         </div>
 
         <div className="source-info">
