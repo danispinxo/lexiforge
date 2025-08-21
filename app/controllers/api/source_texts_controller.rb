@@ -1,5 +1,6 @@
 class Api::SourceTextsController < ApiController
-  before_action :authenticate_any_user!, only: [:my_source_texts, :import_from_gutenberg]
+  skip_before_action :verify_authenticity_token
+  before_action :authenticate_any_user!, only: %i[my_source_texts import_from_gutenberg]
   before_action :set_source_text, only: [:show]
 
   def index
