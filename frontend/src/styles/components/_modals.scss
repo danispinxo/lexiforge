@@ -145,6 +145,38 @@
       margin: 0;
     }
   }
+
+  .privacy-group {
+    margin-top: variables.$spacing-xl;
+    padding-top: variables.$spacing-lg;
+    border-top: 1px solid rgba(variables.$primary-color, 0.1);
+
+    .privacy-label {
+      display: flex !important;
+      align-items: center;
+      gap: variables.$spacing-sm;
+      cursor: pointer;
+      margin-bottom: variables.$spacing-sm !important;
+
+      .privacy-icon {
+        color: variables.$primary-color;
+        margin-left: variables.$spacing-xs;
+      }
+    }
+
+    .privacy-help-container {
+      margin-left: calc(20px + #{variables.$spacing-sm} + #{variables.$spacing-xs});
+
+      .privacy-help {
+        font-size: variables.$font-size-sm;
+        color: variables.$text-secondary;
+        font-style: italic;
+        font-family: variables.$font-serif;
+        display: block;
+        margin-top: variables.$spacing-xs;
+      }
+    }
+  }
 }
 
 .modal-actions {

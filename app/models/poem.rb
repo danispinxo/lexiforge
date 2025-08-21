@@ -14,6 +14,9 @@ class Poem < ApplicationRecord
 
   scope :cut_up_poems, -> { where(technique_used: 'cutup') }
   scope :recent, -> { order(created_at: :desc) }
+  scope :public_poems, -> { where(is_public: true) }
+  scope :private_poems, -> { where(is_public: false) }
+  scope :for_author, ->(author) { where(author: author) }
 
   def word_count
     content.split.length
@@ -51,6 +54,6 @@ class Poem < ApplicationRecord
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[content created_at id id_value source_text_id technique_used title updated_at
-       author_id author_type]
+       author_id author_type is_public]
   end
 end

@@ -1,8 +1,10 @@
 class Api::SourceTextsController < ApiController
+  skip_before_action :verify_authenticity_token
+  before_action :authenticate_any_user!, only: %i[my_source_texts import_from_gutenberg]
   before_action :set_source_text, only: [:show]
 
   def index
-    @source_texts = SourceText.all
+    @source_texts = SourceText.public_texts.includes(:owner)
     render json: @source_texts, each_serializer: SourceTextSerializer
   end
 
@@ -10,38 +12,66 @@ class Api::SourceTextsController < ApiController
     render json: @source_text, serializer: SourceTextDetailSerializer
   end
 
-  def import_from_gutenberg
-    if params[:gutenberg_id].present?
-      service = ProjectGutenbergService.new
-      source_text = service.import_text(params[:gutenberg_id])
+  def my_source_texts
+    current_user = current_api_user || current_admin_user
+    @source_texts = SourceText.for_owner(current_user).includes(:owner)
+    render json: @source_texts, each_serializer: SourceTextSerializer
+  end
 
-      if source_text.persisted?
-        render json: {
-          success: true,
-          message: "Successfully imported '#{source_text.title}'",
-          source_text: {
-            id: source_text.id,
-            title: source_text.title,
-            gutenberg_id: source_text.gutenberg_id
-          }
-        }
-      else
-        render json: {
-          success: false,
-          message: "Failed to import text: #{source_text.errors.full_messages.join(', ')}"
-        }, status: :unprocessable_content
-      end
-    else
-      render json: {
-        success: false,
-        message: 'Please provide a valid Gutenberg ID'
-      }, status: :bad_request
-    end
+  def import_from_gutenberg
+    return render_missing_gutenberg_id if params[:gutenberg_id].blank?
+
+    service = ProjectGutenbergService.new
+    source_text = service.import_text(params[:gutenberg_id])
+
+    return render_import_error(source_text) unless source_text.persisted?
+
+    update_source_text_ownership(source_text)
+    render_import_success(source_text)
   end
 
   private
 
   def set_source_text
     @source_text = SourceText.find(params[:id])
+  end
+
+  def render_missing_gutenberg_id
+    render json: {
+      success: false,
+      message: 'Please provide a valid Gutenberg ID'
+    }, status: :bad_request
+  end
+
+  def render_import_error(source_text)
+    render json: {
+      success: false,
+      message: "Failed to import text: #{source_text.errors.full_messages.join(', ')}"
+    }, status: :unprocessable_content
+  end
+
+  def update_source_text_ownership(source_text)
+    current_user = current_api_user || current_admin_user
+    return unless current_user
+
+    is_public = source_text_should_be_public?
+    source_text.update(owner: current_user, is_public: is_public)
+  end
+
+  def source_text_should_be_public?
+    current_admin_user ? (params[:is_public] != 'false') : false
+  end
+
+  def render_import_success(source_text)
+    render json: {
+      success: true,
+      message: "Successfully imported '#{source_text.title}'",
+      source_text: {
+        id: source_text.id,
+        title: source_text.title,
+        gutenberg_id: source_text.gutenberg_id,
+        is_public: source_text.is_public
+      }
+    }
   end
 end

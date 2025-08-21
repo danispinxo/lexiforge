@@ -42,12 +42,9 @@ function SourceTextDetail() {
     <div className="source-text-detail">
       <div className="header">
         <Link to="/source-texts" className="back-link">
-          Back to Source Texts
+          Back to All Public Source Texts
         </Link>
         <div className="actions">
-          <Link to="/poems" className="btn btn-secondary">
-            View All Poems
-          </Link>
           <button onClick={() => setShowModal(true)} className="btn btn-primary">
             Generate Poem
           </button>

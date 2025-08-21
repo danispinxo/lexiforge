@@ -36,15 +36,18 @@ api.interceptors.response.use(
 
 export const sourceTextsAPI = {
   getAll: () => api.get("/source_texts"),
+  getMine: () => api.get("/source_texts/my_source_texts"),
   getById: (id) => api.get(`/source_texts/${id}`),
-  importFromGutenberg: (gutenbergId) =>
+  importFromGutenberg: (gutenbergId, isPublic = true) =>
     api.post("/source_texts/import_from_gutenberg", {
       gutenberg_id: gutenbergId,
+      is_public: isPublic,
     }),
 };
 
 export const poemsAPI = {
   getAll: () => api.get("/poems"),
+  getMine: () => api.get("/poems/my_poems"),
   getById: (id) => api.get(`/poems/${id}`),
   generatePoem: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_poem`, options),

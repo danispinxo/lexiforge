@@ -5,6 +5,7 @@ class AdminUser < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :authored_poems, class_name: 'Poem', as: :author, dependent: :nullify
+  has_many :source_texts, as: :owner, dependent: :nullify
 
   validates :username, uniqueness: { case_sensitive: false },
                        length: { minimum: 3, maximum: 30 },

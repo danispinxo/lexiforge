@@ -6,36 +6,62 @@ import {
   faExclamationTriangle,
   faInfoCircle,
   faCalendar,
-  faMagic,
+  faLock,
+  faGlobe,
 } from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
-function Poems() {
+function MyPoems() {
   const [poems, setPoems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
-    loadPoems();
-  }, []);
+    if (user) {
+      loadMyPoems();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
-  const loadPoems = async () => {
+  const loadMyPoems = async () => {
     try {
-      const response = await poemsAPI.getAll();
+      const response = await poemsAPI.getMine();
       setPoems(response.data);
     } catch {
-      setError("Error loading poems");
+      setError("Error loading your poems");
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <div className="loading">Loading poems...</div>;
+  if (!user) {
+    return (
+      <div className="poems">
+        <div className="auth-required">
+          <h1>My Poems</h1>
+          <p>
+            Please <Link to="/login">log in</Link> to view your generated poems.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="poems">
+        <div className="loading">Loading your poems...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="poems">
       <div className="header">
-        <h1>Public Generated Poems</h1>
+        <h1>My Generated Poems</h1>
       </div>
 
       {error && (
@@ -49,17 +75,12 @@ function Poems() {
         <div className="empty-state">
           <p>
             <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
-            No poems generated yet.
-          </p>
-          <p>
-            <FontAwesomeIcon icon={faMagic} className="magic-icon" />
-            <Link to="/source-texts">Import some source texts</Link> and generate cut-up poems!
+            You haven't generated any poems yet.
           </p>
         </div>
       ) : (
         <>
           <p className="poems-count">Found {poems.length} generated poems</p>
-
           <div className="poems-table-container">
             <table className="poems-table">
               <thead>
@@ -67,7 +88,7 @@ function Poems() {
                   <th>Title</th>
                   <th>Technique</th>
                   <th>Source Text</th>
-                  <th>Author</th>
+                  <th>Privacy</th>
                   <th>Date Created</th>
                   <th>Actions</th>
                 </tr>
@@ -92,15 +113,18 @@ function Poems() {
                         <span className="unknown-source">Unknown source</span>
                       )}
                     </td>
-                    <td className="author-cell">
-                      <span className="author-name">{poem.author_name || "Anonymous"}</span>
+                    <td className="privacy-cell">
+                      <span className={`privacy-badge ${poem.is_public ? "public" : "private"}`}>
+                        <FontAwesomeIcon icon={poem.is_public ? faGlobe : faLock} />
+                        {poem.is_public ? "Public" : "Private"}
+                      </span>
                     </td>
                     <td className="date-cell">
                       <FontAwesomeIcon icon={faCalendar} className="date-icon" />{" "}
                       {new Date(poem.created_at).toLocaleDateString()}
                     </td>
                     <td className="actions-cell">
-                      <Link to={`/poems/${poem.id}`} className="btn btn-ghost btn-sm">
+                      <Link to={`/poems/${poem.id}`} className="btn btn-outline btn-sm">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                     </td>
@@ -115,4 +139,4 @@ function Poems() {
   );
 }
 
-export default Poems;
+export default MyPoems;

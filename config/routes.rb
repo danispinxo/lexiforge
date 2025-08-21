@@ -14,13 +14,18 @@ Rails.application.routes.draw do
     resources :source_texts do
       collection do
         post :import_from_gutenberg
+        get :my_source_texts
       end
       member do
         post :generate_poem, to: 'poems#generate_poem'
       end
     end
 
-    resources :poems
+    resources :poems do
+      collection do
+        get :my_poems
+      end
+    end
     get 'user/current', to: 'users#current_user_info'
     put 'user/profile', to: 'users#update_profile'
     put 'user/password', to: 'users#change_password'

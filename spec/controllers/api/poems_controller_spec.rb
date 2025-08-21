@@ -154,7 +154,8 @@ RSpec.describe Api::PoemsController, type: :controller do
         id: source_text.id,
         method: 'cut_up',
         num_lines: 10,
-        words_per_line: 8
+        words_per_line: 8,
+        is_public: true
       }
     end
 
@@ -230,7 +231,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         allow(CutUpGenerator).to receive(:new).and_return(generator_instance)
         allow(generator_instance).to receive(:generate).and_return('Generated content')
 
-        post :generate_poem, params: { id: source_text.id }
+        post :generate_poem, params: { id: source_text.id, is_public: true }
 
         expect(generator_instance).to have_received(:generate).with(
           method: 'cut_up',
@@ -269,7 +270,8 @@ RSpec.describe Api::PoemsController, type: :controller do
         num_pages: 2,
         words_per_page: 40,
         words_to_keep: 6,
-        is_blackout: true
+        is_blackout: true,
+        is_public: true
       }
     end
 
@@ -342,7 +344,7 @@ RSpec.describe Api::PoemsController, type: :controller do
         allow(ErasureGenerator).to receive(:new).and_return(generator_instance)
         allow(generator_instance).to receive(:generate).and_return('{}')
 
-        post :generate_poem, params: { id: source_text.id, method: 'erasure' }
+        post :generate_poem, params: { id: source_text.id, method: 'erasure', is_public: true }
 
         expect(generator_instance).to have_received(:generate).with(
           method: 'erasure',

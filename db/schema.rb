@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_20_162057) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_21_184702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_20_162057) do
     t.datetime "updated_at", null: false
     t.string "author_type"
     t.bigint "author_id"
+    t.boolean "is_public", default: true, null: false
     t.index ["author_type", "author_id"], name: "index_poems_on_author"
     t.index ["source_text_id"], name: "index_poems_on_source_text_id"
   end
@@ -75,7 +76,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_20_162057) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "gutenberg_id"
-    t.index ["gutenberg_id"], name: "index_source_texts_on_gutenberg_id", unique: true
+    t.boolean "is_public", default: true, null: false
+    t.string "owner_type"
+    t.bigint "owner_id"
+    t.index ["gutenberg_id"], name: "index_source_texts_on_gutenberg_id_public_unique", unique: true, where: "((is_public = true) AND (gutenberg_id IS NOT NULL))"
+    t.index ["owner_type", "owner_id"], name: "index_source_texts_on_owner_type_and_owner_id"
   end
 
   create_table "users", force: :cascade do |t|

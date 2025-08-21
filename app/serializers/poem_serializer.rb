@@ -1,5 +1,5 @@
 class PoemSerializer < ActiveModel::Serializer
-  attributes :id, :title, :technique_used, :content_preview, :created_at, :author_name
+  attributes :id, :title, :technique_used, :content_preview, :created_at, :author_name, :is_public
 
   belongs_to :source_text, serializer: SourceTextSerializer
 

@@ -21,7 +21,11 @@ ActiveAdmin.register AdminUser do
       row :first_name
       row :last_name
       row :bio do |admin_user|
-        simple_format(admin_user.bio) if admin_user.bio.present?
+        if admin_user.respond_to?(:bio) && admin_user.bio.present?
+          simple_format(admin_user.bio)
+        else
+          'No bio'
+        end
       end
       row :full_name
       row :created_at

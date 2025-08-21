@@ -1,16 +1,22 @@
 class Api::PoemsController < ApiController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_any_user!, only: [:generate_poem]
+  before_action :authenticate_any_user!, only: %i[generate_poem my_poems]
   before_action :set_poem, only: %i[show edit update destroy]
   before_action :set_source_text, only: %i[generate_poem]
 
   def index
-    @poems = Poem.includes(:source_text).order(created_at: :desc)
+    @poems = Poem.public_poems.includes(:source_text).order(created_at: :desc)
     render json: @poems, each_serializer: PoemSerializer
   end
 
   def show
     render json: @poem, serializer: PoemDetailSerializer
+  end
+
+  def my_poems
+    current_user = current_api_user || current_admin_user
+    @poems = Poem.for_author(current_user).includes(:source_text).order(created_at: :desc)
+    render json: @poems, each_serializer: PoemSerializer
   end
 
   def new
@@ -173,12 +179,14 @@ class Api::PoemsController < ApiController
   def build_poem(technique, content, options)
     technique_used = get_technique_used(technique, options)
     author = current_api_user || current_admin_user
+    is_public = ActiveModel::Type::Boolean.new.cast(params[:is_public])
 
     @source_text.poems.build(
       title: generate_poem_title(content, technique_used),
       content: content,
       technique_used: technique_used,
-      author: author
+      author: author,
+      is_public: is_public
     )
   end
 
