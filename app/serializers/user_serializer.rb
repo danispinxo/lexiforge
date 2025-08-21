@@ -5,7 +5,21 @@ class UserSerializer < ActiveModel::Serializer
     object&.admin?
   end
 
-  delegate :username, :first_name, :last_name, :bio, to: :object
+  def username
+    object.respond_to?(:username) ? object.username : nil
+  end
+
+  def first_name
+    object.respond_to?(:first_name) ? object.first_name : nil
+  end
+
+  def last_name
+    object.respond_to?(:last_name) ? object.last_name : nil
+  end
+
+  def bio
+    object.respond_to?(:bio) ? object.bio : nil
+  end
 
   def full_name
     object&.full_name
