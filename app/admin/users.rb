@@ -24,7 +24,7 @@ ActiveAdmin.register User do
         if user.respond_to?(:bio) && user.bio.present?
           simple_format(user.bio)
         else
-          "No bio"
+          'No bio'
         end
       end
       row :full_name
