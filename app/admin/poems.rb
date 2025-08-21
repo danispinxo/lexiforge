@@ -1,11 +1,18 @@
 ActiveAdmin.register Poem do
-  permit_params :title, :content, :technique_used, :source_text_id
+  permit_params :title, :content, :technique_used, :source_text_id, :is_public, :author_type, :author_id
 
   index do
     selectable_column
     id_column
     column :title
     column :technique_used
+    column :is_public do |poem|
+      if poem.is_public
+        status_tag 'Public'
+      else
+        status_tag 'Private'
+      end
+    end
     column 'Content Preview' do |poem|
       truncate(poem.content, length: 150) if poem.content
     end
@@ -35,6 +42,13 @@ ActiveAdmin.register Poem do
       row :id
       row :title
       row :technique_used
+      row :is_public do |poem|
+        if poem.is_public
+          status_tag 'Public', class: 'green'
+        else
+          status_tag 'Private', class: 'red'
+        end
+      end
       row :source_text do |poem|
         link_to poem.source_text.title, admin_source_text_path(poem.source_text) if poem.source_text
       end

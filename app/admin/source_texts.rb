@@ -1,5 +1,5 @@
 ActiveAdmin.register SourceText do
-  permit_params :title, :content, :gutenberg_id, :author
+  permit_params :title, :content, :gutenberg_id, :author, :is_public, :owner_type, :owner_id
 
   index do
     selectable_column
@@ -7,6 +7,27 @@ ActiveAdmin.register SourceText do
     column :title
     column :author
     column :gutenberg_id
+    column :is_public do |source_text|
+      if source_text.is_public
+        status_tag 'Public', class: 'green'
+      else
+        status_tag 'Private', class: 'red'
+      end
+    end
+    column :owner do |source_text|
+      if source_text.owner
+        case source_text.owner_type
+        when 'User'
+          link_to source_text.owner.full_name || source_text.owner.username, admin_user_path(source_text.owner)
+        when 'AdminUser'
+          link_to source_text.owner.email, admin_admin_user_path(source_text.owner)
+        else
+          source_text.owner.to_s
+        end
+      else
+        'System'
+      end
+    end
     column 'Content Preview' do |source_text|
       truncate(source_text.content, length: 100) if source_text.content
     end
@@ -20,6 +41,27 @@ ActiveAdmin.register SourceText do
       row :title
       row :author
       row :gutenberg_id
+      row :is_public do |source_text|
+        if source_text.is_public
+          status_tag 'Public', class: 'green'
+        else
+          status_tag 'Private', class: 'red'
+        end
+      end
+      row :owner do |source_text|
+        if source_text.owner
+          case source_text.owner_type
+          when 'User'
+            link_to source_text.owner.full_name || source_text.owner.username, admin_user_path(source_text.owner)
+          when 'AdminUser'
+            link_to source_text.owner.email, admin_admin_user_path(source_text.owner)
+          else
+            source_text.owner.to_s
+          end
+        else
+          'System'
+        end
+      end
       row :content do |source_text|
         simple_format(truncate(source_text.content, length: 500)) if source_text.content
       end
