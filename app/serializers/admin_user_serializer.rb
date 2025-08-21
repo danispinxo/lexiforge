@@ -5,7 +5,7 @@ class AdminUserSerializer < ActiveModel::Serializer
     object.admin?
   end
 
+  delegate :username, to: :object
   delegate :full_name, to: :object
-
   delegate :gravatar_url, to: :object
 end
