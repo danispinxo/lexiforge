@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faGlobe } from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
 import { POEM_GENERATION_DEFAULTS } from "../constants";
 
 function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGenerated }) {
   const [technique, setTechnique] = useState("cut_up");
+  const [isPublic, setIsPublic] = useState(false);
   const [numLines, setNumLines] = useState(POEM_GENERATION_DEFAULTS.CUT_UP.NUM_LINES);
   const [wordsPerLine, setWordsPerLine] = useState(POEM_GENERATION_DEFAULTS.CUT_UP.WORDS_PER_LINE);
   const [numPages, setNumPages] = useState(POEM_GENERATION_DEFAULTS.ERASURE.NUM_PAGES);
@@ -89,6 +92,8 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.context_window = contextWindow;
           break;
       }
+
+      options.is_public = isPublic;
 
       const response = await poemsAPI.generatePoem(sourceText.id, options);
 
@@ -521,6 +526,26 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 </div>
               </>
             )}
+
+            <div className="form-group privacy-group">
+              <label className="privacy-label">
+                <input
+                  type="checkbox"
+                  checked={isPublic}
+                  onChange={(e) => setIsPublic(e.target.checked)}
+                  disabled={generating}
+                />
+                <FontAwesomeIcon icon={isPublic ? faGlobe : faLock} className="privacy-icon" />
+                Make this poem public
+              </label>
+              <div className="privacy-help-container">
+                <small className="privacy-help">
+                  {isPublic
+                    ? "Other users will be able to see this poem"
+                    : "Only you will be able to see this poem"}
+                </small>
+              </div>
+            </div>
 
             {error && <div className="message error">{error}</div>}
 
