@@ -82,15 +82,6 @@ class Api::UsersController < ApiController
 
   private
 
-  def authenticate_any_user!
-    return if current_api_user || current_admin_user
-
-    render json: {
-      success: false,
-      message: 'Authentication required'
-    }, status: :unauthorized
-  end
-
   def profile_params
     params.require(:user).permit(:username, :first_name, :last_name, :bio)
   end
