@@ -20,6 +20,12 @@ class SourceText < ApplicationRecord
     %w[content created_at gutenberg_id id id_value title updated_at is_public owner_id owner_type]
   end
 
+  def is_public?
+    return true unless self.class.column_names.include?('is_public')
+    
+    super
+  end
+
   private
 
   def unique_public_gutenberg_id
