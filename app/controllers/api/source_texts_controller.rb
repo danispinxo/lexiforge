@@ -3,7 +3,7 @@ class Api::SourceTextsController < ApiController
   before_action :set_source_text, only: [:show]
 
   def index
-    @source_texts = SourceText.public_texts.includes(:user)
+    @source_texts = SourceText.public_texts.includes(:owner)
     render json: @source_texts, each_serializer: SourceTextSerializer
   end
 
@@ -13,7 +13,7 @@ class Api::SourceTextsController < ApiController
 
   def my_source_texts
     current_user = current_api_user || current_admin_user
-    @source_texts = SourceText.for_user(current_user).includes(:user)
+    @source_texts = SourceText.for_owner(current_user).includes(:owner)
     render json: @source_texts, each_serializer: SourceTextSerializer
   end
 
@@ -26,7 +26,7 @@ class Api::SourceTextsController < ApiController
         current_user = current_api_user || current_admin_user
         if current_user
           is_public = current_admin_user ? (params[:is_public] != 'false') : false
-          source_text.update(user: current_user, is_public: is_public)
+          source_text.update(owner: current_user, is_public: is_public)
         end
 
         render json: {
