@@ -50,8 +50,7 @@ function AuthWrapper() {
   };
 
   const handleAdminPanelClick = () => {
-    const backendUrl =
-      import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+    const backendUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
     const adminUrl = backendUrl.replace("/api", "/admin");
     window.open(`${adminUrl}`, "_blank");
     setIsDropdownOpen(false);
@@ -59,10 +58,7 @@ function AuthWrapper() {
 
   return (
     <div className="auth-dropdown" ref={dropdownRef}>
-      <button
-        className="auth-dropdown-toggle"
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-      >
+      <button className="auth-dropdown-toggle" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
         {user ? (
           <>
             {user.gravatar_url && (
@@ -91,19 +87,14 @@ function AuthWrapper() {
           {user ? (
             <>
               <div className="dropdown-header">
-                <span>
-                  Welcome, {user.full_name || user.username || user.email}
-                </span>
+                <span>Welcome, {user.full_name || user.username || user.email}</span>
               </div>
               <button onClick={handleProfileClick} className="dropdown-item">
                 <FontAwesomeIcon icon={faUserEdit} />
                 <span>Edit Profile</span>
               </button>
               {user.admin && (
-                <button
-                  onClick={handleAdminPanelClick}
-                  className="dropdown-item"
-                >
+                <button onClick={handleAdminPanelClick} className="dropdown-item">
                   <FontAwesomeIcon icon={faCog} />
                   <span>Admin Panel</span>
                 </button>

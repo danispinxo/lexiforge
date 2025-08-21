@@ -34,10 +34,7 @@ function PoemDetail() {
           Back to All Poems
         </Link>
         <div className="actions">
-          <Link
-            to={`/source-texts/${poem.source_text.id}`}
-            className="btn btn-secondary"
-          >
+          <Link to={`/source-texts/${poem.source_text.id}`} className="btn btn-secondary">
             View Source Text
           </Link>
         </div>
@@ -48,21 +45,14 @@ function PoemDetail() {
 
         <div className="metadata">
           <span className="technique">Technique: {poem.technique_used}</span>
-          <span className="author">
-            Author: {poem.author_name || "Anonymous"}
-          </span>
-          <span className="date">
-            Created: {new Date(poem.created_at).toLocaleDateString()}
-          </span>
+          <span className="author">Author: {poem.author_name || "Anonymous"}</span>
+          <span className="date">Created: {new Date(poem.created_at).toLocaleDateString()}</span>
         </div>
 
         <div className="source-info">
           <p>
             Generated from:{" "}
-            <Link
-              to={`/source-texts/${poem.source_text.id}`}
-              className="source-link"
-            >
+            <Link to={`/source-texts/${poem.source_text.id}`} className="source-link">
               {poem.source_text.title}
             </Link>
           </p>
@@ -73,14 +63,12 @@ function PoemDetail() {
         <h3>Poem</h3>
         <div
           className={`poem-text ${
-            poem.technique_used === "erasure" ||
-            poem.technique_used === "blackout"
+            poem.technique_used === "erasure" || poem.technique_used === "blackout"
               ? "erasure-poem"
               : "lineated-poem"
           }`}
         >
-          {poem.technique_used === "erasure" ||
-          poem.technique_used === "blackout" ? (
+          {poem.technique_used === "erasure" || poem.technique_used === "blackout" ? (
             <div className="erasure-pages-container">
               {(() => {
                 try {
@@ -89,8 +77,7 @@ function PoemDetail() {
                     return parsedContent.pages.map((page) => (
                       <div key={page.number} className="erasure-page">
                         <div className="page-number">Page {page.number}</div>
-                        {poem.technique_used === "blackout" ||
-                        parsedContent.is_blackout ? (
+                        {poem.technique_used === "blackout" || parsedContent.is_blackout ? (
                           <div
                             className="page-content blackout-content"
                             dangerouslySetInnerHTML={{ __html: page.content }}

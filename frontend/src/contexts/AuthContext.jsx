@@ -52,9 +52,7 @@ export const AuthProvider = ({ children }) => {
         return {
           success: false,
           message:
-            response.data.message ||
-            response.data.errors?.join(", ") ||
-            "Registration failed",
+            response.data.message || response.data.errors?.join(", ") || "Registration failed",
         };
       }
     } catch (error) {

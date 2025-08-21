@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { VALIDATION } from "../constants";
 import {
   faUser,
   faIdCard,
@@ -66,9 +67,7 @@ function Profile() {
         setProfileError(response.data.message || "Failed to update profile");
       }
     } catch (error) {
-      setProfileError(
-        error.response?.data?.message || "Failed to update profile"
-      );
+      setProfileError(error.response?.data?.message || "Failed to update profile");
     }
 
     setLoading(false);
@@ -103,9 +102,7 @@ function Profile() {
         setPasswordError(response.data.message || "Failed to change password");
       }
     } catch (error) {
-      setPasswordError(
-        error.response?.data?.message || "Failed to change password"
-      );
+      setPasswordError(error.response?.data?.message || "Failed to change password");
     }
 
     setLoading(false);
@@ -138,11 +135,7 @@ function Profile() {
 
         <div className="profile-header">
           <div className="avatar-section">
-            <img
-              src={user.gravatar_url}
-              alt={`${user.full_name} avatar`}
-              className="user-avatar"
-            />
+            <img src={user.gravatar_url} alt={`${user.full_name} avatar`} className="user-avatar" />
             <div className="avatar-info">
               <h2>{user.full_name}</h2>
               <p className="user-email">
@@ -150,11 +143,7 @@ function Profile() {
               </p>
               <p className="gravatar-note">
                 <FontAwesomeIcon icon={faImage} /> Avatar powered by{" "}
-                <a
-                  href="https://gravatar.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer">
                   Gravatar
                 </a>
               </p>
@@ -169,10 +158,7 @@ function Profile() {
 
           {profileError && (
             <div className="error-message">
-              <FontAwesomeIcon
-                icon={faExclamationTriangle}
-                className="error-icon"
-              />
+              <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
               {profileError}
             </div>
           )}
@@ -194,15 +180,13 @@ function Profile() {
                 id="username"
                 name="username"
                 value={profileData.username}
-                onChange={(e) =>
-                  handleProfileChange("username", e.target.value)
-                }
+                onChange={(e) => handleProfileChange("username", e.target.value)}
                 required
                 disabled={loading}
-                minLength={3}
-                maxLength={30}
-                pattern="[a-zA-Z0-9_]+"
-                title="Username can only contain letters, numbers, and underscores"
+                minLength={VALIDATION.USERNAME.MIN_LENGTH}
+                maxLength={VALIDATION.USERNAME.MAX_LENGTH}
+                pattern={VALIDATION.USERNAME.PATTERN}
+                title={VALIDATION.USERNAME.TITLE}
               />
             </div>
 
@@ -215,12 +199,10 @@ function Profile() {
                 id="first_name"
                 name="first_name"
                 value={profileData.first_name}
-                onChange={(e) =>
-                  handleProfileChange("first_name", e.target.value)
-                }
+                onChange={(e) => handleProfileChange("first_name", e.target.value)}
                 required
                 disabled={loading}
-                maxLength={50}
+                maxLength={VALIDATION.NAME.MAX_LENGTH}
               />
             </div>
 
@@ -233,12 +215,10 @@ function Profile() {
                 id="last_name"
                 name="last_name"
                 value={profileData.last_name}
-                onChange={(e) =>
-                  handleProfileChange("last_name", e.target.value)
-                }
+                onChange={(e) => handleProfileChange("last_name", e.target.value)}
                 required
                 disabled={loading}
-                maxLength={50}
+                maxLength={VALIDATION.NAME.MAX_LENGTH}
               />
             </div>
 
@@ -252,20 +232,16 @@ function Profile() {
                 value={profileData.bio}
                 onChange={(e) => handleProfileChange("bio", e.target.value)}
                 disabled={loading}
-                maxLength={500}
+                maxLength={VALIDATION.BIO.MAX_LENGTH}
                 rows={4}
                 placeholder="Tell us a bit about yourself..."
               />
               <small className="char-count">
-                {profileData.bio.length}/500 characters
+                {profileData.bio.length}/{VALIDATION.BIO.MAX_LENGTH} characters
               </small>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary"
-            >
+            <button type="submit" disabled={loading} className="btn btn-primary">
               {loading ? (
                 <>
                   <span>Saving...</span>
@@ -286,10 +262,7 @@ function Profile() {
 
           {passwordError && (
             <div className="error-message">
-              <FontAwesomeIcon
-                icon={faExclamationTriangle}
-                className="error-icon"
-              />
+              <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
               {passwordError}
             </div>
           )}
@@ -312,9 +285,7 @@ function Profile() {
                   id="current_password"
                   name="current_password"
                   value={passwordData.current_password}
-                  onChange={(e) =>
-                    handlePasswordChange("current_password", e.target.value)
-                  }
+                  onChange={(e) => handlePasswordChange("current_password", e.target.value)}
                   required
                   disabled={loading}
                   autoComplete="current-password"
@@ -325,9 +296,7 @@ function Profile() {
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                   disabled={loading}
                 >
-                  <FontAwesomeIcon
-                    icon={showCurrentPassword ? faEyeSlash : faEye}
-                  />
+                  <FontAwesomeIcon icon={showCurrentPassword ? faEyeSlash : faEye} />
                 </button>
               </div>
             </div>
@@ -342,12 +311,10 @@ function Profile() {
                   id="new_password"
                   name="new_password"
                   value={passwordData.new_password}
-                  onChange={(e) =>
-                    handlePasswordChange("new_password", e.target.value)
-                  }
+                  onChange={(e) => handlePasswordChange("new_password", e.target.value)}
                   required
                   disabled={loading}
-                  minLength={6}
+                  minLength={VALIDATION.PASSWORD.MIN_LENGTH}
                   autoComplete="new-password"
                 />
                 <button
@@ -356,17 +323,14 @@ function Profile() {
                   onClick={() => setShowNewPassword(!showNewPassword)}
                   disabled={loading}
                 >
-                  <FontAwesomeIcon
-                    icon={showNewPassword ? faEyeSlash : faEye}
-                  />
+                  <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
                 </button>
               </div>
             </div>
 
             <div className="form-group">
               <label htmlFor="confirm_password">
-                <FontAwesomeIcon icon={faLock} />{" "}
-                <span>Confirm New Password</span>
+                <FontAwesomeIcon icon={faLock} /> <span>Confirm New Password</span>
               </label>
               <div className="password-input-container">
                 <input
@@ -374,12 +338,10 @@ function Profile() {
                   id="confirm_password"
                   name="confirm_password"
                   value={passwordData.confirm_password}
-                  onChange={(e) =>
-                    handlePasswordChange("confirm_password", e.target.value)
-                  }
+                  onChange={(e) => handlePasswordChange("confirm_password", e.target.value)}
                   required
                   disabled={loading}
-                  minLength={6}
+                  minLength={VALIDATION.PASSWORD.MIN_LENGTH}
                   autoComplete="new-password"
                 />
                 <button
@@ -388,18 +350,12 @@ function Profile() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   disabled={loading}
                 >
-                  <FontAwesomeIcon
-                    icon={showConfirmPassword ? faEyeSlash : faEye}
-                  />
+                  <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
                 </button>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary"
-            >
+            <button type="submit" disabled={loading} className="btn btn-primary">
               {loading ? (
                 <>
                   <span>Changing Password...</span>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { POPULAR_BOOKS } from "../constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
@@ -43,9 +44,7 @@ function SourceTexts() {
     try {
       const response = await sourceTextsAPI.importFromGutenberg(gutenbergId);
       if (response.data.success) {
-        setMessage(
-          `Successfully imported "${response.data.source_text.title}"`
-        );
+        setMessage(`Successfully imported "${response.data.source_text.title}"`);
         setGutenbergId("");
         loadSourceTexts();
       }
@@ -56,26 +55,7 @@ function SourceTexts() {
     }
   };
 
-  const popularBooks = [
-    { id: 1342, title: "Pride and Prejudice", author: "Jane Austen" },
-    {
-      id: 11,
-      title: "Alice's Adventures in Wonderland",
-      author: "Lewis Carroll",
-    },
-    { id: 74, title: "The Adventures of Tom Sawyer", author: "Mark Twain" },
-    {
-      id: 1661,
-      title: "The Adventures of Sherlock Holmes",
-      author: "Arthur Conan Doyle",
-    },
-    { id: 2701, title: "Moby Dick", author: "Herman Melville" },
-    {
-      id: 844,
-      title: "The Importance of Being Earnest",
-      author: "Oscar Wilde",
-    },
-  ];
+  const popularBooks = POPULAR_BOOKS;
 
   return (
     <div className="source-texts">
@@ -121,17 +101,9 @@ function SourceTexts() {
           </form>
 
           {message && (
-            <div
-              className={`message ${
-                message.includes("Error") ? "error" : "success"
-              }`}
-            >
+            <div className={`message ${message.includes("Error") ? "error" : "success"}`}>
               <FontAwesomeIcon
-                icon={
-                  message.includes("Error")
-                    ? faExclamationTriangle
-                    : faCheckCircle
-                }
+                icon={message.includes("Error") ? faExclamationTriangle : faCheckCircle}
                 className="message-icon"
               />
               {message}
@@ -155,15 +127,10 @@ function SourceTexts() {
           <p className="help-text">
             <FontAwesomeIcon icon={faInfoCircle} className="help-icon" />
             <strong>How to find Gutenberg IDs:</strong> Visit{" "}
-            <a
-              href="https://www.gutenberg.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://www.gutenberg.org/" target="_blank" rel="noopener noreferrer">
               gutenberg.org
             </a>
-            , search for a book, and look for the number in the URL (e.g.,
-            /ebooks/1342)
+            , search for a book, and look for the number in the URL (e.g., /ebooks/1342)
           </p>
         </div>
       )}
@@ -196,24 +163,14 @@ function SourceTexts() {
                 {sourceTexts.map((text) => (
                   <tr key={text.id}>
                     <td className="title-cell">
-                      <Link
-                        to={`/source-texts/${text.id}`}
-                        className="title-link"
-                      >
+                      <Link to={`/source-texts/${text.id}`} className="title-link">
                         {text.title}
                       </Link>
                     </td>
-                    <td className="word-count-cell">
-                      {(text.word_count || 0).toLocaleString()}
-                    </td>
-                    <td className="gutenberg-id-cell">
-                      {text.gutenberg_id || "—"}
-                    </td>
+                    <td className="word-count-cell">{(text.word_count || 0).toLocaleString()}</td>
+                    <td className="gutenberg-id-cell">{text.gutenberg_id || "—"}</td>
                     <td className="actions-cell">
-                      <Link
-                        to={`/source-texts/${text.id}`}
-                        className="btn btn-ghost btn-sm"
-                      >
+                      <Link to={`/source-texts/${text.id}`} className="btn btn-ghost btn-sm">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                     </td>
