@@ -86,22 +86,3 @@ export const CONTENT_DISPLAY = {
     LONG: "long",
   },
 };
-
-export const POPULAR_BOOKS = [
-  { id: 1342, title: "Pride and Prejudice", author: "Jane Austen" },
-  {
-    id: 11,
-    title: "Alice's Adventures in Wonderland",
-    author: "Lewis Carroll",
-  },
-  { id: 84, title: "Frankenstein", author: "Mary Wollstonecraft Shelley" },
-  { id: 345, title: "Dracula", author: "Bram Stoker" },
-  {
-    id: 1661,
-    title: "The Adventures of Sherlock Holmes",
-    author: "Arthur Conan Doyle",
-  },
-  { id: 74, title: "The Adventures of Tom Sawyer", author: "Mark Twain" },
-  { id: 2701, title: "Moby Dick", author: "Herman Melville" },
-  { id: 1080, title: "A Modest Proposal", author: "Jonathan Swift" },
-];
