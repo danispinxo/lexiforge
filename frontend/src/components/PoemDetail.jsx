@@ -31,7 +31,7 @@ function PoemDetail() {
     <div className="poem-detail">
       <div className="header">
         <Link to="/poems" className="back-link">
-          Back to All Poems
+          Back to All Public Poems
         </Link>
         <div className="actions">
           <Link to={`/source-texts/${poem.source_text.id}`} className="btn btn-secondary">
