@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable
 
   has_many :authored_poems, class_name: 'Poem', as: :author, dependent: :nullify
+  has_many :source_texts, dependent: :nullify
 
   validates :username, presence: true, uniqueness: { case_sensitive: false },
                        length: { minimum: 3, maximum: 30 },
