@@ -43,10 +43,7 @@ function Poems() {
 
       {error && (
         <div className="message error">
-          <FontAwesomeIcon
-            icon={faExclamationTriangle}
-            className="message-icon"
-          />
+          <FontAwesomeIcon icon={faExclamationTriangle} className="message-icon" />
           {error}
         </div>
       )}
@@ -59,8 +56,7 @@ function Poems() {
           </p>
           <p>
             <FontAwesomeIcon icon={faMagic} className="magic-icon" />
-            <Link to="/source-texts">Import some source texts</Link> and
-            generate cut-up poems!
+            <Link to="/source-texts">Import some source texts</Link> and generate cut-up poems!
           </p>
         </div>
       ) : (
@@ -88,16 +84,11 @@ function Poems() {
                       </Link>
                     </td>
                     <td className="technique-cell">
-                      <span className="technique-badge">
-                        {poem.technique_used}
-                      </span>
+                      <span className="technique-badge">{poem.technique_used}</span>
                     </td>
                     <td className="source-cell">
                       {poem.source_text ? (
-                        <Link
-                          to={`/source-texts/${poem.source_text.id}`}
-                          className="source-link"
-                        >
+                        <Link to={`/source-texts/${poem.source_text.id}`} className="source-link">
                           {poem.source_text.title}
                         </Link>
                       ) : (
@@ -105,22 +96,14 @@ function Poems() {
                       )}
                     </td>
                     <td className="author-cell">
-                      <span className="author-name">
-                        {poem.author_name || 'Anonymous'}
-                      </span>
+                      <span className="author-name">{poem.author_name || "Anonymous"}</span>
                     </td>
                     <td className="date-cell">
-                      <FontAwesomeIcon
-                        icon={faCalendar}
-                        className="date-icon"
-                      />{" "}
+                      <FontAwesomeIcon icon={faCalendar} className="date-icon" />{" "}
                       {new Date(poem.created_at).toLocaleDateString()}
                     </td>
                     <td className="actions-cell">
-                      <Link
-                        to={`/poems/${poem.id}`}
-                        className="btn btn-ghost btn-sm"
-                      >
+                      <Link to={`/poems/${poem.id}`} className="btn btn-ghost btn-sm">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                     </td>

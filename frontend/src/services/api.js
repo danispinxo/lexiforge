@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -56,10 +55,8 @@ export const authAPI = {
   login: (credentials) => api.post("/users/sign_in", credentials),
   logout: () => api.delete("/users/sign_out"),
   getCurrentUser: () => api.get("/user/current"),
-  updateProfile: (profileData) =>
-    api.put("/user/profile", { user: profileData }),
-  changePassword: (passwordData) =>
-    api.put("/user/password", { password_change: passwordData }),
+  updateProfile: (profileData) => api.put("/user/profile", { user: profileData }),
+  changePassword: (passwordData) => api.put("/user/password", { password_change: passwordData }),
 };
 
 export default api;

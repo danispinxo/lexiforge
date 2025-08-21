@@ -10,18 +10,15 @@ const NotFound = () => {
         <div className="error-code">404</div>
         <h1>Page Not Found</h1>
         <p>
-          Sorry, the page you're looking for doesn't exist. It might have been
-          moved, deleted, or you entered the wrong URL.
+          Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or
+          you entered the wrong URL.
         </p>
         <div className="not-found-actions">
           <Link to="/" className="btn btn-primary">
             <FontAwesomeIcon icon={faHome} />
             <span>Go Home</span>
           </Link>
-          <button
-            onClick={() => window.history.back()}
-            className="btn btn-secondary"
-          >
+          <button onClick={() => window.history.back()} className="btn btn-secondary">
             <FontAwesomeIcon icon={faArrowLeft} />
             <span>Go Back</span>
           </button>

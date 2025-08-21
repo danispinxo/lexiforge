@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { CONTENT_DISPLAY } from "../constants";
 import { sourceTextsAPI } from "../services/api";
 import PoemGenerationModal from "./PoemGenerationModal";
 
@@ -47,10 +48,7 @@ function SourceTextDetail() {
           <Link to="/poems" className="btn btn-secondary">
             View All Poems
           </Link>
-          <button
-            onClick={() => setShowModal(true)}
-            className="btn btn-primary"
-          >
+          <button onClick={() => setShowModal(true)} className="btn btn-primary">
             Generate Poem
           </button>
         </div>
@@ -60,25 +58,15 @@ function SourceTextDetail() {
         <h1>{sourceText.title}</h1>
 
         <div className="metadata">
-          <span className="word-count">
-            {(sourceText.word_count || 0).toLocaleString()} words
-          </span>
+          <span className="word-count">{(sourceText.word_count || 0).toLocaleString()} words</span>
           {sourceText.gutenberg_id && (
-            <span className="gutenberg-id">
-              Project Gutenberg ID: {sourceText.gutenberg_id}
-            </span>
+            <span className="gutenberg-id">Project Gutenberg ID: {sourceText.gutenberg_id}</span>
           )}
-          <span className="poems-count">
-            {sourceText.poems_count} poems generated
-          </span>
+          <span className="poems-count">{sourceText.poems_count} poems generated</span>
         </div>
 
         {message && (
-          <div
-            className={`message ${
-              message.includes("Error") ? "error" : "success"
-            }`}
-          >
+          <div className={`message ${message.includes("Error") ? "error" : "success"}`}>
             {message}
           </div>
         )}
@@ -88,26 +76,23 @@ function SourceTextDetail() {
         <h3>Content Preview</h3>
         <div className="text-content">
           {(() => {
-            const truncatedText = sourceText.content.substring(0, 9990) + "...";
+            const truncatedText =
+              sourceText.content.substring(0, CONTENT_DISPLAY.PREVIEW_LENGTH) + "...";
             let paragraphs = truncatedText.split("\n\n");
 
             if (paragraphs.length === 1) {
-              paragraphs = truncatedText
-                .split("\n")
-                .filter((p) => p.trim().length > 0);
+              paragraphs = truncatedText.split("\n").filter((p) => p.trim().length > 0);
             }
 
             if (paragraphs.length === 1) {
-              paragraphs = truncatedText
-                .split(/\.\s+(?=[A-Z])/)
-                .map((p) => p + ".");
+              paragraphs = truncatedText.split(/\.\s+(?=[A-Z])/).map((p) => p + ".");
             }
 
             return paragraphs.map((paragraph, index) => {
               const cleanParagraph = paragraph.trim();
               const truncatedParagraph =
-                cleanParagraph.length > 500
-                  ? cleanParagraph.substring(0, 500) + "..."
+                cleanParagraph.length > CONTENT_DISPLAY.PARAGRAPH_TRUNCATE_LENGTH
+                  ? cleanParagraph.substring(0, CONTENT_DISPLAY.PARAGRAPH_TRUNCATE_LENGTH) + "..."
                   : cleanParagraph;
               return <p key={index}>{truncatedParagraph}</p>;
             });

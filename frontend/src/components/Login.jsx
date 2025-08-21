@@ -56,10 +56,7 @@ function Login() {
 
           {error && (
             <div className="error-message">
-              <FontAwesomeIcon
-                icon={faExclamationTriangle}
-                className="error-icon"
-              />
+              <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
               {error}
             </div>
           )}
@@ -107,11 +104,7 @@ function Login() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary"
-            >
+            <button type="submit" disabled={loading} className="btn btn-primary">
               {loading ? (
                 <>
                   <FontAwesomeIcon icon={faSignInAlt} className="fa-spin" />{" "}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { VALIDATION } from "../constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserPlus,
@@ -22,8 +23,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirmation, setShowPasswordConfirmation] =
-    useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { register } = useAuth();
@@ -75,17 +75,13 @@ function Register() {
               Back to LexiForge
             </Link>
             <h2>
-              <FontAwesomeIcon icon={faUserPlus} className="auth-icon" />{" "}
-              Register
+              <FontAwesomeIcon icon={faUserPlus} className="auth-icon" /> Register
             </h2>
           </div>
 
           {error && (
             <div className="error-message">
-              <FontAwesomeIcon
-                icon={faExclamationTriangle}
-                className="error-icon"
-              />
+              <FontAwesomeIcon icon={faExclamationTriangle} className="error-icon" />
               {error}
             </div>
           )}
@@ -119,10 +115,10 @@ function Register() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 disabled={loading}
-                minLength={3}
-                maxLength={30}
-                pattern="[a-zA-Z0-9_]+"
-                title="Username can only contain letters, numbers, and underscores"
+                minLength={VALIDATION.USERNAME.MIN_LENGTH}
+                maxLength={VALIDATION.USERNAME.MAX_LENGTH}
+                pattern={VALIDATION.USERNAME.PATTERN}
+                title={VALIDATION.USERNAME.TITLE}
                 autoComplete="username"
               />
             </div>
@@ -140,7 +136,7 @@ function Register() {
                   onChange={(e) => setFirstName(e.target.value)}
                   required
                   disabled={loading}
-                  maxLength={50}
+                  maxLength={VALIDATION.NAME.MAX_LENGTH}
                   autoComplete="given-name"
                 />
               </div>
@@ -157,7 +153,7 @@ function Register() {
                   onChange={(e) => setLastName(e.target.value)}
                   required
                   disabled={loading}
-                  maxLength={50}
+                  maxLength={VALIDATION.NAME.MAX_LENGTH}
                   autoComplete="family-name"
                 />
               </div>
@@ -176,7 +172,7 @@ function Register() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={loading}
-                  minLength={6}
+                  minLength={VALIDATION.PASSWORD.MIN_LENGTH}
                   autoComplete="new-password"
                 />
                 <button
@@ -204,7 +200,7 @@ function Register() {
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                   required
                   disabled={loading}
-                  minLength={6}
+                  minLength={VALIDATION.PASSWORD.MIN_LENGTH}
                   autoComplete="new-password"
                 />
                 <button
@@ -213,18 +209,12 @@ function Register() {
                   onClick={togglePasswordConfirmationVisibility}
                   disabled={loading}
                 >
-                  <FontAwesomeIcon
-                    icon={showPasswordConfirmation ? faEyeSlash : faEye}
-                  />
+                  <FontAwesomeIcon icon={showPasswordConfirmation ? faEyeSlash : faEye} />
                 </button>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary"
-            >
+            <button type="submit" disabled={loading} className="btn btn-primary">
               {loading ? (
                 <>
                   <FontAwesomeIcon icon={faUserPlus} className="fa-spin" />{" "}
