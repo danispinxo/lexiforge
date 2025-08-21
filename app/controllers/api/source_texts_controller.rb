@@ -24,7 +24,10 @@ class Api::SourceTextsController < ApiController
 
       if source_text.persisted?
         current_user = current_api_user || current_admin_user
-        source_text.update(user: current_user, is_public: params[:is_public] != 'false') if current_user
+        if current_user
+          is_public = current_admin_user ? (params[:is_public] != 'false') : false
+          source_text.update(user: current_user, is_public: is_public)
+        end
 
         render json: {
           success: true,
