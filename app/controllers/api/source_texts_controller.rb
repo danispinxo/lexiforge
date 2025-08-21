@@ -19,7 +19,7 @@ class Api::SourceTextsController < ApiController
   end
 
   def import_from_gutenberg
-    return render_missing_gutenberg_id unless params[:gutenberg_id].present?
+    return render_missing_gutenberg_id if params[:gutenberg_id].blank?
 
     service = ProjectGutenbergService.new
     source_text = service.import_text(params[:gutenberg_id])
@@ -54,11 +54,11 @@ class Api::SourceTextsController < ApiController
     current_user = current_api_user || current_admin_user
     return unless current_user
 
-    is_public = determine_source_text_privacy
+    is_public = source_text_should_be_public?
     source_text.update(owner: current_user, is_public: is_public)
   end
 
-  def determine_source_text_privacy
+  def source_text_should_be_public?
     current_admin_user ? (params[:is_public] != 'false') : false
   end
 
