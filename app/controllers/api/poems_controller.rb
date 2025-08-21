@@ -179,7 +179,7 @@ class Api::PoemsController < ApiController
   def build_poem(technique, content, options)
     technique_used = get_technique_used(technique, options)
     author = current_api_user || current_admin_user
-    is_public = params[:is_public] != 'false' && @source_text.is_public
+    is_public = params[:is_public] != 'false'
 
     @source_text.poems.build(
       title: generate_poem_title(content, technique_used),
