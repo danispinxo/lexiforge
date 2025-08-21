@@ -35,10 +35,7 @@ function Poems() {
   return (
     <div className="poems">
       <div className="header">
-        <h1>Generated Poems</h1>
-        <Link to="/source-texts" className="btn btn-secondary">
-          Back to Source Texts
-        </Link>
+        <h1>Public Generated Poems</h1>
       </div>
 
       {error && (
