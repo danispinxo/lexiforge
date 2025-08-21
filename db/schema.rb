@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_20_162057) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_21_164143) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_20_162057) do
     t.datetime "updated_at", null: false
     t.string "author_type"
     t.bigint "author_id"
+    t.boolean "is_public", default: true, null: false
     t.index ["author_type", "author_id"], name: "index_poems_on_author"
     t.index ["source_text_id"], name: "index_poems_on_source_text_id"
   end
@@ -75,7 +76,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_20_162057) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "gutenberg_id"
+    t.boolean "is_public", default: true, null: false
+    t.bigint "user_id"
     t.index ["gutenberg_id"], name: "index_source_texts_on_gutenberg_id", unique: true
+    t.index ["user_id"], name: "index_source_texts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -101,4 +105,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_20_162057) do
   end
 
   add_foreign_key "poems", "source_texts"
+  add_foreign_key "source_texts", "users"
 end
