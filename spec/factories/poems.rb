@@ -3,6 +3,7 @@ FactoryBot.define do
     association :source_text
     title { Faker::Book.title }
     content { Faker::Lorem.paragraphs(number: 2).join("\n") }
+    is_public { true }
     technique_used { 'cutup' }
 
     trait :erasure_poem do
