@@ -4,10 +4,7 @@ class SourceText < ApplicationRecord
 
   validates :title, presence: true
   validates :content, presence: true
-  validates :gutenberg_id, uniqueness: {
-    conditions: -> { where(is_public: true) },
-    message: ->(_object, _data) { I18n.t('source_texts.errors.gutenberg_id_taken_public') }
-  }, allow_nil: true
+  validate :unique_public_gutenberg_id
 
   scope :from_gutenberg, -> { where.not(gutenberg_id: nil) }
   scope :custom, -> { where(gutenberg_id: nil) }
@@ -21,5 +18,19 @@ class SourceText < ApplicationRecord
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[content created_at gutenberg_id id id_value title updated_at is_public owner_id owner_type]
+  end
+
+  private
+
+  def unique_public_gutenberg_id
+    return if gutenberg_id.nil?
+    return unless is_public?
+
+    existing_public = SourceText.where(gutenberg_id: gutenberg_id, is_public: true)
+    existing_public = existing_public.where.not(id: id) if persisted?
+
+    return unless existing_public.exists?
+
+    errors.add(:gutenberg_id, I18n.t('source_texts.errors.gutenberg_id_taken_public'))
   end
 end
