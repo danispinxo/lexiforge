@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_21_172625) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_21_174201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_21_172625) do
     t.boolean "is_public", default: true, null: false
     t.string "owner_type"
     t.bigint "owner_id"
-    t.index ["gutenberg_id"], name: "index_source_texts_on_gutenberg_id", unique: true
+    t.index ["gutenberg_id"], name: "index_source_texts_on_gutenberg_id_public_unique", unique: true, where: "((is_public = true) AND (gutenberg_id IS NOT NULL))"
     t.index ["owner_type", "owner_id"], name: "index_source_texts_on_owner_type_and_owner_id"
   end
 
