@@ -1,6 +1,6 @@
 class SourceTextSerializer < ActiveModel::Serializer
   attributes :id, :title, :content_preview, :gutenberg_id, :word_count, :created_at, :is_public, :poems_count
-  
+
   belongs_to :owner, polymorphic: true
 
   def content_preview
