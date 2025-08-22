@@ -14,7 +14,7 @@
 
 .modal-header {
   @include mixins.flex-between;
-  padding: variables.$spacing-xl;
+  padding: variables.$spacing-md;
   border-bottom: 1px solid rgba(variables.$primary-color, 0.2);
   background: linear-gradient(
     135deg,
@@ -45,7 +45,7 @@
 }
 
 .modal-body {
-  padding: variables.$spacing-xl;
+  padding: variables.$spacing-md variables.$spacing-xl;
 
   .source-info {
     @include mixins.card-paper;
@@ -142,7 +142,7 @@
       padding: variables.$spacing-md;
       border-radius: variables.$border-radius-sm;
       border-left: 3px solid variables.$primary-color;
-      margin: 0;
+      margin: 0 0 variables.$spacing-md 0;
     }
   }
 
@@ -175,6 +175,139 @@
         display: block;
         margin-top: variables.$spacing-xs;
       }
+    }
+  }
+
+  .privacy-toggle-group {
+    margin-top: variables.$spacing-xl;
+    padding-top: variables.$spacing-lg;
+    border-top: 1px solid rgba(variables.$primary-color, 0.1);
+
+    .privacy-toggle-container {
+      display: flex;
+      align-items: center;
+      gap: variables.$spacing-lg;
+      margin-bottom: variables.$spacing-sm;
+    }
+
+    .privacy-toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .privacy-toggle-track {
+        width: 60px;
+        height: 32px;
+        background: variables.$text-muted;
+        border-radius: 16px;
+        position: relative;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+
+        .privacy-toggle-thumb {
+          width: 28px;
+          height: 28px;
+          background: white;
+          border-radius: 50%;
+          position: absolute;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+          .privacy-toggle-icon {
+            font-size: 12px;
+            color: variables.$text-muted;
+            transition: all 0.3s ease;
+          }
+        }
+      }
+
+      &.public {
+        .privacy-toggle-track {
+          background: variables.$primary-color;
+
+          .privacy-toggle-thumb {
+            transform: translateX(28px);
+
+            .privacy-toggle-icon {
+              color: variables.$primary-color;
+            }
+          }
+        }
+      }
+
+      &.private {
+        .privacy-toggle-track {
+          background: variables.$text-muted;
+
+          .privacy-toggle-thumb {
+            transform: translateX(0);
+
+            .privacy-toggle-icon {
+              color: variables.$text-muted;
+            }
+          }
+        }
+      }
+
+      &:hover:not(:disabled) {
+        .privacy-toggle-track {
+          border-color: rgba(variables.$primary-color, 0.3);
+        }
+      }
+
+      &:focus:not(:disabled) {
+        outline: none;
+        .privacy-toggle-track {
+          border-color: variables.$primary-color;
+          box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
+        }
+      }
+    }
+
+    .privacy-toggle-labels {
+      display: flex;
+      gap: variables.$spacing-lg;
+
+      .privacy-label-text {
+        display: flex;
+        align-items: center;
+        gap: variables.$spacing-xs;
+        font-size: variables.$font-size-sm;
+        color: variables.$text-muted;
+        transition: all 0.3s ease;
+
+        .privacy-icon {
+          font-size: 14px;
+        }
+
+        &.active {
+          color: variables.$text-primary;
+          font-weight: 600;
+
+          .privacy-icon {
+            color: variables.$primary-color;
+          }
+        }
+      }
+    }
+
+    .privacy-help {
+      font-size: variables.$font-size-sm;
+      color: variables.$text-secondary;
+      font-style: italic;
+      font-family: variables.$font-serif;
+      margin-top: variables.$spacing-sm;
+      padding-left: variables.$spacing-xs;
     }
   }
 }

@@ -7,11 +7,11 @@ import {
   faCheckCircle,
   faExclamationTriangle,
   faLock,
-  faGlobe,
   faTimes,
 } from "../config/fontawesome";
 import { sourceTextsAPI } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
+import PrivacyToggle from "./PrivacyToggle";
 
 function SourceTextImportModal({ isOpen, onClose, onSuccess }) {
   const [gutenbergId, setGutenbergId] = useState("");
@@ -102,23 +102,12 @@ function SourceTextImportModal({ isOpen, onClose, onSuccess }) {
             </div>
 
             {user?.admin && (
-              <div className="form-group privacy-group">
-                <label className="privacy-label">
-                  <input
-                    type="checkbox"
-                    checked={isPublic}
-                    onChange={(e) => setIsPublic(e.target.checked)}
-                    disabled={loading}
-                  />
-                  <FontAwesomeIcon icon={isPublic ? faGlobe : faLock} className="privacy-icon" />
-                  Make this source text public
-                </label>
-                <small className="privacy-help">
-                  {isPublic
-                    ? "Other users will be able to see and use this text"
-                    : "Only you will be able to see and use this text"}
-                </small>
-              </div>
+              <PrivacyToggle
+                isPublic={isPublic}
+                onChange={setIsPublic}
+                disabled={loading}
+                contentType="source text"
+              />
             )}
 
             {!user?.admin && (
