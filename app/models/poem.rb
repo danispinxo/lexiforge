@@ -3,7 +3,7 @@ class Poem < ApplicationRecord
   belongs_to :author, polymorphic: true, optional: true
 
   ALLOWED_TECHNIQUES = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball', 'mesostic',
-                        'found', 'kwic'].freeze
+                        'found', 'kwic', 'prisoners_constraint'].freeze
 
   validates :title, presence: true
   validates :content, presence: true
