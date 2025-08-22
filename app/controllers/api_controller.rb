@@ -14,7 +14,7 @@ class ApiController < ApplicationController
   def current_api_user
     return @current_api_user if defined?(@current_api_user)
 
-    @current_api_user = warden.user(:api_user)
+    @current_api_user = warden.user(:user)
   end
 
   def current_admin_user

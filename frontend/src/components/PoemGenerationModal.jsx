@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faGlobe } from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
 import { POEM_GENERATION_DEFAULTS } from "../constants";
+import PrivacyToggle from "./PrivacyToggle";
 
 function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGenerated }) {
   const [technique, setTechnique] = useState("cut_up");
@@ -33,6 +33,12 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
   const [keyword, setKeyword] = useState(POEM_GENERATION_DEFAULTS.KWIC.KEYWORD);
   const [kwicLines, setKwicLines] = useState(POEM_GENERATION_DEFAULTS.KWIC.NUM_LINES);
   const [contextWindow, setContextWindow] = useState(POEM_GENERATION_DEFAULTS.KWIC.CONTEXT_WINDOW);
+  const [prisonersWords, setPrisonersWords] = useState(
+    POEM_GENERATION_DEFAULTS.PRISONERS_CONSTRAINT.NUM_WORDS
+  );
+  const [constraintType, setConstraintType] = useState(
+    POEM_GENERATION_DEFAULTS.PRISONERS_CONSTRAINT.CONSTRAINT_TYPE
+  );
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -90,6 +96,10 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.keyword = keyword;
           options.num_lines = kwicLines;
           options.context_window = contextWindow;
+          break;
+        case "prisoners_constraint":
+          options.num_words = prisonersWords;
+          options.constraint_type = constraintType;
           break;
       }
 
@@ -152,11 +162,20 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 <option value="definitional">Definitional</option>
                 <option value="found">Found</option>
                 <option value="kwic">KWIC (KeyWord In Context)</option>
+                <option value="prisoners_constraint">Prisoner's Constraint</option>
               </select>
             </div>
 
             {technique === "cut_up" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Cut-up poetry randomly selects and rearranges words from the source text to
+                    create new verse combinations. This technique, popularized by William S.
+                    Burroughs, generates unexpected juxtapositions and fresh meanings.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="num-lines">Number of Lines:</label>
                   <input
@@ -182,19 +201,20 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     disabled={generating}
                   />
                 </div>
-
-                <div className="form-description">
-                  <p className="technique-description">
-                    Cut-up poetry randomly selects and rearranges words from the source text to
-                    create new verse combinations. This technique, popularized by William S.
-                    Burroughs, generates unexpected juxtapositions and fresh meanings.
-                  </p>
-                </div>
               </>
             )}
 
             {technique === "erasure" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Erasure poetry removes most words from existing text, leaving behind only select
+                    words that form new poems. Blackout style visually shows the erased words as
+                    solid blocks, mimicking the original erasure technique of marking out text with
+                    black ink.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="num-pages">Number of Pages:</label>
                   <input
@@ -247,20 +267,19 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     </span>
                   </label>
                 </div>
-
-                <div className="form-description">
-                  <p className="technique-description">
-                    Erasure poetry removes most words from existing text, leaving behind only select
-                    words that form new poems. Blackout style visually shows the erased words as
-                    solid blocks, mimicking the original erasure technique of marking out text with
-                    black ink.
-                  </p>
-                </div>
               </>
             )}
 
             {technique === "snowball" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Snowball poems start with a word of your chosen length and each subsequent line
+                    contains a word that's one character longer. Perfect for creating poems with a
+                    sense of building momentum and growth.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="snowball-lines">Number of Lines:</label>
                   <input
@@ -286,19 +305,23 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     disabled={generating}
                   />
                 </div>
-
-                <div className="form-description">
-                  <p className="technique-description">
-                    Snowball poems start with a word of your chosen length and each subsequent line
-                    contains a word that's one character longer. Perfect for creating poems with a
-                    sense of building momentum and growth.
-                  </p>
-                </div>
               </>
             )}
 
             {technique === "mesostic" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Mesostic poetry uses a "spine word" to guide the poem's structure. Each line
+                    contains a word from the source text that has the corresponding letter of the
+                    spine word in the correct position. For example, with spine word "dog", the
+                    first line will contain a word with 'd' as the first letter, the second line
+                    with 'o' as the second letter, and the third line with 'g' as the third letter.
+                    Use spaces in your spine word to create multiple stanzas. For example, "dog cat"
+                    will create two stanzas - one for "dog" and one for "cat", separated by a blank
+                    line.
+                  </p>
+                </div>
                 <div className="form-group">
                   <label htmlFor="spine-word">Spine Word (Required):</label>
                   <input
@@ -311,26 +334,23 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     required
                   />
                 </div>
-
-                <div className="form-description">
-                  <p className="technique-description">
-                    Mesostic poetry uses a "spine word" to guide the poem's structure. Each line
-                    contains a word from the source text that has the corresponding letter of the
-                    spine word in the correct position. For example, with spine word "dog", the
-                    first line will contain a word with 'd' as the first letter, the second line
-                    with 'o' as the second letter, and the third line with 'g' as the third letter.
-                    <br />
-                    <br />
-                    <strong>Stanza breaks:</strong> Use spaces in your spine word to create multiple
-                    stanzas. For example, "dog cat" will create two stanzas - one for "dog" and one
-                    for "cat", separated by a blank line.
-                  </p>
-                </div>
               </>
             )}
 
             {technique === "n_plus_seven" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    N+7 poetry replaces nouns in the source text with the 7th (or your chosen
+                    offset) noun that appears after them in the dictionary. This technique,
+                    developed by the Oulipo group, creates surprising juxtapositions while
+                    maintaining the original text's grammatical structure. The algorithm randomly
+                    selects a subset of words from your source text and applies N+7 replacement to
+                    all nouns found in that selection, creating new meanings and unexpected
+                    connections.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="offset">Dictionary Offset:</label>
                   <input
@@ -356,23 +376,22 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     disabled={generating}
                   />
                 </div>
-
-                <div className="form-description">
-                  <p className="technique-description">
-                    N+7 poetry replaces nouns in the source text with the 7th (or your chosen
-                    offset) noun that appears after them in the dictionary. This technique,
-                    developed by the Oulipo group, creates surprising juxtapositions while
-                    maintaining the original text's grammatical structure. The algorithm randomly
-                    selects a subset of words from your source text and applies N+7 replacement to
-                    all nouns found in that selection, creating new meanings and unexpected
-                    connections.
-                  </p>
-                </div>
               </>
             )}
 
             {technique === "definitional" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Definitional literature replaces words in the source text with their dictionary
+                    definitions. First, a section of text is selected based on your chosen length.
+                    Then, within that section, a specified number of words are randomly chosen and
+                    replaced with their dictionary definitions. This technique creates new meanings
+                    by expanding simple words into their full definitions, often revealing hidden
+                    layers of meaning and creating unexpected juxtapositions.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="section-length">Section Length:</label>
                   <input
@@ -417,22 +436,21 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     </div>
                   )}
                 </div>
-
-                <div className="form-description">
-                  <p className="technique-description">
-                    Definitional literature replaces words in the source text with their dictionary
-                    definitions. First, a section of text is selected based on your chosen length.
-                    Then, within that section, a specified number of words are randomly chosen and
-                    replaced with their dictionary definitions. This technique creates new meanings
-                    by expanding simple words into their full definitions, often revealing hidden
-                    layers of meaning and creating unexpected juxtapositions.
-                  </p>
-                </div>
               </>
             )}
 
             {technique === "found" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Found poetry extracts consecutive lines from different sections of the source
+                    text. Each line is taken from a different part of the book to ensure diversity,
+                    while maintaining the natural flow of consecutive words within each line. This
+                    technique creates new meaning by recontextualizing existing text fragments,
+                    allowing the original work to speak in new and unexpected ways.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="found-poem-lines">Number of Lines:</label>
                   <input
@@ -461,21 +479,21 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     ))}
                   </select>
                 </div>
-
-                <div className="form-description">
-                  <p className="technique-description">
-                    Found poetry extracts consecutive lines from different sections of the source
-                    text. Each line is taken from a different part of the book to ensure diversity,
-                    while maintaining the natural flow of consecutive words within each line. This
-                    technique creates new meaning by recontextualizing existing text fragments,
-                    allowing the original work to speak in new and unexpected ways.
-                  </p>
-                </div>
               </>
             )}
 
             {technique === "kwic" && (
               <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    KWIC (KeyWord In Context) poetry creates a poem by finding all instances of a
+                    chosen keyword in the source text and displaying each occurrence with its
+                    surrounding context. Each line shows the keyword with a few words before and
+                    after it, creating a unique perspective on how that word is used throughout the
+                    text.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label htmlFor="keyword">Keyword (Required):</label>
                   <input
@@ -514,38 +532,57 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     disabled={generating}
                   />
                 </div>
+              </>
+            )}
 
+            {technique === "prisoners_constraint" && (
+              <>
                 <div className="form-description">
                   <p className="technique-description">
-                    KWIC (KeyWord In Context) poetry creates a poem by finding all instances of a
-                    chosen keyword in the source text and displaying each occurrence with its
-                    surrounding context. Each line shows the keyword with a few words before and
-                    after it, creating a unique perspective on how that word is used throughout the
-                    text.
+                    Prisoner's Constraint poetry emulates the resourcefulness of a prisoner whose
+                    supply of paper has been restricted. To maximize space, words are chosen that
+                    avoid letters that rise above or fall below the baseline. Choose from "No
+                    Ascenders" (avoiding b, d, f, h, k, l, t), "No Descenders" (avoiding g, j, p, q,
+                    y), or "Full Constraint" (avoiding both ascenders and descenders for maximum
+                    compression).
                   </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="prisoners-words">Number of Words:</label>
+                  <input
+                    type="number"
+                    id="prisoners-words"
+                    value={prisonersWords}
+                    onChange={(e) => setPrisonersWords(parseInt(e.target.value) || 0)}
+                    min="5"
+                    max="500"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="constraint-type">Constraint Type:</label>
+                  <select
+                    id="constraint-type"
+                    value={constraintType}
+                    onChange={(e) => setConstraintType(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="no_ascenders">No Ascenders (avoid b,d,f,h,k,l,t)</option>
+                    <option value="no_descenders">No Descenders (avoid g,j,p,q,y)</option>
+                    <option value="full_constraint">Full Constraint (avoid both)</option>
+                  </select>
                 </div>
               </>
             )}
 
-            <div className="form-group privacy-group">
-              <label className="privacy-label">
-                <input
-                  type="checkbox"
-                  checked={isPublic}
-                  onChange={(e) => setIsPublic(e.target.checked)}
-                  disabled={generating}
-                />
-                <FontAwesomeIcon icon={isPublic ? faGlobe : faLock} className="privacy-icon" />
-                Make this poem public
-              </label>
-              <div className="privacy-help-container">
-                <small className="privacy-help">
-                  {isPublic
-                    ? "Other users will be able to see this poem"
-                    : "Only you will be able to see this poem"}
-                </small>
-              </div>
-            </div>
+            <PrivacyToggle
+              isPublic={isPublic}
+              onChange={setIsPublic}
+              disabled={generating}
+              contentType="poem"
+            />
 
             {error && <div className="message error">{error}</div>}
 

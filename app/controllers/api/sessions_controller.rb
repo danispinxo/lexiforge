@@ -10,8 +10,6 @@ class Api::SessionsController < Devise::SessionsController
     user = User.find_by(email: sign_in_params[:email])
     admin_user = AdminUser.find_by(email: sign_in_params[:email])
 
-    log_user_lookup(user, admin_user)
-
     if user&.valid_password?(sign_in_params[:password])
       handle_user_login(user)
     elsif admin_user&.valid_password?(sign_in_params[:password])
@@ -22,42 +20,34 @@ class Api::SessionsController < Devise::SessionsController
   end
 
   def destroy
-    sign_out(current_api_user) if current_api_user
+    if current_api_user
+      sign_out(current_api_user)
+    elsif current_admin_user
+      sign_out(current_admin_user)
+    end
+
     render json: { success: true, message: 'Signed out successfully' }
   end
 
   private
 
-  def log_user_lookup(user, admin_user)
-    Rails.logger.info "User found: #{user.present?}"
-    Rails.logger.info "Admin user found: #{admin_user.present?}"
-  end
-
   def handle_user_login(user)
     sign_in(user)
-    Rails.logger.info 'Creating UserSerializer...'
     serializer = UserSerializer.new(user)
-    Rails.logger.info 'UserSerializer created successfully'
     serialized_data = serializer.as_json
-    Rails.logger.info 'Serialization successful'
 
     render json: { success: true, user: serialized_data }
-  rescue StandardError => e
-    Rails.logger.error "User login error: #{e.message}"
+  rescue StandardError
     render json: { success: false, message: 'Login failed' }, status: :internal_server_error
   end
 
   def handle_admin_user_login(admin_user)
     sign_in(admin_user)
-    Rails.logger.info 'Creating AdminUserSerializer...'
     serializer = AdminUserSerializer.new(admin_user)
-    Rails.logger.info 'AdminUserSerializer created successfully'
     serialized_data = serializer.as_json
-    Rails.logger.info 'Serialization successful'
 
     render json: { success: true, user: serialized_data }
-  rescue StandardError => e
-    Rails.logger.error "Admin user login error: #{e.message}"
+  rescue StandardError
     render json: { success: false, message: 'Login failed' }, status: :internal_server_error
   end
 
