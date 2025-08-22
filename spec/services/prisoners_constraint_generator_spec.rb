@@ -111,7 +111,7 @@ RSpec.describe PrisonersConstraintGenerator, type: :service do
       it 'removes words with prohibited letters' do
         words = %w[water ice cream cone magic amazing grace saves one]
         filtered = generator.send(:filter_full_constraint, words)
-          
+
         expect(filtered).to include('ice', 'cream', 'cone', 'saves', 'one')
         expect(filtered).not_to include('water', 'magic', 'amazing', 'grace')
       end
