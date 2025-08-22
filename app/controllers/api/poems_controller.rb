@@ -109,6 +109,8 @@ class Api::PoemsController < ApiController
       build_found_poem_options(options, permitted_params)
     when 'kwic'
       build_kwic_options(options, permitted_params)
+    when 'prisoners_constraint'
+      build_prisoners_constraint_options(options, permitted_params)
     end
 
     options
@@ -158,6 +160,11 @@ class Api::PoemsController < ApiController
     options[:context_window] = (permitted_params[:context_window] || 3).to_i
   end
 
+  def build_prisoners_constraint_options(options, permitted_params)
+    options[:num_words] = (permitted_params[:num_words] || 20).to_i
+    options[:constraint_type] = permitted_params[:constraint_type] || 'full_constraint'
+  end
+
   def generate_content(technique, options)
     generator_class = case technique
                       when 'cut_up' then CutUpGenerator
@@ -168,6 +175,7 @@ class Api::PoemsController < ApiController
                       when 'definitional' then DefinitionalGenerator
                       when 'found' then FoundPoemGenerator
                       when 'kwic' then KwicGenerator
+                      when 'prisoners_constraint' then PrisonersConstraintGenerator
                       else
                         raise "Unknown technique: #{technique}"
                       end
@@ -213,6 +221,8 @@ class Api::PoemsController < ApiController
       'n+7'
     when 'kwic'
       'KWIC'
+    when 'prisoners_constraint'
+      "prisoner's constraint"
     else
       technique
     end
@@ -266,7 +276,8 @@ class Api::PoemsController < ApiController
     params.permit(:method, :spine_word, :num_lines, :words_per_line, :size,
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
-                  :section_length, :words_to_replace, :line_length, :keyword, :context_window)
+                  :section_length, :words_to_replace, :line_length, :keyword, :context_window,
+                  :num_words, :constraint_type)
   end
 
   def authenticate_any_user!
