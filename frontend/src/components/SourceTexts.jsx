@@ -5,12 +5,10 @@ import {
   faEye,
   faInfoCircle,
   faFileText,
-  faPlus,
   faCheckCircle,
   faExclamationTriangle,
 } from "../config/fontawesome";
 import { sourceTextsAPI } from "../services/api";
-import { useAuth } from "../hooks/useAuth";
 import SourceTextImportModal from "./SourceTextImportModal";
 
 function SourceTexts() {
@@ -18,7 +16,6 @@ function SourceTexts() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const { user } = useAuth();
 
   useEffect(() => {
     loadSourceTexts();
@@ -71,12 +68,6 @@ function SourceTexts() {
               <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
               No public source texts available yet.
             </p>
-            {user?.admin && (
-              <p>
-                <FontAwesomeIcon icon={faPlus} className="admin-hint" />
-                You can import texts from Project Gutenberg using the Import button above.
-              </p>
-            )}
           </div>
         ) : (
           <div className="texts-table-container">

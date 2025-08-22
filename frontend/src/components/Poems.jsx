@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faExclamationTriangle,
-  faInfoCircle,
-  faCalendar,
-  faMagic,
-} from "../config/fontawesome";
+import { faEye, faExclamationTriangle, faInfoCircle, faCalendar } from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
 
 function Poems() {
@@ -52,7 +46,6 @@ function Poems() {
             No poems generated yet.
           </p>
           <p>
-            <FontAwesomeIcon icon={faMagic} className="magic-icon" />
             <Link to="/source-texts">Import some source texts</Link> and generate cut-up poems!
           </p>
         </div>
