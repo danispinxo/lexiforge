@@ -21,9 +21,9 @@ class Api::SessionsController < Devise::SessionsController
 
   def destroy
     if current_api_user
-      sign_out(current_api_user)
+      sign_out(current_api_user, scope: :user)
     elsif current_admin_user
-      sign_out(current_admin_user)
+      sign_out(current_admin_user, scope: :admin_user)
     end
 
     render json: { success: true, message: 'Signed out successfully' }
@@ -32,7 +32,7 @@ class Api::SessionsController < Devise::SessionsController
   private
 
   def handle_user_login(user)
-    sign_in(user)
+    sign_in(user, scope: :user)
     serializer = UserSerializer.new(user)
     serialized_data = serializer.as_json
 
@@ -42,7 +42,7 @@ class Api::SessionsController < Devise::SessionsController
   end
 
   def handle_admin_user_login(admin_user)
-    sign_in(admin_user)
+    sign_in(admin_user, scope: :admin_user)
     serializer = AdminUserSerializer.new(admin_user)
     serialized_data = serializer.as_json
 
