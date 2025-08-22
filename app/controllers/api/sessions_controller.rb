@@ -32,22 +32,30 @@ class Api::SessionsController < Devise::SessionsController
   private
 
   def handle_user_login(user)
+    Rails.logger.info "=== SIGNIN DEBUG: Signing in user #{user.email} with scope :user"
     sign_in(user, scope: :user)
+    Rails.logger.info "=== SIGNIN DEBUG: User signed in, checking current_api_user: #{warden.user(:user)&.email || 'nil'}"
+    
     serializer = UserSerializer.new(user)
     serialized_data = serializer.as_json
 
     render json: { success: true, user: serialized_data }
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.error "=== SIGNIN DEBUG: Login failed with error: #{e.message}"
     render json: { success: false, message: 'Login failed' }, status: :internal_server_error
   end
 
   def handle_admin_user_login(admin_user)
+    Rails.logger.info "=== SIGNIN DEBUG: Signing in admin_user #{admin_user.email} with scope :admin_user"
     sign_in(admin_user, scope: :admin_user)
+    Rails.logger.info "=== SIGNIN DEBUG: Admin user signed in, checking current_admin_user: #{warden.user(:admin_user)&.email || 'nil'}"
+    
     serializer = AdminUserSerializer.new(admin_user)
     serialized_data = serializer.as_json
 
     render json: { success: true, user: serialized_data }
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.error "=== SIGNIN DEBUG: Admin login failed with error: #{e.message}"
     render json: { success: false, message: 'Login failed' }, status: :internal_server_error
   end
 
