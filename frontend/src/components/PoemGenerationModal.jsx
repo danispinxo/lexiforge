@@ -33,6 +33,12 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
   const [keyword, setKeyword] = useState(POEM_GENERATION_DEFAULTS.KWIC.KEYWORD);
   const [kwicLines, setKwicLines] = useState(POEM_GENERATION_DEFAULTS.KWIC.NUM_LINES);
   const [contextWindow, setContextWindow] = useState(POEM_GENERATION_DEFAULTS.KWIC.CONTEXT_WINDOW);
+  const [prisonersWords, setPrisonersWords] = useState(
+    POEM_GENERATION_DEFAULTS.PRISONERS_CONSTRAINT.NUM_WORDS
+  );
+  const [constraintType, setConstraintType] = useState(
+    POEM_GENERATION_DEFAULTS.PRISONERS_CONSTRAINT.CONSTRAINT_TYPE
+  );
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -90,6 +96,10 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.keyword = keyword;
           options.num_lines = kwicLines;
           options.context_window = contextWindow;
+          break;
+        case "prisoners_constraint":
+          options.num_words = prisonersWords;
+          options.constraint_type = constraintType;
           break;
       }
 
@@ -152,6 +162,7 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 <option value="definitional">Definitional</option>
                 <option value="found">Found</option>
                 <option value="kwic">KWIC (KeyWord In Context)</option>
+                <option value="prisoners_constraint">Prisoner's Constraint</option>
               </select>
             </div>
 
@@ -520,6 +531,48 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     max="10"
                     disabled={generating}
                   />
+                </div>
+              </>
+            )}
+
+            {technique === "prisoners_constraint" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Prisoner's Constraint poetry emulates the resourcefulness of a prisoner whose
+                    supply of paper has been restricted. To maximize space, words are chosen that
+                    avoid letters that rise above or fall below the baseline. Choose from "No
+                    Ascenders" (avoiding b, d, f, h, k, l, t), "No Descenders" (avoiding g, j, p, q,
+                    y), or "Full Constraint" (avoiding both ascenders and descenders for maximum
+                    compression).
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="prisoners-words">Number of Words:</label>
+                  <input
+                    type="number"
+                    id="prisoners-words"
+                    value={prisonersWords}
+                    onChange={(e) => setPrisonersWords(parseInt(e.target.value) || 0)}
+                    min="5"
+                    max="500"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="constraint-type">Constraint Type:</label>
+                  <select
+                    id="constraint-type"
+                    value={constraintType}
+                    onChange={(e) => setConstraintType(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="no_ascenders">No Ascenders (avoid b,d,f,h,k,l,t)</option>
+                    <option value="no_descenders">No Descenders (avoid g,j,p,q,y)</option>
+                    <option value="full_constraint">Full Constraint (avoid both)</option>
+                  </select>
                 </div>
               </>
             )}
