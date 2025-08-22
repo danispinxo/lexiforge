@@ -25,7 +25,7 @@ class Api::SessionsController < Devise::SessionsController
     elsif current_admin_user
       sign_out(current_admin_user)
     end
-    
+
     render json: { success: true, message: 'Signed out successfully' }
   end
 
@@ -37,7 +37,7 @@ class Api::SessionsController < Devise::SessionsController
     serialized_data = serializer.as_json
 
     render json: { success: true, user: serialized_data }
-  rescue StandardError => e
+  rescue StandardError
     render json: { success: false, message: 'Login failed' }, status: :internal_server_error
   end
 
@@ -47,7 +47,7 @@ class Api::SessionsController < Devise::SessionsController
     serialized_data = serializer.as_json
 
     render json: { success: true, user: serialized_data }
-  rescue StandardError => e
+  rescue StandardError
     render json: { success: false, message: 'Login failed' }, status: :internal_server_error
   end
 
