@@ -51,6 +51,10 @@ export const POEM_GENERATION_DEFAULTS = {
     CONTEXT_WINDOW: 3,
     KEYWORD: "",
   },
+  PRISONERS_CONSTRAINT: {
+    NUM_WORDS: 20,
+    CONSTRAINT_TYPE: "full_constraint",
+  },
 };
 
 export const INPUT_LIMITS = {
@@ -79,6 +83,7 @@ export const CONTENT_DISPLAY = {
     DEFINITIONAL: "definitional",
     FOUND: "found",
     KWIC: "kwic",
+    PRISONERS_CONSTRAINT: "prisoners_constraint",
   },
   LINE_LENGTH_OPTIONS: {
     SHORT: "short",
