@@ -147,7 +147,7 @@ RSpec.describe Api::PoemsController, type: :controller do
   end
 
   describe 'POST #generate_poem for cut_up technique' do
-    before { sign_in user }
+    before { sign_in user, scope: :user }
 
     let(:valid_params) do
       {
@@ -261,7 +261,7 @@ RSpec.describe Api::PoemsController, type: :controller do
   end
 
   describe 'POST #generate_poem for erasure technique' do
-    before { sign_in user }
+    before { sign_in user, scope: :user }
 
     let(:valid_params) do
       {
