@@ -72,11 +72,7 @@
 
 @mixin button-primary {
   @include button-base;
-  background: linear-gradient(
-    135deg,
-    variables.$primary-color 0%,
-    variables.$primary-dark 100%
-  );
+  background: linear-gradient(135deg, variables.$primary-color 0%, variables.$primary-dark 100%);
   color: variables.$black;
   box-shadow: variables.$shadow-medium;
 
@@ -165,11 +161,7 @@
         rgba(variables.$primary-color, 0.03) 0%,
         transparent 50%
       ),
-      radial-gradient(
-        circle at 80% 20%,
-        rgba(variables.$accent-color, 0.02) 0%,
-        transparent 50%
-      );
+      radial-gradient(circle at 80% 20%, rgba(variables.$accent-color, 0.02) 0%, transparent 50%);
     border-radius: inherit;
     pointer-events: none;
   }
@@ -269,11 +261,7 @@
 }
 
 @mixin concert-poster {
-  background: linear-gradient(
-    45deg,
-    variables.$charcoal 0%,
-    variables.$dark-gray 100%
-  );
+  background: linear-gradient(45deg, variables.$charcoal 0%, variables.$dark-gray 100%);
   color: variables.$warm-white;
   padding: variables.$spacing-xl;
   border-radius: variables.$border-radius-lg;
@@ -288,11 +276,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(
-      circle,
-      rgba(variables.$primary-color, 0.1) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(circle, rgba(variables.$primary-color, 0.1) 0%, transparent 70%);
     animation: rotate 20s linear infinite;
   }
 }
