@@ -38,7 +38,7 @@ class PrisonersConstraintGenerator
     @source_text.content.downcase
                 .gsub(/[^\w\s]/, '')
                 .split
-                .reject { |word| word.match?(/[^a-z]/) }
+                .grep_v(/[^a-z]/)
                 .uniq
   end
 
@@ -75,21 +75,21 @@ class PrisonersConstraintGenerator
 
     lines = []
     remaining_words = words.dup
-    
+
     while remaining_words.any?
       line_length = case rand(100)
-                    when 0..40 then 1 
-                    when 41..70 then 2 
-                    when 71..90 then 3 
-                    else 4 
+                    when 0..40 then 1
+                    when 41..70 then 2
+                    when 71..90 then 3
+                    else 4
                     end
-      
+
       line_length = [line_length, remaining_words.length].min
-      
+
       line_words = remaining_words.shift(line_length)
       lines << line_words.join(' ')
     end
-    
+
     lines.join("\n")
   end
 end
