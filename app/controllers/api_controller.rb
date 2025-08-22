@@ -15,16 +15,12 @@ class ApiController < ApplicationController
     return @current_api_user if defined?(@current_api_user)
 
     @current_api_user = warden.user(:user)
-    Rails.logger.info "=== AUTH DEBUG: current_api_user = #{@current_api_user&.email || 'nil'}"
-    @current_api_user
   end
 
   def current_admin_user
     return @current_admin_user if defined?(@current_admin_user)
 
     @current_admin_user = warden.user(:admin_user)
-    Rails.logger.info "=== AUTH DEBUG: current_admin_user = #{@current_admin_user&.email || 'nil'}"
-    @current_admin_user
   end
 
   def authenticate_any_user!
