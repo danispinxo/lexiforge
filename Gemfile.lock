@@ -239,7 +239,9 @@ GEM
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.9)
+    pg (1.6.1-arm64-darwin)
+    pg (1.6.1-x86_64-darwin)
+    pg (1.6.1-x86_64-linux)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -324,7 +326,7 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.4)
-    rubocop (1.79.2)
+    rubocop (1.80.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -433,7 +435,7 @@ DEPENDENCIES
   httparty
   image_processing (~> 1.2)
   jbuilder
-  pg (~> 1.1)
+  pg (~> 1.6)
   puma (>= 5.0)
   rack-cors
   rails (~> 7.1.0)
