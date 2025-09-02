@@ -269,7 +269,7 @@ class Api::PoemsController < ApiController
   end
 
   def poem_params
-    params.require(:poem).permit(:title, :content, :technique_used, :source_text_id)
+    params.expect(poem: %i[title content technique_used source_text_id])
   end
 
   def generation_params

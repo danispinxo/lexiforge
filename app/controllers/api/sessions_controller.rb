@@ -57,7 +57,7 @@ class Api::SessionsController < Devise::SessionsController
 
   def sign_in_params
     if params[:session]
-      params.require(:session).permit(:email, :password)
+      params.expect(session: %i[email password])
     else
       params.permit(:email, :password)
     end

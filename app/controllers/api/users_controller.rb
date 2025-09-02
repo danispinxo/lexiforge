@@ -83,10 +83,10 @@ class Api::UsersController < ApiController
   private
 
   def profile_params
-    params.require(:user).permit(:username, :first_name, :last_name, :bio)
+    params.expect(user: %i[username first_name last_name bio])
   end
 
   def password_params
-    params.require(:password_change).permit(:current_password, :new_password)
+    params.expect(password_change: %i[current_password new_password])
   end
 end

@@ -59,8 +59,8 @@ class Api::RegistrationsController < ApiController
 
   def sign_up_params
     if params[:registration]
-      params.require(:registration).permit(:email, :password, :password_confirmation, :username, :first_name,
-                                           :last_name, :bio)
+      params.expect(registration: %i[email password password_confirmation username first_name
+                                     last_name bio])
     else
       params.permit(:email, :password, :password_confirmation, :username, :first_name, :last_name, :bio)
     end
