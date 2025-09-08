@@ -33,19 +33,19 @@ ActiveAdmin.register Poem do
     column :title
     column :technique_used do |poem|
       color_style = case poem.technique_used
-                   when 'cutup' then 'background-color: #3498db; color: white;'
-                   when 'erasure' then 'background-color: #2ecc71; color: white;'
-                   when 'blackout' then 'background-color: #2c3e50; color: white;'
-                   when 'n+7' then 'background-color: #f39c12; color: white;'
-                   when 'definitional' then 'background-color: #9b59b6; color: white;'
-                   when 'snowball' then 'background-color: #1abc9c; color: white;'
-                   when 'mesostic' then 'background-color: #e91e63; color: white;'
-                   when 'found' then 'background-color: #ff9800; color: white;'
-                   when 'kwic' then 'background-color: #e74c3c; color: white;'
-                   when 'prisoners_constraint' then 'background-color: #95a5a6; color: white;'
-                   else 'background-color: #bdc3c7; color: white;'
-                   end
-      content_tag :span, poem.technique_used.humanize, 
+                    when 'cutup' then 'background-color: #3498db; color: white;'
+                    when 'erasure' then 'background-color: #2ecc71; color: white;'
+                    when 'blackout' then 'background-color: #2c3e50; color: white;'
+                    when 'n+7' then 'background-color: #f39c12; color: white;'
+                    when 'definitional' then 'background-color: #9b59b6; color: white;'
+                    when 'snowball' then 'background-color: #1abc9c; color: white;'
+                    when 'mesostic' then 'background-color: #e91e63; color: white;'
+                    when 'found' then 'background-color: #ff9800; color: white;'
+                    when 'kwic' then 'background-color: #e74c3c; color: white;'
+                    when 'prisoners_constraint' then 'background-color: #95a5a6; color: white;'
+                    else 'background-color: #bdc3c7; color: white;'
+                    end
+      content_tag :span, poem.technique_used.humanize,
                   style: "display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
     end
     column :is_public do |poem|
@@ -85,19 +85,19 @@ ActiveAdmin.register Poem do
       row :title
       row :technique_used do |poem|
         color_style = case poem.technique_used
-                     when 'cutup' then 'background-color: #3498db; color: white;'
-                     when 'erasure' then 'background-color: #2ecc71; color: white;'
-                     when 'blackout' then 'background-color: #2c3e50; color: white;'
-                     when 'n+7' then 'background-color: #f39c12; color: white;'
-                     when 'definitional' then 'background-color: #9b59b6; color: white;'
-                     when 'snowball' then 'background-color: #1abc9c; color: white;'
-                     when 'mesostic' then 'background-color: #e91e63; color: white;'
-                     when 'found' then 'background-color: #ff9800; color: white;'
-                     when 'kwic' then 'background-color: #e74c3c; color: white;'
-                     when 'prisoners_constraint' then 'background-color: #95a5a6; color: white;'
-                     else 'background-color: #bdc3c7; color: white;'
-                     end
-        content_tag :span, poem.technique_used.humanize, 
+                      when 'cutup' then 'background-color: #3498db; color: white;'
+                      when 'erasure' then 'background-color: #2ecc71; color: white;'
+                      when 'blackout' then 'background-color: #2c3e50; color: white;'
+                      when 'n+7' then 'background-color: #f39c12; color: white;'
+                      when 'definitional' then 'background-color: #9b59b6; color: white;'
+                      when 'snowball' then 'background-color: #1abc9c; color: white;'
+                      when 'mesostic' then 'background-color: #e91e63; color: white;'
+                      when 'found' then 'background-color: #ff9800; color: white;'
+                      when 'kwic' then 'background-color: #e74c3c; color: white;'
+                      when 'prisoners_constraint' then 'background-color: #95a5a6; color: white;'
+                      else 'background-color: #bdc3c7; color: white;'
+                      end
+        content_tag :span, poem.technique_used.humanize,
                     style: "display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
       end
       row :is_public do |poem|

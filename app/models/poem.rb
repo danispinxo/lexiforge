@@ -22,7 +22,7 @@ class Poem < ApplicationRecord
   scope :found_poems, -> { where(technique_used: 'found') }
   scope :kwic_poems, -> { where(technique_used: 'kwic') }
   scope :prisoners_constraint_poems, -> { where(technique_used: 'prisoners_constraint') }
-  
+
   scope :recent, -> { order(created_at: :desc) }
   scope :public_poems, -> { where(is_public: true) }
   scope :private_poems, -> { where(is_public: false) }
