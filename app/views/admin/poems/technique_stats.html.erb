@@ -1,0 +1,58 @@
+<% content_for :title, "Poem Technique Statistics" %>
+
+<div class="technique-stats-page">
+  <div class="stats-header">
+    <h1>Poem Technique Statistics</h1>
+    <p>Overview of all poetry techniques used in the system</p>
+  </div>
+
+  <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+    <% @stats.each do |technique, count| %>
+      <div class="stat-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+        <div class="stat-technique" style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #333;">
+          <%= technique.humanize %>
+        </div>
+        <div class="stat-count" style="font-size: 36px; font-weight: bold; color: #007cba;">
+          <%= count %>
+        </div>
+        <div class="stat-label" style="color: #666; font-size: 14px;">
+          <%= 'poem'.pluralize(count) %>
+        </div>
+        <div style="margin-top: 15px;">
+          <%= link_to "View #{technique.humanize} Poems", 
+                      admin_poems_path(q: { technique_used_eq: technique }), 
+                      class: "button small" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="stats-summary" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+    <h3>Summary</h3>
+    <ul>
+      <li><strong>Total Poems:</strong> <%= @stats.values.sum %></li>
+      <li><strong>Techniques Used:</strong> <%= @stats.keys.count %></li>
+      <li><strong>Most Popular:</strong> 
+        <% if @stats.any? %>
+          <%= @stats.max_by { |_, count| count }.first.humanize %> 
+          (<%= @stats.max_by { |_, count| count }.last %> poems)
+        <% else %>
+          No poems yet
+        <% end %>
+      </li>
+      <li><strong>Least Popular:</strong> 
+        <% if @stats.any? %>
+          <%= @stats.min_by { |_, count| count }.first.humanize %> 
+          (<%= @stats.min_by { |_, count| count }.last %> poems)
+        <% else %>
+          No poems yet
+        <% end %>
+      </li>
+    </ul>
+  </div>
+
+  <div class="actions" style="text-align: center; margin: 30px 0;">
+    <%= link_to "Back to Poems", admin_poems_path, class: "button" %>
+    <%= link_to "Create New Poem", new_admin_poem_path, class: "button primary" %>
+  </div>
+</div>
