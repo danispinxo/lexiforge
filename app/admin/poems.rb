@@ -1,7 +1,6 @@
 ActiveAdmin.register Poem do
   permit_params :title, :content, :technique_used, :source_text_id, :is_public, :author_type, :author_id
 
-  # Add scopes for quick filtering by technique
   scope :all, default: true
   scope :cut_up_poems, -> { cut_up_poems }, 'Cut-Up'
   scope :erasure_poems, -> { erasure_poems }, 'Erasure'
@@ -17,11 +16,10 @@ ActiveAdmin.register Poem do
   scope :private_poems, -> { private_poems }, 'Private'
   scope :recent, -> { recent }, 'Recent'
 
-  # Add filters for more detailed searching
   filter :title
   filter :technique_used, as: :select, collection: Poem::ALLOWED_TECHNIQUES.map { |t| [t.humanize, t] }
   filter :is_public, as: :select, collection: [['Public', true], ['Private', false]]
-  filter :source_text, as: :select, collection: -> { SourceText.all.pluck(:title, :id) }
+  filter :source_text, as: :select, collection: -> { SourceText.pluck(:title, :id) }
   filter :author_type, as: :select, collection: [['User', 'User'], ['Admin User', 'AdminUser']]
   filter :created_at
   filter :updated_at
@@ -45,9 +43,9 @@ ActiveAdmin.register Poem do
                     when 'prisoners_constraint' then 'background-color: #95a5a6; color: white;'
                     else 'background-color: #bdc3c7; color: white;'
                     end
-         content_tag :span, poem.technique_used.humanize,
-                     style: "display: inline-block; padding: 4px 8px; border-radius: 3px; " \
-                            "font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
+      content_tag :span, poem.technique_used.humanize,
+                  style: 'display: inline-block; padding: 4px 8px; border-radius: 3px; ' \
+                         "font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
     end
     column :is_public do |poem|
       if poem.is_public
@@ -99,7 +97,7 @@ ActiveAdmin.register Poem do
                       else 'background-color: #bdc3c7; color: white;'
                       end
         content_tag :span, poem.technique_used.humanize,
-                    style: "display: inline-block; padding: 4px 8px; border-radius: 3px; " \
+                    style: 'display: inline-block; padding: 4px 8px; border-radius: 3px; ' \
                            "font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
       end
       row :is_public do |poem|
