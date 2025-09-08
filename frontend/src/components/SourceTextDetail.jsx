@@ -3,10 +3,12 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { CONTENT_DISPLAY } from "../constants";
 import { sourceTextsAPI } from "../services/api";
 import PoemGenerationModal from "./PoemGenerationModal";
+import { useAuth } from "../hooks/useAuth";
 
 function SourceTextDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [sourceText, setSourceText] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -45,9 +47,17 @@ function SourceTextDetail() {
           Back to All Public Source Texts
         </Link>
         <div className="actions">
-          <button onClick={() => setShowModal(true)} className="btn btn-primary">
-            Generate Poem
-          </button>
+          {user ? (
+            <button onClick={() => setShowModal(true)} className="btn btn-primary">
+              Generate Poem
+            </button>
+          ) : (
+            <div className="auth-required-message">
+              <Link to="/login" className="btn btn-secondary">
+                Log in to Generate Poems
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 

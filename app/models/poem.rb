@@ -13,6 +13,16 @@ class Poem < ApplicationRecord
   }
 
   scope :cut_up_poems, -> { where(technique_used: 'cutup') }
+  scope :erasure_poems, -> { where(technique_used: 'erasure') }
+  scope :blackout_poems, -> { where(technique_used: 'blackout') }
+  scope :n_plus_seven_poems, -> { where(technique_used: 'n+7') }
+  scope :definitional_poems, -> { where(technique_used: 'definitional') }
+  scope :snowball_poems, -> { where(technique_used: 'snowball') }
+  scope :mesostic_poems, -> { where(technique_used: 'mesostic') }
+  scope :found_poems, -> { where(technique_used: 'found') }
+  scope :kwic_poems, -> { where(technique_used: 'kwic') }
+  scope :prisoners_constraint_poems, -> { where(technique_used: 'prisoners_constraint') }
+
   scope :recent, -> { order(created_at: :desc) }
   scope :public_poems, -> { where(is_public: true) }
   scope :private_poems, -> { where(is_public: false) }

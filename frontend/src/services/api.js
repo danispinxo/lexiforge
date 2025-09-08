@@ -12,9 +12,6 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    if (import.meta.env.DEV) {
-      console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
-    }
     return config;
   },
   (error) => {
