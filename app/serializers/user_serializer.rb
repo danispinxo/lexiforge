@@ -23,15 +23,13 @@ class UserSerializer < ActiveModel::Serializer
 
   def full_name
     object&.full_name
-  rescue StandardError => e
-    Rails.logger.error "Error in UserSerializer#full_name: #{e.message}"
+  rescue StandardError
     nil
   end
 
   def gravatar_url
     object&.gravatar_url
-  rescue StandardError => e
-    Rails.logger.error "Error in UserSerializer#gravatar_url: #{e.message}"
+  rescue StandardError
     nil
   end
 end
