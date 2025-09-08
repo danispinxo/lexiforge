@@ -45,8 +45,9 @@ ActiveAdmin.register Poem do
                     when 'prisoners_constraint' then 'background-color: #95a5a6; color: white;'
                     else 'background-color: #bdc3c7; color: white;'
                     end
-      content_tag :span, poem.technique_used.humanize,
-                  style: "display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
+         content_tag :span, poem.technique_used.humanize,
+                     style: "display: inline-block; padding: 4px 8px; border-radius: 3px; " \
+                            "font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
     end
     column :is_public do |poem|
       if poem.is_public
@@ -98,7 +99,8 @@ ActiveAdmin.register Poem do
                       else 'background-color: #bdc3c7; color: white;'
                       end
         content_tag :span, poem.technique_used.humanize,
-                    style: "display: inline-block; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
+                    style: "display: inline-block; padding: 4px 8px; border-radius: 3px; " \
+                           "font-size: 11px; font-weight: bold; text-transform: uppercase; #{color_style}"
       end
       row :is_public do |poem|
         if poem.is_public
