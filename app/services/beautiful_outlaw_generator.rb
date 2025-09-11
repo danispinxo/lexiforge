@@ -9,7 +9,7 @@ class BeautifulOutlawGenerator < BaseGenerator
 
   def generate_beautifuloutlaw(options = {})
     config = extract_beautiful_outlaw_config(options)
-    
+
     hidden_word_error = validate_required_param(config[:hidden_word], 'hidden_word')
     return hidden_word_error if hidden_word_error
 
@@ -36,9 +36,9 @@ class BeautifulOutlawGenerator < BaseGenerator
     hidden_word = config[:hidden_word]
     stanzas = []
 
-    hidden_word.each_char.with_index do |forbidden_letter, index|
+    hidden_word.each_char.with_index do |forbidden_letter, _index|
       stanza = create_single_stanza(words, forbidden_letter, config)
-      stanzas << stanza if stanza && !stanza.empty?
+      stanzas << stanza if stanza.present?
     end
 
     stanzas
@@ -46,7 +46,7 @@ class BeautifulOutlawGenerator < BaseGenerator
 
   def create_single_stanza(words, forbidden_letter, config)
     available_words = words.reject { |word| word.include?(forbidden_letter) }
-    
+
     return nil if available_words.length < config[:words_per_line]
 
     stanza_lines = []
@@ -56,7 +56,7 @@ class BeautifulOutlawGenerator < BaseGenerator
     end
 
     return nil if stanza_lines.empty?
-    
+
     stanza_lines.compact
   end
 
@@ -65,15 +65,13 @@ class BeautifulOutlawGenerator < BaseGenerator
 
     selected_words = select_diverse_words(available_words, words_per_line)
     return nil if selected_words.empty?
-    
+
     selected_words.join(' ').capitalize
   end
 
   def select_diverse_words(available_words, count)
     return [] if available_words.length < count
-    
+
     available_words.sample(count)
   end
-
-
 end
