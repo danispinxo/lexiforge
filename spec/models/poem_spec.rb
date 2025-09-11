@@ -52,7 +52,7 @@ RSpec.describe Poem, type: :model do
 
     describe '.recent' do
       it 'orders poems by creation date descending' do
-        recent_poems = Poem.recent.limit(10) # Limit to avoid interference from other tests
+        recent_poems = Poem.recent.limit(10)
         poems_created_in_test = [old_poem, recent_poem, cutup_poem, erasure_poem]
         poems_created_in_test.sort_by(&:created_at).reverse
 
@@ -99,7 +99,7 @@ RSpec.describe Poem, type: :model do
       it 'handles empty content' do
         poem = build(:poem, content: '')
         poem.save(validate: false)
-        expect(poem.line_count).to eq(0) # Empty string has 0 lines
+        expect(poem.line_count).to eq(0)
       end
 
       it 'handles content with trailing newline' do
@@ -125,7 +125,7 @@ RSpec.describe Poem, type: :model do
         end
 
         it 'truncates content when over limit' do
-          long_content = 'word ' * 50 # More than 100 characters
+          long_content = 'word ' * 50
           poem = create(:poem, content: long_content)
           short = poem.short_content
 
@@ -134,7 +134,6 @@ RSpec.describe Poem, type: :model do
         end
 
         it 'truncates at word boundaries' do
-          # Create content that would be truncated mid-word without separator
           long_content = "#{'word ' * 30}verylongwordthatwouldbecutoff"
           poem = create(:poem, content: long_content)
           short = poem.short_content
