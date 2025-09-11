@@ -39,6 +39,15 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
   const [constraintType, setConstraintType] = useState(
     POEM_GENERATION_DEFAULTS.PRISONERS_CONSTRAINT.CONSTRAINT_TYPE
   );
+  const [hiddenWord, setHiddenWord] = useState(
+    POEM_GENERATION_DEFAULTS.BEAUTIFUL_OUTLAW.HIDDEN_WORD
+  );
+  const [linesPerStanza, setLinesPerStanza] = useState(
+    POEM_GENERATION_DEFAULTS.BEAUTIFUL_OUTLAW.LINES_PER_STANZA
+  );
+  const [beautifulOutlawWordsPerLine, setBeautifulOutlawWordsPerLine] = useState(
+    POEM_GENERATION_DEFAULTS.BEAUTIFUL_OUTLAW.WORDS_PER_LINE
+  );
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -55,6 +64,12 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
 
     if (technique === "kwic" && !keyword.trim()) {
       setError("Keyword is required for KWIC poetry");
+      setGenerating(false);
+      return;
+    }
+
+    if (technique === "beautiful_outlaw" && !hiddenWord.trim()) {
+      setError("Hidden word is required for Beautiful Outlaw poetry");
       setGenerating(false);
       return;
     }
@@ -100,6 +115,11 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
         case "prisoners_constraint":
           options.num_words = prisonersWords;
           options.constraint_type = constraintType;
+          break;
+        case "beautiful_outlaw":
+          options.hidden_word = hiddenWord;
+          options.lines_per_stanza = linesPerStanza;
+          options.words_per_line = beautifulOutlawWordsPerLine;
           break;
       }
 
@@ -163,6 +183,7 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 <option value="found">Found</option>
                 <option value="kwic">KWIC (KeyWord In Context)</option>
                 <option value="prisoners_constraint">Prisoner's Constraint</option>
+                <option value="beautiful_outlaw">Beautiful Outlaw</option>
               </select>
             </div>
 
@@ -573,6 +594,60 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     <option value="no_descenders">No Descenders (avoid g,j,p,q,y)</option>
                     <option value="full_constraint">Full Constraint (avoid both)</option>
                   </select>
+                </div>
+              </>
+            )}
+
+            {technique === "beautiful_outlaw" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Beautiful Outlaw (Belle Absente) is a lipogram technique that combines elements
+                    of acrostic poetry. You select a hidden word and construct a poem where each
+                    stanza corresponds to a letter of that word. Within each stanza, the assigned
+                    letter is deliberately omitted, while all other letters of the alphabet are
+                    used. This creates a poem about presence and absence, where the hidden word's
+                    meaning emerges through what is left unsaid.
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="hidden-word">Hidden Word (Required):</label>
+                  <input
+                    type="text"
+                    id="hidden-word"
+                    value={hiddenWord}
+                    onChange={(e) => setHiddenWord(e.target.value)}
+                    placeholder="Enter a word (e.g., 'love', 'hope', 'dream')"
+                    disabled={generating}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="lines-per-stanza">Lines Per Stanza:</label>
+                  <input
+                    type="number"
+                    id="lines-per-stanza"
+                    value={linesPerStanza}
+                    onChange={(e) => setLinesPerStanza(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="10"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="beautiful-outlaw-words-per-line">Words Per Line:</label>
+                  <input
+                    type="number"
+                    id="beautiful-outlaw-words-per-line"
+                    value={beautifulOutlawWordsPerLine}
+                    onChange={(e) => setBeautifulOutlawWordsPerLine(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="15"
+                    disabled={generating}
+                  />
                 </div>
               </>
             )}

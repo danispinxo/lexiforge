@@ -92,26 +92,8 @@ class Api::PoemsController < ApiController
     permitted_params = generation_params
     options = { method: technique }
 
-    case technique
-    when 'cut_up'
-      build_cut_up_options(options, permitted_params)
-    when 'erasure'
-      build_erasure_options(options, permitted_params)
-    when 'snowball'
-      build_snowball_options(options, permitted_params)
-    when 'mesostic'
-      build_mesostic_options(options, permitted_params)
-    when 'n_plus_seven'
-      build_n_plus_seven_options(options, permitted_params)
-    when 'definitional'
-      build_definitional_options(options, permitted_params)
-    when 'found'
-      build_found_poem_options(options, permitted_params)
-    when 'kwic'
-      build_kwic_options(options, permitted_params)
-    when 'prisoners_constraint'
-      build_prisoners_constraint_options(options, permitted_params)
-    end
+    builder_method = "build_#{technique.tr('-', '_')}_options"
+    send(builder_method, options, permitted_params) if respond_to?(builder_method, true)
 
     options
   end
@@ -165,23 +147,33 @@ class Api::PoemsController < ApiController
     options[:constraint_type] = permitted_params[:constraint_type] || 'full_constraint'
   end
 
-  def generate_content(technique, options)
-    generator_class = case technique
-                      when 'cut_up' then CutUpGenerator
-                      when 'erasure' then ErasureGenerator
-                      when 'snowball' then SnowballGenerator
-                      when 'mesostic' then MesosticGenerator
-                      when 'n_plus_seven' then NPlusSevenGenerator
-                      when 'definitional' then DefinitionalGenerator
-                      when 'found' then FoundPoemGenerator
-                      when 'kwic' then KwicGenerator
-                      when 'prisoners_constraint' then PrisonersConstraintGenerator
-                      else
-                        raise "Unknown technique: #{technique}"
-                      end
+  def build_beautiful_outlaw_options(options, permitted_params)
+    options[:hidden_word] = permitted_params[:hidden_word] if permitted_params[:hidden_word].present?
+    options[:lines_per_stanza] = (permitted_params[:lines_per_stanza] || 4).to_i
+    options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
+  end
 
+  def generate_content(technique, options)
+    generator_class = technique_to_generator_class(technique)
     generator = generator_class.new(@source_text)
     generator.generate(options)
+  end
+
+  def technique_to_generator_class(technique)
+    technique_generators = {
+      'cut_up' => CutUpGenerator,
+      'erasure' => ErasureGenerator,
+      'snowball' => SnowballGenerator,
+      'mesostic' => MesosticGenerator,
+      'n_plus_seven' => NPlusSevenGenerator,
+      'definitional' => DefinitionalGenerator,
+      'found' => FoundPoemGenerator,
+      'kwic' => KwicGenerator,
+      'prisoners_constraint' => PrisonersConstraintGenerator,
+      'beautiful_outlaw' => BeautifulOutlawGenerator
+    }
+
+    technique_generators[technique] || raise("Unknown technique: #{technique}")
   end
 
   def build_poem(technique, content, options)
@@ -206,6 +198,8 @@ class Api::PoemsController < ApiController
       options[:is_blackout] ? 'blackout' : 'erasure'
     when 'n_plus_seven'
       'n+7'
+    when 'beautiful_outlaw'
+      'beautiful_outlaw'
     else
       technique
     end
@@ -223,6 +217,8 @@ class Api::PoemsController < ApiController
       'KWIC'
     when 'prisoners_constraint'
       "prisoner's constraint"
+    when 'beautiful_outlaw'
+      'beautiful outlaw'
     else
       technique
     end
@@ -277,7 +273,7 @@ class Api::PoemsController < ApiController
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
                   :section_length, :words_to_replace, :line_length, :keyword, :context_window,
-                  :num_words, :constraint_type)
+                  :num_words, :constraint_type, :hidden_word, :lines_per_stanza)
   end
 
   def authenticate_any_user!

@@ -35,5 +35,17 @@ FactoryBot.define do
       technique_used { 'snowball' }
       content { Faker::Lorem.paragraphs(number: 1).join("\n") }
     end
+
+    trait :beautiful_outlaw_poem do
+      technique_used { 'beautiful_outlaw' }
+      content do
+        [
+          "Cherry words dance together\nBright harmony creates music",
+          "Silent writing whispers truths\nAncient scripts show beauty",
+          "Poetry flows through language\nWords create magical stories",
+          "Music flows through words\nArt transforms ordinary things"
+        ].join("\n\n")
+      end
+    end
   end
 end
