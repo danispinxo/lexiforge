@@ -19,9 +19,10 @@ class PrisonersConstraintGenerator < BaseGenerator
   end
 
   def extract_config(options)
+    defaults = PoemGenerationConstants::DEFAULTS[:prisoners_constraint]
     {
-      num_words: options[:num_words] || 20,
-      constraint_type: options[:constraint_type] || 'full_constraint'
+      num_words: options[:num_words] || defaults[:num_words],
+      constraint_type: options[:constraint_type] || defaults[:constraint_type]
     }
   end
 
@@ -58,18 +59,13 @@ class PrisonersConstraintGenerator < BaseGenerator
   end
 
   def lineate_words(words)
-    return words.join(' ') if words.length <= 3
+    return words.join(' ') if words.length <= PoemGenerationConstants::PRISONERS_CONSTRAINT[:single_line_threshold]
 
     lines = []
     remaining_words = words.dup
 
     while remaining_words.any?
-      line_length = case rand(100)
-                    when 0..40 then 1
-                    when 41..70 then 2
-                    when 71..90 then 3
-                    else 4
-                    end
+      line_length = calculate_line_length
 
       line_length = [line_length, remaining_words.length].min
 
@@ -78,5 +74,17 @@ class PrisonersConstraintGenerator < BaseGenerator
     end
 
     lines.join("\n")
+  end
+
+  def calculate_line_length
+    random_value = rand(PoemGenerationConstants::PRISONERS_CONSTRAINT[:random_max])
+    probabilities = PoemGenerationConstants::PRISONERS_CONSTRAINT[:line_length_probabilities]
+
+    case random_value
+    when probabilities[:single_word][:range] then probabilities[:single_word][:length]
+    when probabilities[:two_words][:range] then probabilities[:two_words][:length]
+    when probabilities[:three_words][:range] then probabilities[:three_words][:length]
+    else probabilities[:four_words][:length]
+    end
   end
 end
