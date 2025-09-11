@@ -64,11 +64,11 @@ class ProjectGutenbergService
 
     title_patterns.each do |pattern|
       match = content.match(pattern)
-      if match && match[1].strip.length > 0
-        title = match[1].strip
-        title = title.gsub(/\s*#\d+.*$/, '')
-        return title if title.length > 0
-      end
+      next unless match && match[1].strip.length.positive?
+
+      title = match[1].strip
+      title = title.gsub(/\s*#\d+.*$/, '')
+      return title if title.length.positive?
     end
 
     "Book ##{gutenberg_id}"
