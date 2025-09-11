@@ -57,7 +57,7 @@ RSpec.describe DefinitionalGenerator do
       it 'raises an error' do
         expect do
           generator.generate(method: 'invalid_method')
-        end.to raise_error('Invalid method: invalid_method')
+        end.to raise_error('Invalid method: invalid_method. Only supported method: definitional')
       end
     end
   end
