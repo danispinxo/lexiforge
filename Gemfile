@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.2.2'
+ruby '3.4.4'
 gem 'rails', '~> 8.0.2'
 
 gem 'pg', '~> 1.6'
@@ -30,6 +30,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'dip'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
