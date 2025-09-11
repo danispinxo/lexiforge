@@ -25,7 +25,6 @@ class CutUpGenerator < BaseGenerator
     }
   end
 
-
   def generate_cutup_lines(words, config)
     lines = []
     config[:num_lines].times do

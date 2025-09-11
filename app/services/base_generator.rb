@@ -5,23 +5,21 @@ class BaseGenerator
 
   def generate(options = {})
     method = options[:method] || default_method
-    
-    if method == default_method
-      send("generate_#{method}", options)
-    else
-      raise "Invalid method: #{method}. Only supported method: #{default_method}"
-    end
+
+    raise "Invalid method: #{method}. Only supported method: #{default_method}" unless method == default_method
+
+    send("generate_#{method}", options)
   end
 
   protected
 
   def default_method
-    raise NotImplementedError, "Subclasses must define default_method"
+    raise NotImplementedError, 'Subclasses must define default_method'
   end
 
   def extract_clean_words(min_length: 2, preserve_punctuation: false)
     content = @source_text.content
-    
+
     if preserve_punctuation
       content.downcase
              .gsub(/[^\w\s'-]/, ' ')
@@ -80,17 +78,20 @@ class BaseGenerator
   def validate_minimum_words(min_count = 10)
     words = extract_clean_words
     return 'Not enough words in source text' if words.length < min_count
+
     nil
   end
 
   def validate_minimum_content(min_length = 100)
     content = @source_text.content.strip
     return 'Not enough content in source text' if content.length < min_length
+
     nil
   end
 
   def validate_required_param(param, param_name)
     return "#{param_name.humanize} is required" if param.blank?
+
     nil
   end
 
@@ -123,6 +124,7 @@ class BaseGenerator
 
   def select_random_subset(array, count)
     return array if count >= array.length
+
     array.sample(count)
   end
 end
