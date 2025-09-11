@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=3.2.2
+ARG RUBY_VERSION=3.4.4
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 WORKDIR /rails
@@ -11,7 +11,7 @@ ENV RAILS_ENV="production" \
 FROM base as build
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config libyaml-dev libffi-dev libssl-dev
 
 COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
