@@ -7,7 +7,7 @@ class FoundPoemGenerator < BaseGenerator
 
   private
 
-  def generate_found_poem(options = {})
+  def generate_found(options = {})
     config = extract_found_poem_config(options)
     words = extract_clean_words
 
