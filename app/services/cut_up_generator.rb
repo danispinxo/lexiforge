@@ -1,17 +1,8 @@
-class CutUpGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class CutUpGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'cut_up'
-
-    case method
-    when 'cut_up'
-      generate_cutup(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'cut_up'
   end
 
   private
@@ -20,7 +11,8 @@ class CutUpGenerator
     config = extract_cutup_config(options)
     words = extract_clean_words
 
-    return 'Not enough words in source text' if words.length < 10
+    validation_error = validate_minimum_words(10)
+    return validation_error if validation_error
 
     lines = generate_cutup_lines(words, config)
     lines.join("\n")
@@ -31,14 +23,6 @@ class CutUpGenerator
       num_lines: options[:num_lines] || 12,
       words_per_line: options[:words_per_line] || 6
     }
-  end
-
-  def extract_clean_words
-    @source_text.content.downcase
-                .gsub(/[^\w\s]/, '')
-                .split
-                .reject { |word| word.length < 2 }
-                .uniq
   end
 
   def generate_cutup_lines(words, config)

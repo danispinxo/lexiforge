@@ -1,17 +1,8 @@
-class ErasureGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class ErasureGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'erasure'
-
-    case method
-    when 'erasure'
-      generate_erasure(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'erasure'
   end
 
   private
@@ -20,7 +11,8 @@ class ErasureGenerator
     config = extract_erasure_config(options)
     original_text = @source_text.content.strip
 
-    return 'Not enough content in source text' if original_text.length < 100
+    validation_error = validate_minimum_content(100)
+    return validation_error if validation_error
 
     pages = generate_erasure_pages(original_text, config)
     format_erasure_result(pages, config[:is_blackout])

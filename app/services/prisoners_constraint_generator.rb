@@ -1,22 +1,13 @@
-class PrisonersConstraintGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class PrisonersConstraintGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'prisoners_constraint'
-
-    case method
-    when 'prisoners_constraint'
-      generate_prisoners_constraint(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'prisoners_constraint'
   end
 
   private
 
-  def generate_prisoners_constraint(options = {})
+  def generate_prisonersconstraint(options = {})
     config = extract_config(options)
     words = extract_clean_words
     filtered_words = filter_words_by_constraint(words, config[:constraint_type])
@@ -35,11 +26,7 @@ class PrisonersConstraintGenerator
   end
 
   def extract_clean_words
-    @source_text.content.downcase
-                .gsub(/[^\w\s]/, '')
-                .split
-                .grep_v(/[^a-z]/)
-                .uniq
+    super.grep_v(/[^a-z]/)
   end
 
   def filter_words_by_constraint(words, constraint_type)
