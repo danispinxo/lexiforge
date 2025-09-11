@@ -13,7 +13,7 @@ class DefinitionalGenerator < BaseGenerator
     config = extract_definitional_config(options)
     words = extract_words_with_positions
 
-    validation_error = validate_minimum_words(10)
+    validation_error = validate_minimum_words
     return validation_error if validation_error
 
     section_words = select_text_section(words, config[:section_length])
@@ -24,10 +24,11 @@ class DefinitionalGenerator < BaseGenerator
   end
 
   def extract_definitional_config(options)
+    defaults = PoemGenerationConstants::DEFAULTS[:definitional]
     {
       preserve_structure: options[:preserve_structure] || true,
-      section_length: options[:section_length] || 200,
-      words_to_replace: options[:words_to_replace] || 20
+      section_length: options[:section_length] || defaults[:section_length],
+      words_to_replace: options[:words_to_replace] || defaults[:words_to_replace]
     }
   end
 
@@ -46,7 +47,7 @@ class DefinitionalGenerator < BaseGenerator
   end
 
   def definition?(word)
-    return false if word.length < 2
+    return false if word.length < PoemGenerationConstants::VALIDATION[:minimum_word_length]
 
     DictionaryWord.where(word: word.downcase).where.not(definition: [nil, '']).exists?
   end
