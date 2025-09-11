@@ -37,6 +37,10 @@ module PoemGenerationConstants
     prisoners_constraint: {
       num_words: 20,
       constraint_type: "full_constraint"
+    },
+    beautiful_outlaw: {
+      lines_per_stanza: 4,
+      words_per_line: 6
     }
   }.freeze
 
@@ -46,7 +50,8 @@ module PoemGenerationConstants
     minimum_word_length: 2,
     minimum_snowball_lines: 3,
     minimum_word_variety: 3,
-    minimum_found_poem_words: 20
+    minimum_found_poem_words: 20,
+    minimum_beautiful_outlaw_words: 15
   }.freeze
 
   TEXT_PROCESSING = {
