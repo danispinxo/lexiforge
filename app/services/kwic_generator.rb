@@ -1,19 +1,10 @@
 require 'set'
 
-class KwicGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class KwicGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'kwic'
-
-    case method
-    when 'kwic'
-      generate_kwic(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'kwic'
   end
 
   private
@@ -23,7 +14,8 @@ class KwicGenerator
     num_lines = options[:num_lines] || 10
     context_window = options[:context_window] || 3
 
-    return 'Keyword is required for KWIC generation' if keyword.blank?
+    validation_error = validate_required_param(keyword, 'keyword')
+    return validation_error if validation_error
 
     sentences = extract_sentences
     return 'Not enough sentences in source text' if sentences.empty?
@@ -34,15 +26,6 @@ class KwicGenerator
 
     selected_lines = kwic_lines.sample(num_lines)
     selected_lines.join("\n")
-  end
-
-  def extract_sentences
-    @source_text.content
-                .gsub(/\s+/, ' ')
-                .split(/[.!?]+/)
-                .map(&:strip)
-                .reject { |sentence| sentence.length < 10 || sentence.split.length < 3 }
-                .map { |sentence| sentence.gsub(/[^\w\s]/, '') }
   end
 
   def find_keyword_contexts(sentences, keyword, context_window)
@@ -74,12 +57,5 @@ class KwicGenerator
     line[0] = line[0].upcase if line.length.positive?
 
     line
-  end
-
-  def extract_clean_words
-    @source_text.content.downcase
-                .gsub(/[^\w\s]/, '')
-                .split
-                .reject { |word| word.length < 2 }
   end
 end

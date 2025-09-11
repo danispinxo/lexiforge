@@ -112,17 +112,17 @@ RSpec.describe KwicGenerator do
     context 'with missing keyword' do
       it 'returns an error message when keyword is nil' do
         result = generator.generate(keyword: nil)
-        expect(result).to eq('Keyword is required for KWIC generation')
+        expect(result).to eq('Keyword is required')
       end
 
       it 'returns an error message when keyword is empty' do
         result = generator.generate(keyword: '')
-        expect(result).to eq('Keyword is required for KWIC generation')
+        expect(result).to eq('Keyword is required')
       end
 
       it 'returns an error message when keyword is whitespace' do
         result = generator.generate(keyword: '   ')
-        expect(result).to eq('Keyword is required for KWIC generation')
+        expect(result).to eq('Keyword is required')
       end
     end
 
@@ -137,7 +137,7 @@ RSpec.describe KwicGenerator do
 
     context 'with invalid method' do
       it 'raises an error' do
-        expect { generator.generate(method: 'invalid', keyword: 'wind') }.to raise_error('Invalid method: invalid')
+        expect { generator.generate(method: 'invalid', keyword: 'wind') }.to raise_error('Invalid method: invalid. Only supported method: kwic')
       end
     end
 

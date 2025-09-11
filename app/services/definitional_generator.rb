@@ -1,19 +1,10 @@
 require 'timeout'
 
-class DefinitionalGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class DefinitionalGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'definitional'
-
-    case method
-    when 'definitional'
-      generate_definitional(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'definitional'
   end
 
   private
@@ -22,7 +13,8 @@ class DefinitionalGenerator
     config = extract_definitional_config(options)
     words = extract_words_with_positions
 
-    return 'Not enough words in source text' if words.length < 10
+    validation_error = validate_minimum_words(10)
+    return validation_error if validation_error
 
     section_words = select_text_section(words, config[:section_length])
 
@@ -37,36 +29,6 @@ class DefinitionalGenerator
       section_length: options[:section_length] || 200,
       words_to_replace: options[:words_to_replace] || 20
     }
-  end
-
-  def extract_words_with_positions
-    words = []
-    current_word = ''
-    word_start = 0
-
-    @source_text.content.each_char.with_index do |char, index|
-      if /\w/.match?(char)
-        current_word += char
-        word_start = index if current_word.length == 1
-      elsif current_word.length.positive?
-        words << {
-          word: current_word,
-          position: word_start,
-          length: current_word.length
-        }
-        current_word = ''
-      end
-    end
-
-    if current_word.length.positive?
-      words << {
-        word: current_word,
-        position: word_start,
-        length: current_word.length
-      }
-    end
-
-    words
   end
 
   def select_text_section(words, section_length)
@@ -112,12 +74,6 @@ class DefinitionalGenerator
     apply_definition_replacements_to_text(original_segment, replacements, start_pos)
   end
 
-  def calculate_text_range(sorted_words)
-    start_pos = sorted_words.first[:position]
-    end_pos = sorted_words.last[:position] + sorted_words.last[:length]
-    [start_pos, end_pos]
-  end
-
   def build_definition_replacements_map(sorted_words)
     replacements = {}
     sorted_words.each do |word_data|
@@ -136,13 +92,6 @@ class DefinitionalGenerator
   end
 
   def apply_definition_replacements_to_text(original_segment, replacements, start_pos)
-    result = original_segment.dup
-
-    replacements.keys.sort.reverse_each do |pos|
-      replacement_data = replacements[pos]
-      relative_pos = pos - start_pos
-      result[relative_pos, replacement_data[:length]] = replacement_data[:replacement]
-    end
-    result
+    apply_replacements_to_text(original_segment, replacements, start_pos)
   end
 end

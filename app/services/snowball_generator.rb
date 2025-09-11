@@ -1,19 +1,10 @@
 require 'set'
 
-class SnowballGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class SnowballGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'snowball'
-
-    case method
-    when 'snowball'
-      generate_snowball(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'snowball'
   end
 
   private
@@ -22,7 +13,7 @@ class SnowballGenerator
     num_lines = options[:num_lines] || 10
     min_word_length = options[:min_word_length] || 1
 
-    words = extract_clean_words(@source_text.content, min_word_length)
+    words = extract_clean_words_for_snowball(@source_text.content, min_word_length)
 
     validation_error = validate_words_for_snowball(words)
     return validation_error if validation_error
@@ -74,7 +65,7 @@ class SnowballGenerator
     unused_words.sample
   end
 
-  def extract_clean_words(content, min_length)
+  def extract_clean_words_for_snowball(content, min_length)
     content.downcase
            .gsub(/[^\w\s'-]/, ' ')
            .split(/\s+/)
