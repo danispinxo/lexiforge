@@ -8,7 +8,7 @@ class BaseGenerator
 
     raise "Invalid method: #{method}. Only supported method: #{default_method}" unless method == default_method
 
-    method_name = "generate_#{method.gsub('_', '')}"
+    method_name = "generate_#{method.delete('_')}"
     send(method_name, options)
   end
 
