@@ -92,28 +92,8 @@ class Api::PoemsController < ApiController
     permitted_params = generation_params
     options = { method: technique }
 
-    case technique
-    when 'cut_up'
-      build_cut_up_options(options, permitted_params)
-    when 'erasure'
-      build_erasure_options(options, permitted_params)
-    when 'snowball'
-      build_snowball_options(options, permitted_params)
-    when 'mesostic'
-      build_mesostic_options(options, permitted_params)
-    when 'n_plus_seven'
-      build_n_plus_seven_options(options, permitted_params)
-    when 'definitional'
-      build_definitional_options(options, permitted_params)
-    when 'found'
-      build_found_poem_options(options, permitted_params)
-    when 'kwic'
-      build_kwic_options(options, permitted_params)
-    when 'prisoners_constraint'
-      build_prisoners_constraint_options(options, permitted_params)
-    when 'beautiful_outlaw'
-      build_beautiful_outlaw_options(options, permitted_params)
-    end
+    builder_method = "build_#{technique.tr('-', '_')}_options"
+    send(builder_method, options, permitted_params) if respond_to?(builder_method, true)
 
     options
   end
@@ -174,23 +154,26 @@ class Api::PoemsController < ApiController
   end
 
   def generate_content(technique, options)
-    generator_class = case technique
-                      when 'cut_up' then CutUpGenerator
-                      when 'erasure' then ErasureGenerator
-                      when 'snowball' then SnowballGenerator
-                      when 'mesostic' then MesosticGenerator
-                      when 'n_plus_seven' then NPlusSevenGenerator
-                      when 'definitional' then DefinitionalGenerator
-                      when 'found' then FoundPoemGenerator
-                      when 'kwic' then KwicGenerator
-                      when 'prisoners_constraint' then PrisonersConstraintGenerator
-                      when 'beautiful_outlaw' then BeautifulOutlawGenerator
-                      else
-                        raise "Unknown technique: #{technique}"
-                      end
-
+    generator_class = technique_to_generator_class(technique)
     generator = generator_class.new(@source_text)
     generator.generate(options)
+  end
+
+  def technique_to_generator_class(technique)
+    technique_generators = {
+      'cut_up' => CutUpGenerator,
+      'erasure' => ErasureGenerator,
+      'snowball' => SnowballGenerator,
+      'mesostic' => MesosticGenerator,
+      'n_plus_seven' => NPlusSevenGenerator,
+      'definitional' => DefinitionalGenerator,
+      'found' => FoundPoemGenerator,
+      'kwic' => KwicGenerator,
+      'prisoners_constraint' => PrisonersConstraintGenerator,
+      'beautiful_outlaw' => BeautifulOutlawGenerator
+    }
+
+    technique_generators[technique] || raise("Unknown technique: #{technique}")
   end
 
   def build_poem(technique, content, options)
