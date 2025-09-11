@@ -1,17 +1,8 @@
-class MesosticGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class MesosticGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'mesostic'
-
-    case method
-    when 'mesostic'
-      generate_mesostic(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'mesostic'
   end
 
   private
@@ -19,10 +10,12 @@ class MesosticGenerator
   def generate_mesostic(options = {})
     spine_word = options[:spine_word]
 
-    return 'Spine word is required for mesostic generation' if spine_word.blank?
+    validation_error = validate_required_param(spine_word, 'spine_word')
+    return validation_error if validation_error
 
     words = extract_clean_words
-    return 'Not enough words in source text' if words.length < 10
+    validation_error = validate_minimum_words(10)
+    return validation_error if validation_error
 
     mesostic_lines = build_mesostic_lines(words, spine_word)
 
@@ -63,12 +56,5 @@ class MesosticGenerator
     end
 
     { found: false, word: nil, next_index: start_index }
-  end
-
-  def extract_clean_words
-    @source_text.content.downcase
-                .gsub(/[^\w\s]/, '')
-                .split
-                .reject { |word| word.length < 2 }
   end
 end

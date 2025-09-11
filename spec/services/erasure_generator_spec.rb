@@ -27,7 +27,7 @@ RSpec.describe ErasureGenerator do
 
     context 'with invalid method' do
       it 'raises an error' do
-        expect { generator.generate(method: 'invalid') }.to raise_error('Invalid method: invalid')
+        expect { generator.generate(method: 'invalid') }.to raise_error('Invalid method: invalid. Only supported method: erasure')
       end
     end
   end
