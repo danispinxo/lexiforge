@@ -66,7 +66,7 @@ RSpec.describe NPlusSevenGenerator do
       it 'raises error for invalid method' do
         expect do
           generator.generate(method: 'invalid_method')
-        end.to raise_error('Invalid method: invalid_method')
+        end.to raise_error('Invalid method: invalid_method. Only supported method: n_plus_seven')
       end
     end
   end

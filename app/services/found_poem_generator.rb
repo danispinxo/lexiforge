@@ -1,26 +1,18 @@
-class FoundPoemGenerator
-  def initialize(source_text)
-    @source_text = source_text
-  end
+class FoundPoemGenerator < BaseGenerator
+  protected
 
-  def generate(options = {})
-    method = options[:method] || 'found'
-
-    case method
-    when 'found'
-      generate_found_poem(options)
-    else
-      raise "Invalid method: #{method}"
-    end
+  def default_method
+    'found'
   end
 
   private
 
-  def generate_found_poem(options = {})
+  def generate_found(options = {})
     config = extract_found_poem_config(options)
     words = extract_clean_words
 
-    return 'Not enough words in source text' if words.length < 20
+    validation_error = validate_minimum_words(20)
+    return validation_error if validation_error
 
     lines = generate_found_poem_lines(words, config)
     lines.join("\n")
@@ -31,13 +23,6 @@ class FoundPoemGenerator
       num_lines: options[:num_lines] || 10,
       line_length: options[:line_length] || 'medium'
     }
-  end
-
-  def extract_clean_words
-    @source_text.content.downcase
-                .gsub(/[^\w\s]/, ' ')
-                .split
-                .reject { |word| word.length < 2 }
   end
 
   def generate_found_poem_lines(words, config)
@@ -85,14 +70,7 @@ class FoundPoemGenerator
   end
 
   def calculate_word_range(line_length)
-    word_ranges = {
-      'very_short' => 1..2,
-      'short' => 3..4,
-      'medium' => 5..7,
-      'long' => 8..10,
-      'very_long' => 10..15
-    }
-    word_ranges[line_length]
+    random_range_for_length(line_length)
   end
 
   def find_fallback_line(words, word_range)
