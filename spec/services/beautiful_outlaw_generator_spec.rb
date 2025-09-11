@@ -41,16 +41,16 @@ RSpec.describe BeautifulOutlawGenerator do
       it 'generates beautiful outlaw poem as plain text' do
         expect(result).to be_a(String)
         expect(result).not_to be_empty
-        
+
         stanzas = result.split("\n\n")
         expect(stanzas.length).to eq(4)
       end
 
       it 'creates stanzas for each letter of hidden word' do
         stanzas = result.split("\n\n")
-        
+
         expect(stanzas.length).to eq(4)
-        
+
         stanzas.each do |stanza|
           lines = stanza.split("\n")
           expect(lines.length).to eq(4)
@@ -60,18 +60,18 @@ RSpec.describe BeautifulOutlawGenerator do
       it 'excludes forbidden letters from each stanza' do
         stanzas = result.split("\n\n")
         hidden_word = 'love'
-        
+
         stanzas.each_with_index do |stanza, index|
           forbidden_letter = hidden_word[index].downcase
           stanza_text = stanza.downcase
-          
+
           expect(stanza_text).not_to include(forbidden_letter)
         end
       end
 
       it 'generates appropriate number of lines per stanza' do
         stanzas = result.split("\n\n")
-        
+
         stanzas.each do |stanza|
           lines = stanza.split("\n")
           expect(lines.length).to eq(4)
@@ -84,7 +84,7 @@ RSpec.describe BeautifulOutlawGenerator do
 
       it 'respects custom lines per stanza' do
         stanzas = result.split("\n\n")
-        
+
         stanzas.each do |stanza|
           lines = stanza.split("\n")
           expect(lines.length).to eq(3)
@@ -93,7 +93,7 @@ RSpec.describe BeautifulOutlawGenerator do
 
       it 'respects custom words per line' do
         stanzas = result.split("\n\n")
-        
+
         stanzas.each do |stanza|
           lines = stanza.split("\n")
           lines.each do |line|
@@ -181,7 +181,7 @@ RSpec.describe BeautifulOutlawGenerator do
         stanzas = result.split("\n\n")
         first_stanza = stanzas.first
         stanza_text = first_stanza.downcase
-        
+
         expect(stanza_text).not_to include('apple')
         expect(stanza_text).not_to include('banana')
         expect(stanza_text).not_to include('date')
@@ -190,7 +190,7 @@ RSpec.describe BeautifulOutlawGenerator do
         expect(stanza_text).not_to include('peach')
         expect(stanza_text).not_to include('mango')
         expect(stanza_text).not_to include('strawberry')
-        
+
         forbidden_words = %w[apple banana date grape orange peach mango strawberry]
         stanza_words = stanza_text.split
         stanza_words.each do |word|
@@ -209,7 +209,7 @@ RSpec.describe BeautifulOutlawGenerator do
 
         expect(results.length).to eq(10)
         expect(results.all?(String)).to be true
-        
+
         unique_count = results.uniq.length
         expect(unique_count).to be >= 1
       end
@@ -224,13 +224,13 @@ RSpec.describe BeautifulOutlawGenerator do
       result = generator.send(:generate_beautifuloutlaw, options)
       stanzas = result.split("\n\n")
       hidden_word = options[:hidden_word]
-      
+
       stanzas.each_with_index do |stanza, index|
         forbidden_letter = hidden_word[index].downcase
         stanza_text = stanza.downcase
-        
+
         expect(stanza_text).not_to include(forbidden_letter),
-          "Stanza #{index + 1} contains forbidden letter '#{forbidden_letter}'"
+                                   "Stanza #{index + 1} contains forbidden letter '#{forbidden_letter}'"
       end
     end
   end
