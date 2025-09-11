@@ -35,5 +35,21 @@ FactoryBot.define do
       technique_used { 'snowball' }
       content { Faker::Lorem.paragraphs(number: 1).join("\n") }
     end
+
+    trait :beautiful_outlaw_poem do
+      technique_used { 'beautiful_outlaw' }
+      content do
+        {
+          type: 'beautiful_outlaw',
+          hidden_word: 'LOVE',
+          stanzas: [
+            { number: 1, forbidden_letter: 'L', lines: ['Cherry words dance together', 'Bright harmony creates music'] },
+            { number: 2, forbidden_letter: 'O', lines: ['Silent letters whisper truths', 'Ancient scripts reveal beauty'] },
+            { number: 3, forbidden_letter: 'V', lines: ['Poetry flows through language', 'Words create magical stories'] },
+            { number: 4, forbidden_letter: 'E', lines: ['Music flows through words', 'Art transforms ordinary things'] }
+          ]
+        }.to_json
+      end
+    end
   end
 end
