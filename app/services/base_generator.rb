@@ -28,12 +28,14 @@ class BaseGenerator
              .split(/\s+/)
              .reject { |word| word.empty? || word.length < min_length }
              .grep(/\A[a-z'-]+\z/)
+             .reject { |word| word.match?(/\d/) }
              .uniq
     else
       content.downcase
              .gsub(/[^\w\s]/, '')
              .split
              .reject { |word| word.length < min_length }
+             .grep(/\A[a-z]+\z/)
              .uniq
     end
   end
