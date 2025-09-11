@@ -383,7 +383,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
         expect(title).to be_present
         expect(title.split.length).to be_between(1, 4)
-        expect(title[0]).to eq(title[0].upcase) # Should be capitalized
+        expect(title[0]).to eq(title[0].upcase)
       end
 
       it 'handles empty content gracefully' do
@@ -399,14 +399,12 @@ RSpec.describe Api::PoemsController, type: :controller do
       end
 
       it 'selects consecutive words from content' do
-        # Set a seed for reproducible testing
         srand(12_345)
         title = controller.send(:generate_poem_title, poem_content, 'found')
 
         words = poem_content.split
         title_words = title.split
 
-        # Find if the title words appear consecutively in the content
         found_consecutive = false
         (0..(words.length - title_words.length)).each do |i|
           if words[i, title_words.length].map(&:downcase) == title_words.map(&:downcase)
@@ -434,7 +432,6 @@ RSpec.describe Api::PoemsController, type: :controller do
         expect(title.split.length).to be_between(1, 4)
         expect(title[0]).to eq(title[0].upcase)
 
-        # Should extract from visible text, not JSON structure
         expect(title.downcase).not_to include('type')
         expect(title.downcase).not_to include('pages')
         expect(title.downcase).not_to include('number')
@@ -466,7 +463,6 @@ RSpec.describe Api::PoemsController, type: :controller do
         expect(title.split.length).to be_between(1, 4)
         expect(title[0]).to eq(title[0].upcase)
 
-        # Should not contain HTML tags, blackout characters, or class names
         expect(title.downcase).not_to include('span')
         expect(title.downcase).not_to include('class')
         expect(title.downcase).not_to include('blackout')

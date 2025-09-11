@@ -14,7 +14,7 @@ class MesosticGenerator < BaseGenerator
     return validation_error if validation_error
 
     words = extract_clean_words
-    validation_error = validate_minimum_words(10)
+    validation_error = validate_minimum_words
     return validation_error if validation_error
 
     mesostic_lines = build_mesostic_lines(words, spine_word)

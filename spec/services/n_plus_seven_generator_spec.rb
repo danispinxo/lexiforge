@@ -144,13 +144,11 @@ RSpec.describe NPlusSevenGenerator do
 
     it 'returns nil for non-existent word' do
       replacement = generator.send(:find_n_plus_seven_replacement, 'nonexistent', 7)
-      # The method might find a close match, so we just check it's not the original word
       expect(replacement).not_to eq('nonexistent')
     end
 
     it 'handles different offset values' do
       replacement = generator.send(:find_n_plus_seven_replacement, 'cat', 5)
-      # This might return nil or a different word depending on what's in the database
       expect(replacement).to be_a(String).or be_nil
     end
   end
@@ -163,13 +161,11 @@ RSpec.describe NPlusSevenGenerator do
         offset: 7
       )
 
-      # The result should contain some of the replacement words
       expect(result).to be_a(String)
       expect(result).not_to be_empty
 
-      # Check that the result contains words from the selected subset
       words = result.split
-      expect(words.length).to be <= 15 # Allow for some flexibility in word count
+      expect(words.length).to be <= 15
     end
   end
 end

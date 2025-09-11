@@ -13,7 +13,7 @@ class NPlusSevenGenerator < BaseGenerator
     config = extract_n_plus_seven_config(options)
     words = extract_words_with_positions
 
-    validation_error = validate_minimum_words(10)
+    validation_error = validate_minimum_words
     return validation_error if validation_error
 
     selected_words = select_random_word_subset(words, config[:words_to_select])
@@ -22,10 +22,11 @@ class NPlusSevenGenerator < BaseGenerator
   end
 
   def extract_n_plus_seven_config(options)
+    defaults = PoemGenerationConstants::DEFAULTS[:n_plus_seven]
     {
-      offset: options[:offset] || 7,
+      offset: options[:offset] || defaults[:offset],
       preserve_structure: options[:preserve_structure] || true,
-      words_to_select: options[:words_to_select] || 50
+      words_to_select: options[:words_to_select] || defaults[:words_to_select]
     }
   end
 
@@ -37,7 +38,7 @@ class NPlusSevenGenerator < BaseGenerator
   end
 
   def noun?(word)
-    return false if word.length < 2
+    return false if word.length < PoemGenerationConstants::VALIDATION[:minimum_word_length]
 
     DictionaryWord.exists?(word: word.downcase, part_of_speech: 'n')
   end

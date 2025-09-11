@@ -11,7 +11,7 @@ class ErasureGenerator < BaseGenerator
     config = extract_erasure_config(options)
     original_text = @source_text.content.strip
 
-    validation_error = validate_minimum_content(100)
+    validation_error = validate_minimum_content
     return validation_error if validation_error
 
     pages = generate_erasure_pages(original_text, config)
@@ -19,11 +19,12 @@ class ErasureGenerator < BaseGenerator
   end
 
   def extract_erasure_config(options)
+    defaults = PoemGenerationConstants::DEFAULTS[:erasure]
     {
-      num_pages: options[:num_pages] || 3,
-      words_per_page: options[:words_per_page] || 50,
-      words_to_keep: options[:words_to_keep] || 8,
-      is_blackout: options[:is_blackout] || false
+      num_pages: options[:num_pages] || defaults[:num_pages],
+      words_per_page: options[:words_per_page] || defaults[:words_per_page],
+      words_to_keep: options[:words_to_keep] || defaults[:words_to_keep],
+      is_blackout: options[:is_blackout] || defaults[:is_blackout]
     }
   end
 
@@ -49,7 +50,8 @@ class ErasureGenerator < BaseGenerator
   end
 
   def calculate_random_start_position(text, words_per_page)
-    max_start = [text.length - (words_per_page * 8), 0].max
+    max_start = [text.length - (words_per_page * PoemGenerationConstants::TEXT_PROCESSING[:erasure_word_multiplier]),
+                 0].max
     rand(max_start + 1)
   end
 

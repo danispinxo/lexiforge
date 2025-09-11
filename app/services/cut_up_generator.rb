@@ -11,7 +11,7 @@ class CutUpGenerator < BaseGenerator
     config = extract_cutup_config(options)
     words = extract_clean_words
 
-    validation_error = validate_minimum_words(10)
+    validation_error = validate_minimum_words
     return validation_error if validation_error
 
     lines = generate_cutup_lines(words, config)
@@ -19,9 +19,10 @@ class CutUpGenerator < BaseGenerator
   end
 
   def extract_cutup_config(options)
+    defaults = PoemGenerationConstants::DEFAULTS[:cut_up]
     {
-      num_lines: options[:num_lines] || 12,
-      words_per_line: options[:words_per_line] || 6
+      num_lines: options[:num_lines] || defaults[:num_lines],
+      words_per_line: options[:words_per_line] || defaults[:words_per_line]
     }
   end
 
@@ -42,12 +43,6 @@ class CutUpGenerator < BaseGenerator
   end
 
   def calculate_word_range(words_per_line)
-    case words_per_line
-    when 3 then 3..4
-    when 6 then 5..8
-    when 10 then 8..12
-    when 15 then 12..18
-    else 5..7
-    end
+    PoemGenerationConstants::CUT_UP_RANGES[words_per_line] || PoemGenerationConstants::CUT_UP_RANGES[:default]
   end
 end

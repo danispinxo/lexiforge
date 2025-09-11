@@ -11,8 +11,9 @@ class KwicGenerator < BaseGenerator
 
   def generate_kwic(options = {})
     keyword = options[:keyword]&.downcase&.strip
-    num_lines = options[:num_lines] || 10
-    context_window = options[:context_window] || 3
+    defaults = PoemGenerationConstants::DEFAULTS[:kwic]
+    num_lines = options[:num_lines] || defaults[:num_lines]
+    context_window = options[:context_window] || defaults[:context_window]
 
     validation_error = validate_required_param(keyword, 'keyword')
     return validation_error if validation_error

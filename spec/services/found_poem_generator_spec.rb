@@ -26,7 +26,7 @@ RSpec.describe FoundPoemGenerator do
         expect(lines.length).to be >= 8
         expect(lines.length).to be <= 12
         lines.each do |line|
-          expect(line).to match(/^[A-Z]/) # Should be capitalized
+          expect(line).to match(/^[A-Z]/)
           expect(line.split.length).to be >= 5
           expect(line.split.length).to be <= 7
         end
@@ -118,8 +118,6 @@ RSpec.describe FoundPoemGenerator do
       it 'generates lines from different sections of the text' do
         result = generator.generate(num_lines: 10, line_length: 'short')
         lines = result.split("\n")
-
-        # Check that we have some variety in the lines
         unique_lines = lines.uniq
         expect(unique_lines.length).to be > 1
       end
