@@ -11,7 +11,7 @@ class FoundPoemGenerator < BaseGenerator
     config = extract_found_poem_config(options)
     words = extract_clean_words
 
-    validation_error = validate_minimum_words(20)
+    validation_error = validate_minimum_words(PoemGenerationConstants::VALIDATION[:minimum_found_poem_words])
     return validation_error if validation_error
 
     lines = generate_found_poem_lines(words, config)
@@ -19,9 +19,10 @@ class FoundPoemGenerator < BaseGenerator
   end
 
   def extract_found_poem_config(options)
+    defaults = PoemGenerationConstants::DEFAULTS[:found]
     {
-      num_lines: options[:num_lines] || 10,
-      line_length: options[:line_length] || 'medium'
+      num_lines: options[:num_lines] || defaults[:num_lines],
+      line_length: options[:line_length] || defaults[:line_length]
     }
   end
 
@@ -83,7 +84,7 @@ class FoundPoemGenerator < BaseGenerator
   end
 
   def find_random_valid_line(words, word_range)
-    max_attempts = 50
+    max_attempts = PoemGenerationConstants::FOUND_POEM[:max_fallback_attempts]
     attempts = 0
 
     while attempts < max_attempts
