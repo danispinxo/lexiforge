@@ -7,7 +7,7 @@ class PrisonersConstraintGenerator < BaseGenerator
 
   private
 
-  def generate_prisoners_constraint(options = {})
+  def generate_prisonersconstraint(options = {})
     config = extract_config(options)
     words = extract_clean_words
     filtered_words = filter_words_by_constraint(words, config[:constraint_type])

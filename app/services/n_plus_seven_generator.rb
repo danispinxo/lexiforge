@@ -9,7 +9,7 @@ class NPlusSevenGenerator < BaseGenerator
 
   private
 
-  def generate_n_plus_seven(options = {})
+  def generate_nplusseven(options = {})
     config = extract_n_plus_seven_config(options)
     words = extract_words_with_positions
 
