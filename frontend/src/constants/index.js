@@ -55,6 +55,11 @@ export const POEM_GENERATION_DEFAULTS = {
     NUM_WORDS: 20,
     CONSTRAINT_TYPE: "full_constraint",
   },
+  BEAUTIFUL_OUTLAW: {
+    HIDDEN_WORD: "",
+    LINES_PER_STANZA: 4,
+    WORDS_PER_LINE: 6,
+  },
 };
 
 export const INPUT_LIMITS = {
@@ -84,6 +89,7 @@ export const CONTENT_DISPLAY = {
     FOUND: "found",
     KWIC: "kwic",
     PRISONERS_CONSTRAINT: "prisoners_constraint",
+    BEAUTIFUL_OUTLAW: "beautiful_outlaw",
   },
   LINE_LENGTH_OPTIONS: {
     SHORT: "short",
