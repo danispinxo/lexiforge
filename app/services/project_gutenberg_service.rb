@@ -4,20 +4,21 @@ class ProjectGutenbergService
   include HTTParty
 
   base_uri ENV.fetch('GUTENBERG_BASE_URL', 'https://www.gutenberg.org')
+  default_timeout 30
 
   def initialize
     @base_url = ENV.fetch('GUTENBERG_BASE_URL', 'https://www.gutenberg.org')
   end
 
   def import_text(gutenberg_id)
-    metadata = fetch_metadata(gutenberg_id)
-    return SourceText.new unless metadata
-
     content = fetch_text_content(gutenberg_id)
     return SourceText.new unless content
 
+    metadata = fetch_metadata(gutenberg_id)
+    title = metadata ? metadata[:title] : extract_title_from_content(content, gutenberg_id)
+
     source_text = SourceText.new(
-      title: metadata[:title],
+      title: title,
       content: content,
       gutenberg_id: gutenberg_id
     )
@@ -52,6 +53,25 @@ class ProjectGutenbergService
     end
 
     nil
+  end
+
+  def extract_title_from_content(content, gutenberg_id)
+    title_patterns = [
+      /Project Gutenberg's\s+(.+?)(?:\s+by\s+|\s+#|\s+$)/i,
+      /Title:\s*(.+?)$/i,
+      /^(.+?)\s+by\s+/i
+    ]
+
+    title_patterns.each do |pattern|
+      match = content.match(pattern)
+      if match && match[1].strip.length > 0
+        title = match[1].strip
+        title = title.gsub(/\s*#\d+.*$/, '')
+        return title if title.length > 0
+      end
+    end
+
+    "Book ##{gutenberg_id}"
   end
 
   def clean_text(raw_text)
