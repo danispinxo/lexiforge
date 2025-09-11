@@ -7,7 +7,7 @@ class CutUpGenerator < BaseGenerator
 
   private
 
-  def generate_cut_up(options = {})
+  def generate_cutup(options = {})
     config = extract_cutup_config(options)
     words = extract_clean_words
 
