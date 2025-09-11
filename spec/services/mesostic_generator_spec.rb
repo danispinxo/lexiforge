@@ -27,7 +27,7 @@ RSpec.describe MesosticGenerator do
 
     context 'with invalid method' do
       it 'raises an error' do
-        expect { generator.generate(method: 'invalid') }.to raise_error('Invalid method: invalid')
+        expect { generator.generate(method: 'invalid') }.to raise_error('Invalid method: invalid. Only supported method: mesostic')
       end
     end
   end
@@ -94,7 +94,7 @@ RSpec.describe MesosticGenerator do
       let(:options) { {} }
 
       it 'returns error message' do
-        expect(result).to eq('Spine word is required for mesostic generation')
+        expect(result).to eq('Spine word is required')
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe MesosticGenerator do
       let(:options) { { spine_word: '' } }
 
       it 'returns error message' do
-        expect(result).to eq('Spine word is required for mesostic generation')
+        expect(result).to eq('Spine word is required')
       end
     end
 
