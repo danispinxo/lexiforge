@@ -40,7 +40,7 @@ class Poem < ApplicationRecord
     created_at.strftime('%B %d, %Y at %l:%M %p')
   end
 
-  def short_content(limit = 100)
+  def short_content(limit = PoemGenerationConstants::MODEL[:short_content_limit])
     return content if content.length <= limit
 
     content.truncate(limit, separator: ' ')
