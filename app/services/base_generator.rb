@@ -18,7 +18,8 @@ class BaseGenerator
     raise NotImplementedError, 'Subclasses must define default_method'
   end
 
-  def extract_clean_words(min_length: 2, preserve_punctuation: false)
+  def extract_clean_words(min_length: PoemGenerationConstants::VALIDATION[:minimum_word_length],
+                          preserve_punctuation: false)
     content = @source_text.content
 
     if preserve_punctuation
@@ -67,7 +68,7 @@ class BaseGenerator
     words
   end
 
-  def extract_sentences(min_length: 10, min_words: 3)
+  def extract_sentences(min_length: PoemGenerationConstants::TEXT_PROCESSING[:sentence_min_length], min_words: PoemGenerationConstants::TEXT_PROCESSING[:sentence_min_words])
     @source_text.content
                 .gsub(/\s+/, ' ')
                 .split(/[.!?]+/)
@@ -76,14 +77,14 @@ class BaseGenerator
                 .map { |sentence| sentence.gsub(/[^\w\s]/, '') }
   end
 
-  def validate_minimum_words(min_count = 10)
+  def validate_minimum_words(min_count = PoemGenerationConstants::VALIDATION[:minimum_words])
     words = extract_clean_words
     return 'Not enough words in source text' if words.length < min_count
 
     nil
   end
 
-  def validate_minimum_content(min_length = 100)
+  def validate_minimum_content(min_length = PoemGenerationConstants::VALIDATION[:minimum_content_length])
     content = @source_text.content.strip
     return 'Not enough content in source text' if content.length < min_length
 
@@ -113,14 +114,7 @@ class BaseGenerator
   end
 
   def random_range_for_length(length_type)
-    ranges = {
-      'very_short' => 1..2,
-      'short' => 3..4,
-      'medium' => 5..7,
-      'long' => 8..10,
-      'very_long' => 10..15
-    }
-    ranges[length_type] || ranges['medium']
+    PoemGenerationConstants::WORD_RANGES[length_type.to_sym] || PoemGenerationConstants::WORD_RANGES[:medium]
   end
 
   def select_random_subset(array, count)
