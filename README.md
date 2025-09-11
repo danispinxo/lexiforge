@@ -6,7 +6,7 @@ A digital poetry generation platform that transforms classic literature from Pro
 
 ### Backend Framework
 
-- **Rails 7.1** with Ruby 3.2.2
+- **Rails 8** with Ruby 3.4.4
 - **PostgreSQL** database with Active Record ORM
 - **RESTful API** design with JSON serialization
 - **Active Admin** for content management
