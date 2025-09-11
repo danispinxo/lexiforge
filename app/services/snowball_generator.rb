@@ -10,8 +10,9 @@ class SnowballGenerator < BaseGenerator
   private
 
   def generate_snowball(options = {})
-    num_lines = options[:num_lines] || 10
-    min_word_length = options[:min_word_length] || 1
+    defaults = PoemGenerationConstants::DEFAULTS[:snowball]
+    num_lines = options[:num_lines] || defaults[:num_lines]
+    min_word_length = options[:min_word_length] || defaults[:min_word_length]
 
     words = extract_clean_words_for_snowball(@source_text.content, min_word_length)
 
@@ -21,18 +22,22 @@ class SnowballGenerator < BaseGenerator
     words_by_length = words.group_by(&:length)
     lines = build_snowball_lines(words_by_length, num_lines, min_word_length)
 
-    return 'Could not generate enough lines for snowball poem' if lines.length < 3
+    if lines.length < PoemGenerationConstants::VALIDATION[:minimum_snowball_lines]
+      return 'Could not generate enough lines for snowball poem'
+    end
 
     lines.join("\n")
   end
 
   def validate_words_for_snowball(words)
-    return 'Not enough words in source text' if words.length < 10
+    return 'Not enough words in source text' if words.length < PoemGenerationConstants::VALIDATION[:minimum_words]
 
     words_by_length = words.group_by(&:length)
     available_lengths = words_by_length.keys.sort
 
-    return 'Not enough word variety for snowball poem' if available_lengths.length < 3
+    if available_lengths.length < PoemGenerationConstants::VALIDATION[:minimum_word_variety]
+      return 'Not enough word variety for snowball poem'
+    end
 
     nil
   end
