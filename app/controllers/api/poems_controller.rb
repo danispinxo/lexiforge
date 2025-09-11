@@ -111,6 +111,8 @@ class Api::PoemsController < ApiController
       build_kwic_options(options, permitted_params)
     when 'prisoners_constraint'
       build_prisoners_constraint_options(options, permitted_params)
+    when 'beautiful_outlaw'
+      build_beautiful_outlaw_options(options, permitted_params)
     end
 
     options
@@ -165,6 +167,12 @@ class Api::PoemsController < ApiController
     options[:constraint_type] = permitted_params[:constraint_type] || 'full_constraint'
   end
 
+  def build_beautiful_outlaw_options(options, permitted_params)
+    options[:hidden_word] = permitted_params[:hidden_word] if permitted_params[:hidden_word].present?
+    options[:lines_per_stanza] = (permitted_params[:lines_per_stanza] || 4).to_i
+    options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
+  end
+
   def generate_content(technique, options)
     generator_class = case technique
                       when 'cut_up' then CutUpGenerator
@@ -176,6 +184,7 @@ class Api::PoemsController < ApiController
                       when 'found' then FoundPoemGenerator
                       when 'kwic' then KwicGenerator
                       when 'prisoners_constraint' then PrisonersConstraintGenerator
+                      when 'beautiful_outlaw' then BeautifulOutlawGenerator
                       else
                         raise "Unknown technique: #{technique}"
                       end
@@ -206,6 +215,8 @@ class Api::PoemsController < ApiController
       options[:is_blackout] ? 'blackout' : 'erasure'
     when 'n_plus_seven'
       'n+7'
+    when 'beautiful_outlaw'
+      'beautiful_outlaw'
     else
       technique
     end
@@ -223,6 +234,8 @@ class Api::PoemsController < ApiController
       'KWIC'
     when 'prisoners_constraint'
       "prisoner's constraint"
+    when 'beautiful_outlaw'
+      'beautiful outlaw'
     else
       technique
     end
@@ -277,7 +290,7 @@ class Api::PoemsController < ApiController
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
                   :section_length, :words_to_replace, :line_length, :keyword, :context_window,
-                  :num_words, :constraint_type)
+                  :num_words, :constraint_type, :hidden_word, :lines_per_stanza)
   end
 
   def authenticate_any_user!
