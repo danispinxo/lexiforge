@@ -42,5 +42,6 @@
 @include meta.load-css("components/poetry");
 
 @include meta.load-css("pages/import");
+@include meta.load-css("pages/source-texts");
 @include meta.load-css("pages/source-text-detail");
 @include meta.load-css("pages/poem-edit");

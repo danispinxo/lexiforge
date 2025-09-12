@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :source_texts do
       collection do
         post :import_from_gutenberg
+        post :create_custom
         get :my_source_texts
       end
       member do

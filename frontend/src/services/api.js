@@ -40,6 +40,11 @@ export const sourceTextsAPI = {
       gutenberg_id: gutenbergId,
       is_public: isPublic,
     }),
+  createCustom: (title, content) =>
+    api.post("/source_texts/create_custom", {
+      title: title,
+      content: content,
+    }),
 };
 
 export const poemsAPI = {

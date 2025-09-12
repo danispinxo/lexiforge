@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
-  faInfoCircle,
   faFileText,
   faLock,
   faGlobe,
@@ -14,12 +13,14 @@ import {
 import { sourceTextsAPI } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import SourceTextImportModal from "./SourceTextImportModal";
+import CustomSourceTextModal from "./CustomSourceTextModal";
 
 function MySourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -43,6 +44,11 @@ function MySourceTexts() {
     loadMySourceTexts();
   };
 
+  const handleUploadSuccess = (successMessage) => {
+    setMessage(successMessage);
+    loadMySourceTexts();
+  };
+
   if (!user) {
     return (
       <div className="source-texts">
@@ -61,9 +67,14 @@ function MySourceTexts() {
       <div className="header">
         <h1>My Source Texts</h1>
         <div className="header-actions">
-          <button className="btn btn-primary" onClick={() => setIsImportModalOpen(true)}>
-            <FontAwesomeIcon icon={faPlus} /> Import Text
-          </button>
+          <div className="action-buttons">
+            <button className="btn btn-secondary" onClick={() => setIsImportModalOpen(true)}>
+              <FontAwesomeIcon icon={faPlus} /> Import from Gutenberg
+            </button>
+            <button className="btn btn-primary" onClick={() => setIsUploadModalOpen(true)}>
+              <FontAwesomeIcon icon={faPlus} /> Add Custom Text
+            </button>
+          </div>
         </div>
       </div>
 
@@ -81,13 +92,10 @@ function MySourceTexts() {
         <div className="loading">Loading your source texts...</div>
       ) : sourceTexts.length === 0 ? (
         <div className="empty-state">
+          <p>You haven't imported any source texts yet.</p>
           <p>
-            <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
-            You haven't imported any source texts yet.
-          </p>
-          <p>
-            Use the "Import Text" button above to import texts from Project Gutenberg, or check out
-            the <Link to="/source-texts">public source texts</Link>.
+            Use the buttons above to import texts from Project Gutenberg or add your own custom
+            texts.
           </p>
         </div>
       ) : (
@@ -165,6 +173,12 @@ function MySourceTexts() {
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
         onSuccess={handleImportSuccess}
+      />
+
+      <CustomSourceTextModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onSuccess={handleUploadSuccess}
       />
     </div>
   );
