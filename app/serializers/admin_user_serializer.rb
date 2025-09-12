@@ -1,5 +1,5 @@
 class AdminUserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :username, :first_name, :last_name, :bio, :full_name, :gravatar_url, :created_at, :admin
+  attributes :id, :email, :username, :first_name, :last_name, :bio, :full_name, :gravatar_url, :created_at, :admin, :type
 
   def admin
     object.admin?
@@ -31,5 +31,9 @@ class AdminUserSerializer < ActiveModel::Serializer
     object.gravatar_url
   rescue StandardError
     nil
+  end
+
+  def type
+    'AdminUser'
   end
 end
