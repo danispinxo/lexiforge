@@ -76,6 +76,53 @@
       }
     }
 
+    .paste-area {
+      width: 100%;
+      position: relative;
+
+      .content-textarea {
+        width: 100%;
+        padding: variables.$spacing-md;
+        border: 1px solid rgba(variables.$medium-gray, 0.5);
+        border-radius: variables.$border-radius-sm;
+        font-size: variables.$font-size-base;
+        background: variables.$bg-accent;
+        color: variables.$text-primary;
+        font-family: variables.$font-serif;
+        line-height: 1.6;
+        resize: vertical;
+        min-height: 200px;
+
+        &:focus {
+          border-color: variables.$primary-color;
+          box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
+        }
+
+        &::placeholder {
+          color: variables.$text-muted;
+          font-style: italic;
+        }
+      }
+
+      .paste-btn {
+        @include mixins.button-ghost;
+        position: absolute;
+        top: variables.$spacing-sm;
+        right: variables.$spacing-sm;
+        padding: variables.$spacing-xs variables.$spacing-sm;
+        font-size: variables.$font-size-xs;
+        border: 1px solid rgba(variables.$primary-color, 0.3);
+        border-radius: variables.$border-radius-sm;
+        background: rgba(variables.$bg-secondary, 0.9);
+        backdrop-filter: blur(4px);
+
+        &:hover {
+          border-color: variables.$primary-color;
+          background: rgba(variables.$primary-color, 0.1);
+        }
+      }
+    }
+
     select {
       width: 100%;
       padding: variables.$spacing-md;
