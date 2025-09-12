@@ -48,6 +48,8 @@ export const poemsAPI = {
   getById: (id) => api.get(`/poems/${id}`),
   generatePoem: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_poem`, options),
+  update: (id, poemData) => api.put(`/poems/${id}`, { poem: poemData }),
+  delete: (id) => api.delete(`/poems/${id}`),
 };
 
 export const authAPI = {
