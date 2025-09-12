@@ -1,0 +1,388 @@
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
+
+.poem-edit {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: variables.$spacing-lg;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: variables.$spacing-xl;
+    padding-bottom: variables.$spacing-lg;
+    border-bottom: 1px solid rgba(variables.$primary-color, 0.2);
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: variables.$spacing-xs;
+      color: variables.$primary-color;
+      text-decoration: none;
+      font-weight: variables.$weight-medium;
+      transition: all variables.$transition-normal;
+
+      &:hover {
+        color: variables.$link-hover;
+        transform: translateX(-2px);
+      }
+    }
+
+    h1 {
+      font-family: variables.$font-serif;
+      font-size: variables.$font-size-2xl;
+      color: variables.$primary-color;
+      margin: 0;
+      text-align: center;
+      flex: 1;
+    }
+
+    .actions {
+      display: flex;
+      gap: variables.$spacing-sm;
+    }
+  }
+
+  .auth-required,
+  .unauthorized {
+    text-align: center;
+    padding: variables.$spacing-xl;
+    background: rgba(variables.$bg-accent, 0.5);
+    border-radius: variables.$border-radius-md;
+    border: 1px solid rgba(variables.$primary-color, 0.2);
+
+    h1 {
+      color: variables.$primary-color;
+      margin-bottom: variables.$spacing-md;
+    }
+
+    p {
+      color: variables.$text-secondary;
+      margin-bottom: variables.$spacing-lg;
+    }
+  }
+
+  .poem-edit-form {
+    background: variables.$bg-secondary;
+    border-radius: variables.$border-radius-lg;
+    padding: variables.$spacing-xl;
+    border: 1px solid rgba(variables.$primary-color, 0.1);
+    box-shadow: variables.$shadow-medium;
+
+    .form-group {
+      margin-bottom: variables.$spacing-lg;
+
+      label {
+        display: block;
+        font-weight: variables.$weight-semibold;
+        color: variables.$primary-color;
+        margin-bottom: variables.$spacing-sm;
+        font-size: variables.$font-size-sm;
+        @include mixins.small-caps;
+        letter-spacing: 0.05em;
+      }
+
+      .form-input,
+      .form-textarea {
+        width: 100%;
+        padding: variables.$spacing-md;
+        border: 2px solid rgba(variables.$primary-color, 0.2);
+        border-radius: variables.$border-radius-md;
+        background: variables.$bg-primary;
+        color: variables.$text-primary;
+        font-family: variables.$font-sans;
+        font-size: variables.$font-size-base;
+        transition: all variables.$transition-normal;
+
+        &:focus {
+          outline: none;
+          border-color: variables.$primary-color;
+          box-shadow: 0 0 0 3px rgba(variables.$primary-color, 0.1);
+        }
+
+        &::placeholder {
+          color: variables.$text-muted;
+        }
+      }
+
+      .form-textarea {
+        resize: vertical;
+        min-height: 200px;
+        font-family: variables.$font-serif;
+        line-height: 1.6;
+
+        &.poem-content-editor {
+          min-height: 300px;
+          font-size: variables.$font-size-lg;
+        }
+      }
+
+      .erasure-edit-warning {
+        background: rgba(variables.$primary-color, 0.1);
+        border: 1px solid rgba(variables.$primary-color, 0.3);
+        border-radius: variables.$border-radius-sm;
+        padding: variables.$spacing-md;
+        margin-bottom: variables.$spacing-md;
+
+        p {
+          margin: 0;
+          color: variables.$text-secondary;
+          font-size: variables.$font-size-sm;
+          line-height: 1.5;
+        }
+      }
+
+      .form-help {
+        margin-top: variables.$spacing-xs;
+        font-size: variables.$font-size-xs;
+        color: variables.$text-muted;
+        font-style: italic;
+      }
+    }
+
+    // Privacy toggle styling (from modals)
+    .privacy-toggle-group {
+      .privacy-toggle-container {
+        display: flex;
+        align-items: center;
+        gap: variables.$spacing-lg;
+        margin-bottom: variables.$spacing-sm;
+      }
+
+      .privacy-toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+
+        .privacy-toggle-track {
+          width: 60px;
+          height: 32px;
+          background: variables.$text-muted;
+          border-radius: 16px;
+          position: relative;
+          transition: all 0.3s ease;
+          border: 2px solid transparent;
+
+          .privacy-toggle-thumb {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+            .privacy-toggle-icon {
+              font-size: 12px;
+              color: variables.$text-muted;
+              transition: all 0.3s ease;
+            }
+          }
+        }
+
+        &.public {
+          .privacy-toggle-track {
+            background: variables.$primary-color;
+
+            .privacy-toggle-thumb {
+              transform: translateX(28px);
+
+              .privacy-toggle-icon {
+                color: variables.$primary-color;
+              }
+            }
+          }
+        }
+
+        &.private {
+          .privacy-toggle-track {
+            background: variables.$text-muted;
+
+            .privacy-toggle-thumb {
+              transform: translateX(0);
+
+              .privacy-toggle-icon {
+                color: variables.$text-muted;
+              }
+            }
+          }
+        }
+
+        &:hover:not(:disabled) {
+          .privacy-toggle-track {
+            border-color: rgba(variables.$primary-color, 0.3);
+          }
+        }
+
+        &:focus:not(:disabled) {
+          outline: none;
+          .privacy-toggle-track {
+            border-color: variables.$primary-color;
+            box-shadow: 0 0 0 2px rgba(variables.$primary-color, 0.2);
+          }
+        }
+      }
+
+      .privacy-toggle-labels {
+        display: flex;
+        gap: variables.$spacing-lg;
+
+        .privacy-label-text {
+          display: flex;
+          align-items: center;
+          gap: variables.$spacing-xs;
+          font-size: variables.$font-size-sm;
+          color: variables.$text-muted;
+          transition: all 0.3s ease;
+
+          .privacy-icon {
+            font-size: 14px;
+          }
+
+          &.active {
+            color: variables.$text-primary;
+            font-weight: 600;
+
+            .privacy-icon {
+              color: variables.$primary-color;
+            }
+          }
+        }
+      }
+
+      .privacy-help {
+        font-size: variables.$font-size-sm;
+        color: variables.$text-secondary;
+        font-style: italic;
+        font-family: variables.$font-serif;
+        margin-top: variables.$spacing-sm;
+        padding-left: variables.$spacing-xs;
+      }
+    }
+
+    .poem-metadata {
+      background: rgba(variables.$bg-accent, 0.3);
+      border-radius: variables.$border-radius-md;
+      padding: variables.$spacing-lg;
+      margin: variables.$spacing-lg 0;
+      border: 1px solid rgba(variables.$primary-color, 0.1);
+
+      .metadata-item {
+        margin-bottom: variables.$spacing-sm;
+        font-size: variables.$font-size-sm;
+        color: variables.$text-secondary;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        strong {
+          color: variables.$primary-color;
+          font-weight: variables.$weight-semibold;
+        }
+
+        .source-link {
+          color: variables.$primary-color;
+          text-decoration: none;
+          font-style: italic;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: variables.$spacing-xl;
+      padding-top: variables.$spacing-lg;
+      border-top: 1px solid rgba(variables.$primary-color, 0.1);
+      gap: variables.$spacing-md;
+
+      .btn {
+        min-width: 120px;
+      }
+    }
+  }
+
+  .error,
+  .success {
+    padding: variables.$spacing-md;
+    border-radius: variables.$border-radius-md;
+    margin-bottom: variables.$spacing-lg;
+    font-weight: variables.$weight-medium;
+  }
+
+  .error {
+    background: rgba(variables.$accent-color, 0.1);
+    border: 1px solid rgba(variables.$accent-color, 0.3);
+    color: variables.$accent-color;
+  }
+
+  .success {
+    background: rgba(variables.$library-green, 0.1);
+    border: 1px solid rgba(variables.$library-green, 0.3);
+    color: variables.$library-green;
+  }
+}
+
+@include mixins.tablet {
+  .poem-edit {
+    padding: variables.$spacing-md;
+
+    .header {
+      flex-direction: column;
+      gap: variables.$spacing-md;
+      text-align: center;
+
+      h1 {
+        font-size: variables.$font-size-xl;
+      }
+    }
+
+    .poem-edit-form {
+      padding: variables.$spacing-lg;
+
+      .form-actions {
+        flex-direction: column;
+        gap: variables.$spacing-sm;
+
+        .btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@include mixins.mobile {
+  .poem-edit {
+    padding: variables.$spacing-sm;
+
+    .poem-edit-form {
+      padding: variables.$spacing-md;
+
+      .form-group {
+        .form-textarea.poem-content-editor {
+          min-height: 250px;
+          font-size: variables.$font-size-base;
+        }
+      }
+    }
+  }
+}
