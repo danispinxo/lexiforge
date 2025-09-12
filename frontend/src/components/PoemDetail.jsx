@@ -3,9 +3,11 @@ import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faGlobe } from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
 function PoemDetail() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [poem, setPoem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,6 +31,8 @@ function PoemDetail() {
   if (error) return <div className="error">{error}</div>;
   if (!poem) return <div className="error">Poem not found</div>;
 
+  const canEdit = user && poem && poem.author_id === user.id && poem.author_type === user.type;
+
   return (
     <div className="poem-detail">
       <div className="header">
@@ -36,6 +40,11 @@ function PoemDetail() {
           Back to All Public Poems
         </Link>
         <div className="actions">
+          {canEdit && (
+            <Link to={`/poems/${id}/edit`} className="btn btn-secondary">
+              Edit Poem
+            </Link>
+          )}
           <Link to={`/source-texts/${poem.source_text.id}`} className="btn btn-secondary">
             View Source Text
           </Link>
