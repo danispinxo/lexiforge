@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
+  faEdit,
+  faTrash,
   faExclamationTriangle,
   faInfoCircle,
   faCalendar,
@@ -16,6 +18,7 @@ function MyPoems() {
   const [poems, setPoems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -34,6 +37,33 @@ function MyPoems() {
       setError("Error loading your poems");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeletePoem = async (poemId, poemTitle) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete "${poemTitle}"? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    setDeleting(poemId);
+    setError("");
+
+    try {
+      const response = await poemsAPI.delete(poemId);
+      if (response.data.success) {
+        // Remove the deleted poem from the list
+        setPoems((prevPoems) => prevPoems.filter((poem) => poem.id !== poemId));
+      } else {
+        setError(response.data.message || "Failed to delete poem");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to delete poem");
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -124,9 +154,30 @@ function MyPoems() {
                       {new Date(poem.created_at).toLocaleDateString()}
                     </td>
                     <td className="actions-cell">
-                      <Link to={`/poems/${poem.id}`} className="btn btn-outline btn-sm">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
+                      <div className="action-buttons">
+                        <Link
+                          to={`/poems/${poem.id}`}
+                          className="btn btn-secondary btn-sm"
+                          title="View poem"
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </Link>
+                        <Link
+                          to={`/poems/${poem.id}/edit`}
+                          className="btn btn-secondary btn-sm"
+                          title="Edit poem"
+                        >
+                          <FontAwesomeIcon icon={faEdit} />
+                        </Link>
+                        <button
+                          onClick={() => handleDeletePoem(poem.id, poem.title)}
+                          className="btn btn-secondary btn-sm"
+                          title="Delete poem"
+                          disabled={deleting === poem.id}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
