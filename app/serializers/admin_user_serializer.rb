@@ -1,5 +1,6 @@
 class AdminUserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :username, :first_name, :last_name, :bio, :full_name, :gravatar_url, :created_at, :admin, :type
+  attributes :id, :email, :username, :first_name, :last_name, :bio, :full_name, :gravatar_url, :created_at, :admin,
+             :type
 
   def admin
     object.admin?
