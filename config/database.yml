@@ -5,8 +5,11 @@ default: &default
 
 development:
   <<: *default
-  url: <%= ENV.fetch("DATABASE_URL", "postgres://danispinosa@localhost:5432") %>
-  database: lexiforge_development
+  host: <%= ENV.fetch("DB_HOST", "db") %>
+  port: <%= ENV.fetch("DB_PORT", "5432") %>
+  database: <%= ENV.fetch("POSTGRES_DB", "lexiforge_development") %>
+  username: <%= ENV.fetch("POSTGRES_USER", "lexiforge") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "password") %>
 
 test:
   <<: *default
