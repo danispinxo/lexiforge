@@ -32,6 +32,8 @@ import {
   faCog,
   faGlobe,
   faTimes,
+  faEdit,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -66,7 +68,9 @@ library.add(
   faImage,
   faCog,
   faGlobe,
-  faTimes
+  faTimes,
+  faEdit,
+  faTrash
 );
 
 export {
@@ -102,4 +106,6 @@ export {
   faCog,
   faGlobe,
   faTimes,
+  faEdit,
+  faTrash,
 };

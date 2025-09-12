@@ -10,6 +10,7 @@ import SourceTexts from "./components/SourceTexts";
 import SourceTextDetail from "./components/SourceTextDetail";
 import Poems from "./components/Poems";
 import PoemDetail from "./components/PoemDetail";
+import PoemEdit from "./components/PoemEdit";
 import MySourceTexts from "./components/MySourceTexts";
 import MyPoems from "./components/MyPoems";
 import Profile from "./components/Profile";
@@ -58,6 +59,7 @@ function AppContent() {
           <Route path="/my-source-texts" element={<MySourceTexts />} />
           <Route path="/poems" element={<Poems />} />
           <Route path="/poems/:id" element={<PoemDetail />} />
+          <Route path="/poems/:id/edit" element={<PoemEdit />} />
           <Route path="/my-poems" element={<MyPoems />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />

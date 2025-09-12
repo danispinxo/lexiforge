@@ -66,7 +66,6 @@
 
       &:hover {
         background: rgba(variables.$primary-color, 0.03);
-        transform: translateX(2px);
       }
 
       &:last-child {
@@ -134,6 +133,12 @@
 .actions-cell {
   width: 20%;
   text-align: left;
+
+  .action-buttons {
+    display: flex;
+    gap: variables.$spacing-xs;
+    align-items: center;
+  }
 
   .btn {
     padding: variables.$spacing-xs variables.$spacing-sm;
