@@ -1,7 +1,8 @@
 class Api::PoemsController < ApiController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_any_user!, only: %i[generate_poem my_poems]
+  before_action :authenticate_any_user!, only: %i[generate_poem my_poems update destroy]
   before_action :set_poem, only: %i[show edit update destroy]
+  before_action :authorize_poem_owner!, only: %i[update destroy]
   before_action :set_source_text, only: %i[generate_poem]
 
   def index
@@ -52,16 +53,26 @@ class Api::PoemsController < ApiController
 
   def update
     if @poem.update(poem_params)
-      redirect_to @poem, notice: t('poems.notices.updated')
+      render json: {
+        success: true,
+        message: t('poems.notices.updated'),
+        poem: PoemDetailSerializer.new(@poem).as_json
+      }
     else
-      @source_texts = SourceText.all
-      render :edit, status: :unprocessable_content
+      render json: {
+        success: false,
+        message: 'Failed to update poem.',
+        errors: @poem.errors.full_messages
+      }, status: :unprocessable_content
     end
   end
 
   def destroy
     @poem.destroy
-    redirect_to poems_url, notice: t('poems.notices.deleted')
+    render json: {
+      success: true,
+      message: t('poems.notices.deleted')
+    }
   end
 
   def generate_poem
@@ -265,7 +276,7 @@ class Api::PoemsController < ApiController
   end
 
   def poem_params
-    params.expect(poem: %i[title content technique_used source_text_id])
+    params.expect(poem: %i[title content technique_used source_text_id is_public])
   end
 
   def generation_params
@@ -283,6 +294,16 @@ class Api::PoemsController < ApiController
       success: false,
       message: 'Authentication required'
     }, status: :unauthorized
+  end
+
+  def authorize_poem_owner!
+    current_user = current_api_user || current_admin_user
+    return if current_user && @poem.author == current_user
+
+    render json: {
+      success: false,
+      message: 'You can only edit your own poems'
+    }, status: :forbidden
   end
 
   def generate_poem_title(poem_content, technique)
