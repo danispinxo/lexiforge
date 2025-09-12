@@ -31,20 +31,14 @@ class Api::SourceTextsController < ApiController
   end
 
   def create_custom
-    return render_missing_required_fields if params[:title].blank? || params[:content].blank?
-    return render_content_too_short if params[:content].strip.length < 100
-    return render_content_too_long if params[:content].strip.length > 1_000_000
+    return render_missing_required_fields unless valid_custom_params?
+    return render_content_too_short unless content_length_valid?
+    return render_content_too_long unless content_length_reasonable?
 
     current_user = current_api_user || current_admin_user
     return render_unauthorized unless current_user
 
-    source_text = SourceText.new(
-      title: params[:title].strip,
-      content: params[:content].strip,
-      gutenberg_id: nil,
-      owner: current_user,
-      is_public: false
-    )
+    source_text = build_custom_source_text(current_user)
 
     if source_text.save
       render_custom_upload_success(source_text)
@@ -144,5 +138,27 @@ class Api::SourceTextsController < ApiController
       success: false,
       message: "Failed to upload text: #{source_text.errors.full_messages.join(', ')}"
     }, status: :unprocessable_content
+  end
+
+  def valid_custom_params?
+    params[:title].present? && params[:content].present?
+  end
+
+  def content_length_valid?
+    params[:content].strip.length >= 100
+  end
+
+  def content_length_reasonable?
+    params[:content].strip.length <= 1_000_000
+  end
+
+  def build_custom_source_text(user)
+    SourceText.new(
+      title: params[:title].strip,
+      content: params[:content].strip,
+      gutenberg_id: nil,
+      owner: user,
+      is_public: false
+    )
   end
 end
