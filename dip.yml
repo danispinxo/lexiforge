@@ -13,11 +13,27 @@ interaction:
     description: Run Rails commands
     service: api
     command: ./bin/rails
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      POSTGRES_DB: lexiforge_development
+      POSTGRES_USER: ${POSTGRES_USER:-lexiforge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    compose:
+      run_options: [no-deps]
 
   rake:
     description: Run Rake commands
     service: api
     command: ./bin/rake
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      POSTGRES_DB: lexiforge_development
+      POSTGRES_USER: ${POSTGRES_USER:-lexiforge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    compose:
+      run_options: [no-deps]
 
   bundle:
     description: Run Bundle commands
@@ -43,7 +59,7 @@ interaction:
   test-setup:
     description: Setup test database
     service: api
-    command: sh -c "./bin/rails db:create db:migrate RAILS_ENV=test"
+    command: sh -c "RAILS_ENV=test ./bin/rails db:environment:set && RAILS_ENV=test ./bin/rails db:prepare"
     environment:
       RAILS_ENV: test
       TEST_DB_HOST: db_test
@@ -51,6 +67,9 @@ interaction:
       TEST_DB_NAME: lexiforge_test
       TEST_DB_USER: ${POSTGRES_USER:-lexiforge}
       TEST_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      DB_HOST: db_test
+      DB_PORT: 5432
+      POSTGRES_DB: lexiforge_test
 
   rubocop:
     description: Run RuboCop
