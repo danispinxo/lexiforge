@@ -48,6 +48,15 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
   const [beautifulOutlawWordsPerLine, setBeautifulOutlawWordsPerLine] = useState(
     POEM_GENERATION_DEFAULTS.BEAUTIFUL_OUTLAW.WORDS_PER_LINE
   );
+  const [lipogramNumWords, setLipogramNumWords] = useState(
+    POEM_GENERATION_DEFAULTS.LIPOGRAM.NUM_WORDS
+  );
+  const [lipogramLineLength, setLipogramLineLength] = useState(
+    POEM_GENERATION_DEFAULTS.LIPOGRAM.LINE_LENGTH
+  );
+  const [letterToOmit, setLetterToOmit] = useState(
+    POEM_GENERATION_DEFAULTS.LIPOGRAM.LETTER_TO_OMIT
+  );
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -70,6 +79,12 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
 
     if (technique === "beautiful_outlaw" && !hiddenWord.trim()) {
       setError("Hidden word is required for Beautiful Outlaw poetry");
+      setGenerating(false);
+      return;
+    }
+
+    if (technique === "lipogram" && !letterToOmit.trim()) {
+      setError("Letter to omit is required for lipogram poetry");
       setGenerating(false);
       return;
     }
@@ -121,6 +136,11 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.lines_per_stanza = linesPerStanza;
           options.words_per_line = beautifulOutlawWordsPerLine;
           break;
+        case "lipogram":
+          options.num_words = lipogramNumWords;
+          options.line_length = lipogramLineLength;
+          options.letters_to_omit = letterToOmit;
+          break;
       }
 
       options.is_public = isPublic;
@@ -167,23 +187,24 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
 
           <form onSubmit={handleGenerate}>
             <div className="form-group">
-              <label htmlFor="technique">Poetry Technique:</label>
+              <label htmlFor="technique">Technique:</label>
               <select
                 id="technique"
                 value={technique}
                 onChange={(e) => setTechnique(e.target.value)}
                 disabled={generating}
               >
+                <option value="beautiful_outlaw">Beautiful Outlaw</option>
                 <option value="cut_up">Cut-Up</option>
-                <option value="erasure">Erasure</option>
-                <option value="snowball">Snowball</option>
-                <option value="mesostic">Mesostic</option>
-                <option value="n_plus_seven">N+7</option>
                 <option value="definitional">Definitional</option>
+                <option value="erasure">Erasure</option>
                 <option value="found">Found</option>
                 <option value="kwic">KWIC (KeyWord In Context)</option>
+                <option value="lipogram">Lipogram</option>
+                <option value="mesostic">Mesostic</option>
+                <option value="n_plus_seven">N+7</option>
                 <option value="prisoners_constraint">Prisoner's Constraint</option>
-                <option value="beautiful_outlaw">Beautiful Outlaw</option>
+                <option value="snowball">Snowball</option>
               </select>
             </div>
 
@@ -648,6 +669,64 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     max="15"
                     disabled={generating}
                   />
+                </div>
+              </>
+            )}
+
+            {technique === "lipogram" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    A lipogram is a text that deliberately excludes one letter of the alphabet. This
+                    constraint forces creative word choices and can produce surprising results.
+                    Choose which letter to omit and the generator will create a poem using only
+                    words that don't contain that letter.
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="letter-to-omit">Letter to Omit:</label>
+                  <input
+                    type="text"
+                    id="letter-to-omit"
+                    value={letterToOmit}
+                    onChange={(e) => setLetterToOmit(e.target.value)}
+                    placeholder="e.g., 'e', 'a', 'o'"
+                    disabled={generating}
+                    maxLength="1"
+                    pattern="[a-zA-Z]"
+                    required
+                  />
+                  <small className="form-help">
+                    Enter one letter to omit from the poem. Only alphabetic characters allowed.
+                  </small>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="lipogram-num-words">Number of Words:</label>
+                  <input
+                    type="number"
+                    id="lipogram-num-words"
+                    value={lipogramNumWords}
+                    onChange={(e) => setLipogramNumWords(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="100"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="lipogram-line-length">Line Length:</label>
+                  <select
+                    id="lipogram-line-length"
+                    value={lipogramLineLength}
+                    onChange={(e) => setLipogramLineLength(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="short">Short (3-4 words)</option>
+                    <option value="medium">Medium (5-7 words)</option>
+                    <option value="long">Long (8-10 words)</option>
+                  </select>
                 </div>
               </>
             )}
