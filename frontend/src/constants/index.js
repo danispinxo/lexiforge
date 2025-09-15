@@ -60,6 +60,11 @@ export const POEM_GENERATION_DEFAULTS = {
     LINES_PER_STANZA: 4,
     WORDS_PER_LINE: 6,
   },
+  LIPOGRAM: {
+    NUM_WORDS: 20,
+    LINE_LENGTH: "medium",
+    LETTER_TO_OMIT: "e",
+  },
 };
 
 export const INPUT_LIMITS = {
@@ -74,22 +79,24 @@ export const INPUT_LIMITS = {
   SECTION_LENGTH: { MIN: 10, MAX: 1000 },
   WORDS_TO_REPLACE: { MIN: 10, MAX: 2000 },
   CONTEXT_WINDOW: { MIN: 1, MAX: 30 },
+  NUM_WORDS: { MIN: 1, MAX: 100 },
 };
 
 export const CONTENT_DISPLAY = {
   PREVIEW_LENGTH: 9990,
   PARAGRAPH_TRUNCATE_LENGTH: 500,
   POEM_TECHNIQUES: {
+    BEAUTIFUL_OUTLAW: "beautiful_outlaw",
     CUT_UP: "cut_up",
-    ERASURE: "erasure",
-    SNOWBALL: "snowball",
-    MESOSTIC: "mesostic",
-    N_PLUS_SEVEN: "n_plus_seven",
     DEFINITIONAL: "definitional",
+    ERASURE: "erasure",
     FOUND: "found",
     KWIC: "kwic",
+    LIPOGRAM: "lipogram",
+    MESOSTIC: "mesostic",
+    N_PLUS_SEVEN: "n_plus_seven",
     PRISONERS_CONSTRAINT: "prisoners_constraint",
-    BEAUTIFUL_OUTLAW: "beautiful_outlaw",
+    SNOWBALL: "snowball",
   },
   LINE_LENGTH_OPTIONS: {
     SHORT: "short",
