@@ -41,6 +41,11 @@ module PoemGenerationConstants
     beautiful_outlaw: {
       lines_per_stanza: 4,
       words_per_line: 6
+    },
+    lipogram: {
+      num_words: 20,
+      line_length: "medium",
+      letter_to_omit: "e"
     }
   }.freeze
 

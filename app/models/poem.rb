@@ -3,7 +3,7 @@ class Poem < ApplicationRecord
   belongs_to :author, polymorphic: true, optional: true
 
   ALLOWED_TECHNIQUES = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball', 'mesostic',
-                        'found', 'kwic', 'prisoners_constraint', 'beautiful_outlaw'].freeze
+                        'found', 'kwic', 'prisoners_constraint', 'beautiful_outlaw', 'lipogram'].freeze
 
   validates :title, presence: true
   validates :content, presence: true
@@ -23,6 +23,7 @@ class Poem < ApplicationRecord
   scope :kwic_poems, -> { where(technique_used: 'kwic') }
   scope :prisoners_constraint_poems, -> { where(technique_used: 'prisoners_constraint') }
   scope :beautiful_outlaw_poems, -> { where(technique_used: 'beautiful_outlaw') }
+  scope :lipogram_poems, -> { where(technique_used: 'lipogram') }
 
   scope :recent, -> { order(created_at: :desc) }
   scope :public_poems, -> { where(is_public: true) }
