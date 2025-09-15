@@ -164,6 +164,12 @@ class Api::PoemsController < ApiController
     options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
   end
 
+  def build_lipogram_options(options, permitted_params)
+    options[:num_words] = (permitted_params[:num_words] || 20).to_i
+    options[:line_length] = permitted_params[:line_length] || 'medium'
+    options[:letters_to_omit] = permitted_params[:letters_to_omit] if permitted_params[:letters_to_omit].present?
+  end
+
   def generate_content(technique, options)
     generator_class = technique_to_generator_class(technique)
     generator = generator_class.new(@source_text)
@@ -181,7 +187,8 @@ class Api::PoemsController < ApiController
       'found' => FoundPoemGenerator,
       'kwic' => KwicGenerator,
       'prisoners_constraint' => PrisonersConstraintGenerator,
-      'beautiful_outlaw' => BeautifulOutlawGenerator
+      'beautiful_outlaw' => BeautifulOutlawGenerator,
+      'lipogram' => LipogramGenerator
     }
 
     technique_generators[technique] || raise("Unknown technique: #{technique}")
@@ -284,7 +291,7 @@ class Api::PoemsController < ApiController
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
                   :section_length, :words_to_replace, :line_length, :keyword, :context_window,
-                  :num_words, :constraint_type, :hidden_word, :lines_per_stanza)
+                  :num_words, :constraint_type, :hidden_word, :lines_per_stanza, :letters_to_omit)
   end
 
   def authenticate_any_user!
