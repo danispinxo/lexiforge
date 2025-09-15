@@ -37,8 +37,8 @@ class LipogramGenerator < BaseGenerator
 
   def validate_letters_to_omit(letters_to_omit)
     return 'Letter to omit is required' if letters_to_omit.blank?
-    return 'Letter to omit must be exactly one letter' if letters_to_omit.length != 1
     return 'Letter to omit must be an alphabetic character' unless letters_to_omit.match?(/\A[a-zA-Z]\z/)
+    return 'Letter to omit must be exactly one letter' if letters_to_omit.length != 1
 
     nil
   end
