@@ -27,4 +27,33 @@ export default defineConfig([
       "max-len": ["error", { code: 100, ignoreUrls: true, ignoreStrings: true }],
     },
   },
+  {
+    files: ["cypress/**/*.{js,jsx}", "cypress.config.js"],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        cy: "readonly",
+        Cypress: "readonly",
+        describe: "readonly",
+        it: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        before: "readonly",
+        after: "readonly",
+        expect: "readonly",
+        assert: "readonly",
+      },
+      parserOptions: {
+        ecmaVersion: "latest",
+        ecmaFeatures: { jsx: true },
+        sourceType: "module",
+      },
+    },
+    rules: {
+      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+      "max-len": ["error", { code: 100, ignoreUrls: true, ignoreStrings: true }],
+    },
+  },
 ]);
