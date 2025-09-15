@@ -94,9 +94,6 @@ services:
     depends_on:
       - frontend
       - api
-    stdin_open: true
-    tty: true
-    command: tail -f /dev/null
 
 volumes:
   postgres_data:
