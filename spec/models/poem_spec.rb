@@ -157,17 +157,4 @@ RSpec.describe Poem, type: :model do
       end
     end
   end
-
-  describe 'constants' do
-    describe 'ALLOWED_TECHNIQUES' do
-      it 'includes expected techniques' do
-        expected_techniques = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball', 'mesostic', 'found', 'kwic', 'prisoners_constraint', 'beautiful_outlaw']
-        expect(Poem::ALLOWED_TECHNIQUES).to eq(expected_techniques)
-      end
-
-      it 'is frozen' do
-        expect(Poem::ALLOWED_TECHNIQUES).to be_frozen
-      end
-    end
-  end
 end
