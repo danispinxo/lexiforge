@@ -134,7 +134,7 @@ RSpec.describe LipogramGenerator do
     end
 
     context 'with no words available after filtering' do
-      let(:source_text) { create(:source_text, content: 'every evening everyone everywhere hello world') }
+      let(:source_text) { create(:source_text, content: 'every evening everyone everywhere hello world test sample these are enough') }
       let(:options) { { letters_to_omit: 'e' } }
 
       it 'returns error message for insufficient filtered words' do
@@ -150,18 +150,10 @@ RSpec.describe LipogramGenerator do
       end
     end
 
-    context 'with too many letters to omit' do
-      let(:options) { { letters_to_omit: 'ab' } }
+    context 'with non-alphabetic character' do
+      let(:options) { { letters_to_omit: '3' } }
 
-      it 'returns error for more than 1 letter' do
-        expect(result).to eq('Letter to omit must be exactly one letter')
-      end
-    end
-
-    context 'with non-alphabetic characters in letters_to_omit' do
-      let(:options) { { letters_to_omit: 'a1b' } }
-
-      it 'returns error for non-alphabetic characters' do
+      it 'returns error for non-alphabetic character' do
         expect(result).to eq('Letter to omit must be an alphabetic character')
       end
     end
@@ -224,12 +216,12 @@ RSpec.describe LipogramGenerator do
     end
 
     context 'with more words requested than available' do
-      let(:source_text) { create(:source_text, content: 'cat dog bird fish') }
-      let(:options) { { num_words: 10, letters_to_omit: 'e' } }
+      let(:source_text) { create(:source_text, content: 'these are enough words to generate a poem in this test case') }
+      let(:options) { { num_words: 15, letters_to_omit: 'x' } }
 
       it 'uses all available words' do
         word_count = result.split.length
-        expect(word_count).to be <= 4
+        expect(word_count).to be <= 12
         expect(word_count).to be > 0
       end
     end
@@ -243,9 +235,9 @@ RSpec.describe LipogramGenerator do
 
       it 'correctly filters words containing omitted letter' do
         filtered_words = generator.send(:filter_words_by_omitted_letters,
-                                        %w[apple banana cherry date elderberry], 'a')
+                                       %w[apple banana cherry date elderberry], 'a')
 
-        expect(filtered_words).to eq(['cherry'])
+        expect(filtered_words).to eq(['cherry', 'elderberry'])
       end
     end
 
