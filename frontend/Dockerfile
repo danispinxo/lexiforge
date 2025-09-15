@@ -12,15 +12,19 @@ RUN apk add --no-cache \
     dbus \
     ttf-dejavu \
     ttf-droid \
-    ttf-liberation
+    ttf-liberation \
+    gcompat
 
 ENV CYPRESS_CACHE_FOLDER=/app/.cache/Cypress
+ENV CYPRESS_BROWSER=/usr/bin/chromium-browser
+ENV DISPLAY=:99
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
+
+RUN npx cypress install --force
 
 COPY . .
 
