@@ -95,30 +95,6 @@ interaction:
     compose:
       run_options: [no-deps]
 
-  cypress:
-    description: Run Cypress tests in headless mode
-    service: cypress
-    command: npm run cypress:run:headless
-    compose:
-      run_options: [no-deps]
-      build: true
-
-  cypress:open:
-    description: Open Cypress Test Runner (requires X11 forwarding)
-    service: cypress
-    command: npm run cypress:open
-    compose:
-      run_options: [no-deps]
-      build: true
-
-  cypress:install:
-    description: Install Cypress binary
-    service: cypress
-    command: npx cypress install
-    compose:
-      run_options: [no-deps]
-      build: true
-
   bash:
     description: Open bash in API container
     service: api

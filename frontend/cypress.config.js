@@ -8,7 +8,7 @@ export default defineConfig({
     viewportWidth: 1280,
     viewportHeight: 720,
     video: false,
-    screenshotOnRunFailure: true,
+    screenshotOnRunFailure: false,
     defaultCommandTimeout: 10000,
     requestTimeout: 10000,
     responseTimeout: 10000,
@@ -16,7 +16,7 @@ export default defineConfig({
 
     setupNodeEvents(on) {
       on("before:browser:launch", (browser, launchOptions) => {
-        if (browser.name === "electron") {
+        if (browser.name === "chrome" || browser.name === "chromium") {
           launchOptions.args.push("--no-sandbox");
           launchOptions.args.push("--disable-setuid-sandbox");
           launchOptions.args.push("--disable-dev-shm-usage");
@@ -28,6 +28,7 @@ export default defineConfig({
           launchOptions.args.push("--disable-features=TranslateUI");
           launchOptions.args.push("--disable-ipc-flooding-protection");
         }
+        // Electron doesn't need these args, so we skip it
         return launchOptions;
       });
     },
