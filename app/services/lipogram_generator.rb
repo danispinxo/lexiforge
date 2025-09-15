@@ -18,7 +18,7 @@ class LipogramGenerator < BaseGenerator
     return validation_error if validation_error
 
     filtered_words = filter_words_by_omitted_letters(words, config[:letters_to_omit])
-    
+
     validation_error = validate_filtered_words(filtered_words, config[:num_words])
     return validation_error if validation_error
 
@@ -65,14 +65,13 @@ class LipogramGenerator < BaseGenerator
     while words_used < config[:num_words] && !remaining_words.empty?
       line_length = calculate_line_length(word_range, config[:num_words] - words_used)
       line_words = select_words_for_line(remaining_words, line_length)
-      
-      if line_words.any?
-        lines << line_words.join(' ').capitalize
-        words_used += line_words.length
-        remaining_words -= line_words
-      else
-        break
-      end
+
+      break unless line_words.any?
+
+      lines << line_words.join(' ').capitalize
+      words_used += line_words.length
+      remaining_words -= line_words
+
     end
 
     lines
@@ -81,9 +80,9 @@ class LipogramGenerator < BaseGenerator
   def calculate_line_length(word_range, remaining_words)
     max_possible = [word_range.max, remaining_words].min
     min_possible = [word_range.min, remaining_words].min
-    
+
     min_possible = [min_possible, word_range.min].max
-    
+
     if min_possible == max_possible
       min_possible
     else
