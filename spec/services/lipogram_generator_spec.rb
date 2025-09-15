@@ -235,9 +235,9 @@ RSpec.describe LipogramGenerator do
 
       it 'correctly filters words containing omitted letter' do
         filtered_words = generator.send(:filter_words_by_omitted_letters,
-                                       %w[apple banana cherry date elderberry], 'a')
+                                        %w[apple banana cherry date elderberry], 'a')
 
-        expect(filtered_words).to eq(['cherry', 'elderberry'])
+        expect(filtered_words).to eq(%w[cherry elderberry])
       end
     end
 
