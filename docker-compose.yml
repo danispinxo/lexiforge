@@ -87,7 +87,6 @@ services:
       VITE_API_BASE_URL: ${API_BASE_URL:-http://localhost:3000/api}
       CYPRESS_baseUrl: http://frontend:3001
       CYPRESS_CACHE_FOLDER: /app/.cache/Cypress
-      CYPRESS_BROWSER: /usr/bin/chromium-browser
     volumes:
       - ./frontend:/app
       - /app/node_modules
