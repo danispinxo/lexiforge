@@ -12,24 +12,21 @@ export default defineConfig({
     defaultCommandTimeout: 10000,
     requestTimeout: 10000,
     responseTimeout: 10000,
-
-    chromeWebSecurity: false,
     experimentalStudio: true,
+
     setupNodeEvents(on) {
       on("before:browser:launch", (browser, launchOptions) => {
-        if (browser.name === "chromium") {
+        if (browser.name === "electron") {
           launchOptions.args.push("--no-sandbox");
           launchOptions.args.push("--disable-setuid-sandbox");
           launchOptions.args.push("--disable-dev-shm-usage");
-          launchOptions.args.push("--disable-accelerated-2d-canvas");
-          launchOptions.args.push("--no-first-run");
-          launchOptions.args.push("--no-zygote");
           launchOptions.args.push("--disable-gpu");
-          launchOptions.args.push("--disable-web-security");
-          launchOptions.args.push("--disable-features=VizDisplayCompositor");
+          launchOptions.args.push("--disable-software-rasterizer");
           launchOptions.args.push("--disable-background-timer-throttling");
           launchOptions.args.push("--disable-backgrounding-occluded-windows");
           launchOptions.args.push("--disable-renderer-backgrounding");
+          launchOptions.args.push("--disable-features=TranslateUI");
+          launchOptions.args.push("--disable-ipc-flooding-protection");
         }
         return launchOptions;
       });
