@@ -9,6 +9,7 @@ gem 'puma', '>= 5.0'
 gem 'active_model_serializers'
 gem 'jbuilder'
 gem 'rack-cors'
+gem 'kaminari'
 
 gem 'bootsnap', require: false
 gem 'httparty'
