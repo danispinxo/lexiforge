@@ -8,7 +8,10 @@ class Api::SourceTextsController < ApiController
     per_page = params[:per_page] || 10
 
     @source_texts = SourceText.public_texts.includes(:owner)
-                              .page(page).per(per_page)
+    @source_texts = apply_search(@source_texts, params[:search])
+    @source_texts = apply_filters(@source_texts, params)
+    @source_texts = apply_sorting(@source_texts, params[:sort_by], params[:sort_direction])
+    @source_texts = @source_texts.page(page).per(per_page)
 
     render json: {
       source_texts: ActiveModel::Serializer::CollectionSerializer.new(
@@ -35,7 +38,10 @@ class Api::SourceTextsController < ApiController
     per_page = params[:per_page] || 10
 
     @source_texts = SourceText.for_owner(current_user).includes(:owner)
-                              .page(page).per(per_page)
+    @source_texts = apply_search(@source_texts, params[:search])
+    @source_texts = apply_filters(@source_texts, params)
+    @source_texts = apply_sorting(@source_texts, params[:sort_by], params[:sort_direction])
+    @source_texts = @source_texts.page(page).per(per_page)
 
     render json: {
       source_texts: ActiveModel::Serializer::CollectionSerializer.new(
@@ -85,6 +91,64 @@ class Api::SourceTextsController < ApiController
 
   def set_source_text
     @source_text = SourceText.find(params[:id])
+  end
+
+  def apply_search(scope, search_term)
+    return scope if search_term.blank?
+
+    scope.where(
+      'title ILIKE ? OR content ILIKE ?',
+      "%#{search_term}%", "%#{search_term}%"
+    )
+  end
+
+  def apply_filters(scope, filter_params)
+    # Filter by Gutenberg vs Custom texts
+    if filter_params[:text_type].present?
+      case filter_params[:text_type]
+      when 'gutenberg'
+        scope = scope.where.not(gutenberg_id: nil)
+      when 'custom'
+        scope = scope.where(gutenberg_id: nil)
+      end
+    end
+
+    # Filter by word count ranges (using content length as proxy)
+    if filter_params[:min_word_count].present?
+      # Approximate: assume average word length of 5 characters + 1 space = 6 chars per word
+      min_chars = filter_params[:min_word_count].to_i * 6
+      scope = scope.where('LENGTH(content) >= ?', min_chars)
+    end
+
+    if filter_params[:max_word_count].present?
+      # Approximate: assume average word length of 5 characters + 1 space = 6 chars per word
+      max_chars = filter_params[:max_word_count].to_i * 6
+      scope = scope.where('LENGTH(content) <= ?', max_chars)
+    end
+
+    scope
+  end
+
+  def apply_sorting(scope, sort_by, sort_direction)
+    sort_by ||= 'created_at'
+    sort_direction ||= 'desc'
+
+    # Ensure valid sort direction
+    sort_direction = 'desc' unless %w[asc desc].include?(sort_direction.downcase)
+
+    case sort_by
+    when 'title'
+      scope.order("title #{sort_direction}")
+    when 'word_count'
+      # Sort by content length as a proxy for word count
+      scope.order("LENGTH(content) #{sort_direction}")
+    when 'created_at'
+      scope.order("created_at #{sort_direction}")
+    when 'gutenberg_id'
+      scope.order("gutenberg_id #{sort_direction} NULLS LAST")
+    else
+      scope.order("created_at #{sort_direction}")
+    end
   end
 
   def render_missing_gutenberg_id
