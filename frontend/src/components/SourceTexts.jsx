@@ -10,22 +10,31 @@ import {
 } from "../config/fontawesome";
 import { sourceTextsAPI } from "../services/api";
 import SourceTextImportModal from "./SourceTextImportModal";
+import Pagination from "./Pagination";
 
 function SourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    total_count: 0,
+    per_page: 10,
+  });
 
   useEffect(() => {
-    loadSourceTexts();
-  }, []);
+    loadSourceTexts(currentPage);
+  }, [currentPage]);
 
-  const loadSourceTexts = async () => {
+  const loadSourceTexts = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await sourceTextsAPI.getAll();
-      setSourceTexts(response.data);
+      const response = await sourceTextsAPI.getAll(page);
+      setSourceTexts(response.data.source_texts);
+      setPagination(response.data.pagination);
     } catch {
       setMessage("Error loading source texts");
     } finally {
@@ -35,7 +44,12 @@ function SourceTexts() {
 
   const handleImportSuccess = (successMessage) => {
     setMessage(successMessage);
-    loadSourceTexts();
+    loadSourceTexts(currentPage);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -57,7 +71,7 @@ function SourceTexts() {
       <div className="texts-section">
         <h3>
           <FontAwesomeIcon icon={faFileText} className="section-icon" />
-          Available Source Texts ({sourceTexts.length})
+          Available Source Texts ({pagination.total_count})
         </h3>
 
         {loading ? (
@@ -101,6 +115,13 @@ function SourceTexts() {
             </table>
           </div>
         )}
+
+        <Pagination
+          currentPage={pagination.current_page}
+          totalPages={pagination.total_pages}
+          onPageChange={handlePageChange}
+          loading={loading}
+        />
       </div>
 
       <SourceTextImportModal
