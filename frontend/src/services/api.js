@@ -32,14 +32,32 @@ api.interceptors.response.use(
 );
 
 export const sourceTextsAPI = {
-  getAll: (page = 1, perPage = 10) =>
-    api.get("/source_texts", {
-      params: { page, per_page: perPage },
-    }),
-  getMine: (page = 1, perPage = 10) =>
-    api.get("/source_texts/my_source_texts", {
-      params: { page, per_page: perPage },
-    }),
+  getAll: (page = 1, perPage = 10, options = {}) => {
+    const params = {
+      page,
+      per_page: perPage,
+      ...(options.search && { search: options.search }),
+      ...(options.sortBy && { sort_by: options.sortBy }),
+      ...(options.sortDirection && { sort_direction: options.sortDirection }),
+      ...(options.textType && { text_type: options.textType }),
+      ...(options.minWordCount && { min_word_count: options.minWordCount }),
+      ...(options.maxWordCount && { max_word_count: options.maxWordCount }),
+    };
+    return api.get("/source_texts", { params });
+  },
+  getMine: (page = 1, perPage = 10, options = {}) => {
+    const params = {
+      page,
+      per_page: perPage,
+      ...(options.search && { search: options.search }),
+      ...(options.sortBy && { sort_by: options.sortBy }),
+      ...(options.sortDirection && { sort_direction: options.sortDirection }),
+      ...(options.textType && { text_type: options.textType }),
+      ...(options.minWordCount && { min_word_count: options.minWordCount }),
+      ...(options.maxWordCount && { max_word_count: options.maxWordCount }),
+    };
+    return api.get("/source_texts/my_source_texts", { params });
+  },
   getById: (id) => api.get(`/source_texts/${id}`),
   importFromGutenberg: (gutenbergId, isPublic = true) =>
     api.post("/source_texts/import_from_gutenberg", {

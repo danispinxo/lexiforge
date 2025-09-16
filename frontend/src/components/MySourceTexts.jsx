@@ -15,6 +15,8 @@ import { useAuth } from "../hooks/useAuth";
 import SourceTextImportModal from "./SourceTextImportModal";
 import CustomSourceTextModal from "./CustomSourceTextModal";
 import Pagination from "./Pagination";
+import SearchAndFilter from "./SearchAndFilter";
+import SortableHeader from "./SortableHeader";
 
 function MySourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
@@ -29,18 +31,35 @@ function MySourceTexts() {
     total_count: 0,
     per_page: 10,
   });
+  const [searchOptions, setSearchOptions] = useState({
+    search: "",
+    sortBy: "created_at",
+    sortDirection: "desc",
+    textType: "",
+    minWordCount: "",
+    maxWordCount: "",
+  });
   const { user } = useAuth();
 
   useEffect(() => {
     if (user) {
       loadMySourceTexts(currentPage);
     }
-  }, [user, currentPage]);
+  }, [
+    user,
+    currentPage,
+    searchOptions.search,
+    searchOptions.sortBy,
+    searchOptions.sortDirection,
+    searchOptions.textType,
+    searchOptions.minWordCount,
+    searchOptions.maxWordCount,
+  ]);
 
   const loadMySourceTexts = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await sourceTextsAPI.getMine(page);
+      const response = await sourceTextsAPI.getMine(page, 10, searchOptions);
       setSourceTexts(response.data.source_texts);
       setPagination(response.data.pagination);
     } catch {
@@ -63,6 +82,21 @@ function MySourceTexts() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSearch = (search) => {
+    setSearchOptions((prev) => ({ ...prev, search }));
+    setCurrentPage(1);
+  };
+
+  const handleFilter = (filters) => {
+    setSearchOptions((prev) => ({ ...prev, ...filters }));
+    setCurrentPage(1);
+  };
+
+  const handleSort = (sortBy, sortDirection) => {
+    setSearchOptions((prev) => ({ ...prev, sortBy, sortDirection }));
+    setCurrentPage(1);
   };
 
   if (!user) {
@@ -104,6 +138,14 @@ function MySourceTexts() {
         </div>
       )}
 
+      <SearchAndFilter
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+        onSort={handleSort}
+        currentSort={{ sortBy: searchOptions.sortBy, sortDirection: searchOptions.sortDirection }}
+        showTextTypeFilter={true}
+      />
+
       {loading ? (
         <div className="loading">Loading your source texts...</div>
       ) : sourceTexts.length === 0 ? (
@@ -124,11 +166,25 @@ function MySourceTexts() {
             <table className="texts-table">
               <thead>
                 <tr>
-                  <th>Title</th>
+                  <SortableHeader sortKey="title" currentSort={searchOptions} onSort={handleSort}>
+                    Title
+                  </SortableHeader>
                   <th>Privacy</th>
-                  <th>Gutenberg ID</th>
+                  <SortableHeader
+                    sortKey="gutenberg_id"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Gutenberg ID
+                  </SortableHeader>
                   <th>Poems Generated</th>
-                  <th>Date Added</th>
+                  <SortableHeader
+                    sortKey="created_at"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Date Added
+                  </SortableHeader>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -137,7 +193,6 @@ function MySourceTexts() {
                   <tr key={sourceText.id}>
                     <td className="title-cell">
                       <Link to={`/source-texts/${sourceText.id}`} className="title-link">
-                        <FontAwesomeIcon icon={faFileText} className="file-icon" />
                         {sourceText.title}
                       </Link>
                     </td>
