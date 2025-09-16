@@ -1,22 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-  faFilter,
-  faTimes,
-  faChevronDown,
-  faSort,
-  faSortUp,
-  faSortDown,
-} from "../config/fontawesome";
+import { faSearch, faFilter, faTimes, faChevronDown } from "../config/fontawesome";
 
-function SearchAndFilter({
-  onSearch,
-  onFilter,
-  onSort,
-  currentSort = { sortBy: "created_at", sortDirection: "desc" },
-  showTextTypeFilter = true,
-}) {
+function SearchAndFilter({ onSearch, onFilter, showTextTypeFilter = true }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
@@ -28,7 +14,7 @@ function SearchAndFilter({
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    // Debounce search
+
     const timeoutId = setTimeout(() => {
       onSearch(value);
     }, 300);
@@ -50,19 +36,6 @@ function SearchAndFilter({
     };
     setFilters(clearedFilters);
     onFilter(clearedFilters);
-  };
-
-  const handleSort = (sortBy) => {
-    const newDirection =
-      currentSort.sortBy === sortBy && currentSort.sortDirection === "asc" ? "desc" : "asc";
-    onSort(sortBy, newDirection);
-  };
-
-  const getSortIcon = (column) => {
-    if (currentSort.sortBy !== column) {
-      return faSort;
-    }
-    return currentSort.sortDirection === "asc" ? faSortUp : faSortDown;
   };
 
   const hasActiveFilters = Object.values(filters).some((value) => value !== "");

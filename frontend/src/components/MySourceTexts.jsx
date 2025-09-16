@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -41,33 +41,27 @@ function MySourceTexts() {
   });
   const { user } = useAuth();
 
+  const loadMySourceTexts = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await sourceTextsAPI.getMine(page, 10, searchOptions);
+        setSourceTexts(response.data.source_texts);
+        setPagination(response.data.pagination);
+      } catch {
+        setMessage("Error loading your source texts");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [searchOptions]
+  );
+
   useEffect(() => {
     if (user) {
       loadMySourceTexts(currentPage);
     }
-  }, [
-    user,
-    currentPage,
-    searchOptions.search,
-    searchOptions.sortBy,
-    searchOptions.sortDirection,
-    searchOptions.textType,
-    searchOptions.minWordCount,
-    searchOptions.maxWordCount,
-  ]);
-
-  const loadMySourceTexts = async (page = 1) => {
-    setLoading(true);
-    try {
-      const response = await sourceTextsAPI.getMine(page, 10, searchOptions);
-      setSourceTexts(response.data.source_texts);
-      setPagination(response.data.pagination);
-    } catch {
-      setMessage("Error loading your source texts");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [user, currentPage, loadMySourceTexts]);
 
   const handleImportSuccess = (successMessage) => {
     setMessage(successMessage);
@@ -138,13 +132,7 @@ function MySourceTexts() {
         </div>
       )}
 
-      <SearchAndFilter
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-        onSort={handleSort}
-        currentSort={{ sortBy: searchOptions.sortBy, sortDirection: searchOptions.sortDirection }}
-        showTextTypeFilter={true}
-      />
+      <SearchAndFilter onSearch={handleSearch} onFilter={handleFilter} showTextTypeFilter={true} />
 
       {loading ? (
         <div className="loading">Loading your source texts...</div>

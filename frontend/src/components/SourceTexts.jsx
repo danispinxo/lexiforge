@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -35,30 +35,25 @@ function SourceTexts() {
     maxWordCount: "",
   });
 
+  const loadSourceTexts = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await sourceTextsAPI.getAll(page, 10, searchOptions);
+        setSourceTexts(response.data.source_texts);
+        setPagination(response.data.pagination);
+      } catch {
+        setMessage("Error loading source texts");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [searchOptions]
+  );
+
   useEffect(() => {
     loadSourceTexts(currentPage);
-  }, [
-    currentPage,
-    searchOptions.search,
-    searchOptions.sortBy,
-    searchOptions.sortDirection,
-    searchOptions.textType,
-    searchOptions.minWordCount,
-    searchOptions.maxWordCount,
-  ]);
-
-  const loadSourceTexts = async (page = 1) => {
-    setLoading(true);
-    try {
-      const response = await sourceTextsAPI.getAll(page, 10, searchOptions);
-      setSourceTexts(response.data.source_texts);
-      setPagination(response.data.pagination);
-    } catch {
-      setMessage("Error loading source texts");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [currentPage, loadSourceTexts]);
 
   const handleImportSuccess = (successMessage) => {
     setMessage(successMessage);
@@ -101,13 +96,7 @@ function SourceTexts() {
         </div>
       )}
 
-      <SearchAndFilter
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-        onSort={handleSort}
-        currentSort={{ sortBy: searchOptions.sortBy, sortDirection: searchOptions.sortDirection }}
-        showTextTypeFilter={false}
-      />
+      <SearchAndFilter onSearch={handleSearch} onFilter={handleFilter} showTextTypeFilter={false} />
 
       <div className="texts-section">
         <h3>
