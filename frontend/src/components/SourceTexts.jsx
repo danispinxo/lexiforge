@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,6 +11,8 @@ import {
 import { sourceTextsAPI } from "../services/api";
 import SourceTextImportModal from "./SourceTextImportModal";
 import Pagination from "./Pagination";
+import SearchAndFilter from "./SearchAndFilter";
+import SortableHeader from "./SortableHeader";
 
 function SourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
@@ -24,23 +26,34 @@ function SourceTexts() {
     total_count: 0,
     per_page: 10,
   });
+  const [searchOptions, setSearchOptions] = useState({
+    search: "",
+    sortBy: "created_at",
+    sortDirection: "desc",
+    textType: "",
+    minWordCount: "",
+    maxWordCount: "",
+  });
+
+  const loadSourceTexts = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await sourceTextsAPI.getAll(page, 10, searchOptions);
+        setSourceTexts(response.data.source_texts);
+        setPagination(response.data.pagination);
+      } catch {
+        setMessage("Error loading source texts");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [searchOptions]
+  );
 
   useEffect(() => {
     loadSourceTexts(currentPage);
-  }, [currentPage]);
-
-  const loadSourceTexts = async (page = 1) => {
-    setLoading(true);
-    try {
-      const response = await sourceTextsAPI.getAll(page);
-      setSourceTexts(response.data.source_texts);
-      setPagination(response.data.pagination);
-    } catch {
-      setMessage("Error loading source texts");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [currentPage, loadSourceTexts]);
 
   const handleImportSuccess = (successMessage) => {
     setMessage(successMessage);
@@ -50,6 +63,21 @@ function SourceTexts() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSearch = (search) => {
+    setSearchOptions((prev) => ({ ...prev, search }));
+    setCurrentPage(1);
+  };
+
+  const handleFilter = (filters) => {
+    setSearchOptions((prev) => ({ ...prev, ...filters }));
+    setCurrentPage(1);
+  };
+
+  const handleSort = (sortBy, sortDirection) => {
+    setSearchOptions((prev) => ({ ...prev, sortBy, sortDirection }));
+    setCurrentPage(1);
   };
 
   return (
@@ -67,6 +95,8 @@ function SourceTexts() {
           {message}
         </div>
       )}
+
+      <SearchAndFilter onSearch={handleSearch} onFilter={handleFilter} showTextTypeFilter={false} />
 
       <div className="texts-section">
         <h3>
@@ -88,9 +118,23 @@ function SourceTexts() {
             <table className="texts-table">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Word Count</th>
-                  <th>Gutenberg ID</th>
+                  <SortableHeader sortKey="title" currentSort={searchOptions} onSort={handleSort}>
+                    Title
+                  </SortableHeader>
+                  <SortableHeader
+                    sortKey="word_count"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Word Count
+                  </SortableHeader>
+                  <SortableHeader
+                    sortKey="gutenberg_id"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Gutenberg ID
+                  </SortableHeader>
                   <th>Actions</th>
                 </tr>
               </thead>

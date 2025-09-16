@@ -38,6 +38,11 @@ import {
   faTrash,
   faFile,
   faPaste,
+  faSearch,
+  faFilter,
+  faSort,
+  faSortUp,
+  faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -78,7 +83,12 @@ library.add(
   faEdit,
   faTrash,
   faFile,
-  faPaste
+  faPaste,
+  faSearch,
+  faFilter,
+  faSort,
+  faSortUp,
+  faSortDown
 );
 
 export {
@@ -120,4 +130,9 @@ export {
   faTrash,
   faFile,
   faPaste,
+  faSearch,
+  faFilter,
+  faSort,
+  faSortUp,
+  faSortDown,
 };
