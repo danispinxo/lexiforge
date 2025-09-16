@@ -32,8 +32,14 @@ api.interceptors.response.use(
 );
 
 export const sourceTextsAPI = {
-  getAll: () => api.get("/source_texts"),
-  getMine: () => api.get("/source_texts/my_source_texts"),
+  getAll: (page = 1, perPage = 10) =>
+    api.get("/source_texts", {
+      params: { page, per_page: perPage },
+    }),
+  getMine: (page = 1, perPage = 10) =>
+    api.get("/source_texts/my_source_texts", {
+      params: { page, per_page: perPage },
+    }),
   getById: (id) => api.get(`/source_texts/${id}`),
   importFromGutenberg: (gutenbergId, isPublic = true) =>
     api.post("/source_texts/import_from_gutenberg", {
