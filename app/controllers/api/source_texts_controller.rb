@@ -92,7 +92,7 @@ class Api::SourceTextsController < ApiController
   def build_source_texts_query(base_scope)
     page = params[:page] || 1
     per_page = params[:per_page] || 10
-    
+
     scope = base_scope.includes(:owner)
     scope = apply_search(scope, params[:search])
     scope = apply_filters(scope, params)
@@ -138,7 +138,7 @@ class Api::SourceTextsController < ApiController
     when 'gutenberg_id'
       scope.order("gutenberg_id #{sort_direction} NULLS LAST")
     else
-      scope.order("created_at desc")
+      scope.order(created_at: :desc)
     end
   end
 
