@@ -4,28 +4,8 @@ class Api::SourceTextsController < ApiController
   before_action :set_source_text, only: [:show]
 
   def index
-    page = params[:page] || 1
-    per_page = params[:per_page] || 10
-
-    @source_texts = SourceText.public_texts.includes(:owner)
-    @source_texts = apply_search(@source_texts, params[:search])
-    @source_texts = apply_filters(@source_texts, params)
-    @source_texts = apply_sorting(@source_texts, params[:sort_by], params[:sort_direction])
-    @source_texts = @source_texts.page(page).per(per_page)
-
-    render json: {
-      source_texts: ActiveModel::Serializer::CollectionSerializer.new(
-        @source_texts, serializer: SourceTextSerializer
-      ),
-      pagination: {
-        current_page: @source_texts.current_page,
-        total_pages: @source_texts.total_pages,
-        total_count: @source_texts.total_count,
-        per_page: @source_texts.limit_value,
-        next_page: @source_texts.next_page,
-        prev_page: @source_texts.prev_page
-      }
-    }
+    @source_texts = build_source_texts_query(SourceText.public_texts)
+    render_paginated_source_texts
   end
 
   def show
@@ -34,28 +14,8 @@ class Api::SourceTextsController < ApiController
 
   def my_source_texts
     current_user = current_api_user || current_admin_user
-    page = params[:page] || 1
-    per_page = params[:per_page] || 10
-
-    @source_texts = SourceText.for_owner(current_user).includes(:owner)
-    @source_texts = apply_search(@source_texts, params[:search])
-    @source_texts = apply_filters(@source_texts, params)
-    @source_texts = apply_sorting(@source_texts, params[:sort_by], params[:sort_direction])
-    @source_texts = @source_texts.page(page).per(per_page)
-
-    render json: {
-      source_texts: ActiveModel::Serializer::CollectionSerializer.new(
-        @source_texts, serializer: SourceTextSerializer
-      ),
-      pagination: {
-        current_page: @source_texts.current_page,
-        total_pages: @source_texts.total_pages,
-        total_count: @source_texts.total_count,
-        per_page: @source_texts.limit_value,
-        next_page: @source_texts.next_page,
-        prev_page: @source_texts.prev_page
-      }
-    }
+    @source_texts = build_source_texts_query(SourceText.for_owner(current_user))
+    render_paginated_source_texts
   end
 
   def import_from_gutenberg
@@ -129,6 +89,37 @@ class Api::SourceTextsController < ApiController
     scope
   end
 
+  def build_source_texts_query(base_scope)
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+    
+    scope = base_scope.includes(:owner)
+    scope = apply_search(scope, params[:search])
+    scope = apply_filters(scope, params)
+    scope = apply_sorting(scope, params[:sort_by], params[:sort_direction])
+    scope.page(page).per(per_page)
+  end
+
+  def render_paginated_source_texts
+    render json: {
+      source_texts: ActiveModel::Serializer::CollectionSerializer.new(
+        @source_texts, serializer: SourceTextSerializer
+      ),
+      pagination: pagination_metadata
+    }
+  end
+
+  def pagination_metadata
+    {
+      current_page: @source_texts.current_page,
+      total_pages: @source_texts.total_pages,
+      total_count: @source_texts.total_count,
+      per_page: @source_texts.limit_value,
+      next_page: @source_texts.next_page,
+      prev_page: @source_texts.prev_page
+    }
+  end
+
   def apply_sorting(scope, sort_by, sort_direction)
     sort_by ||= 'created_at'
     sort_direction ||= 'desc'
@@ -147,7 +138,7 @@ class Api::SourceTextsController < ApiController
     when 'gutenberg_id'
       scope.order("gutenberg_id #{sort_direction} NULLS LAST")
     else
-      scope.order("created_at #{sort_direction}")
+      scope.order("created_at desc")
     end
   end
 
