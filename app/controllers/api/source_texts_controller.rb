@@ -4,8 +4,25 @@ class Api::SourceTextsController < ApiController
   before_action :set_source_text, only: [:show]
 
   def index
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+
     @source_texts = SourceText.public_texts.includes(:owner)
-    render json: @source_texts, each_serializer: SourceTextSerializer
+                              .page(page).per(per_page)
+
+    render json: {
+      source_texts: ActiveModel::Serializer::CollectionSerializer.new(
+        @source_texts, serializer: SourceTextSerializer
+      ),
+      pagination: {
+        current_page: @source_texts.current_page,
+        total_pages: @source_texts.total_pages,
+        total_count: @source_texts.total_count,
+        per_page: @source_texts.limit_value,
+        next_page: @source_texts.next_page,
+        prev_page: @source_texts.prev_page
+      }
+    }
   end
 
   def show
@@ -14,8 +31,25 @@ class Api::SourceTextsController < ApiController
 
   def my_source_texts
     current_user = current_api_user || current_admin_user
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+
     @source_texts = SourceText.for_owner(current_user).includes(:owner)
-    render json: @source_texts, each_serializer: SourceTextSerializer
+                              .page(page).per(per_page)
+
+    render json: {
+      source_texts: ActiveModel::Serializer::CollectionSerializer.new(
+        @source_texts, serializer: SourceTextSerializer
+      ),
+      pagination: {
+        current_page: @source_texts.current_page,
+        total_pages: @source_texts.total_pages,
+        total_count: @source_texts.total_count,
+        per_page: @source_texts.limit_value,
+        next_page: @source_texts.next_page,
+        prev_page: @source_texts.prev_page
+      }
+    }
   end
 
   def import_from_gutenberg
