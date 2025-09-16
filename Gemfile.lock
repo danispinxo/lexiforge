@@ -468,6 +468,7 @@ DEPENDENCIES
   httparty
   image_processing (~> 1.2)
   jbuilder
+  kaminari
   pg (~> 1.6)
   puma (>= 5.0)
   rack-cors

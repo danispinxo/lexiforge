@@ -79,27 +79,7 @@ services:
     stdin_open: true
     tty: true
 
-  cypress:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.cypress
-    environment:
-      VITE_API_BASE_URL: http://api:3000/api
-      CYPRESS_baseUrl: http://host.docker.internal:3001
-      CYPRESS_CACHE_FOLDER: /app/.cache/Cypress
-      RAILS_ENV: test
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - cypress_cache:/app/.cache/Cypress
-    depends_on:
-      - frontend
-      - api
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
 volumes:
   postgres_data:
   postgres_test_data:
   bundle_data:
-  cypress_cache:
