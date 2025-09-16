@@ -14,6 +14,7 @@ import { sourceTextsAPI } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import SourceTextImportModal from "./SourceTextImportModal";
 import CustomSourceTextModal from "./CustomSourceTextModal";
+import Pagination from "./Pagination";
 
 function MySourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
@@ -21,17 +22,27 @@ function MySourceTexts() {
   const [message, setMessage] = useState("");
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    total_count: 0,
+    per_page: 10,
+  });
   const { user } = useAuth();
 
   useEffect(() => {
-    loadMySourceTexts();
-  }, []);
+    if (user) {
+      loadMySourceTexts(currentPage);
+    }
+  }, [user, currentPage]);
 
-  const loadMySourceTexts = async () => {
+  const loadMySourceTexts = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await sourceTextsAPI.getMine();
-      setSourceTexts(response.data);
+      const response = await sourceTextsAPI.getMine(page);
+      setSourceTexts(response.data.source_texts);
+      setPagination(response.data.pagination);
     } catch {
       setMessage("Error loading your source texts");
     } finally {
@@ -41,12 +52,17 @@ function MySourceTexts() {
 
   const handleImportSuccess = (successMessage) => {
     setMessage(successMessage);
-    loadMySourceTexts();
+    loadMySourceTexts(currentPage);
   };
 
   const handleUploadSuccess = (successMessage) => {
     setMessage(successMessage);
-    loadMySourceTexts();
+    loadMySourceTexts(currentPage);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (!user) {
@@ -102,7 +118,7 @@ function MySourceTexts() {
         <div className="texts-section">
           <h3>
             <FontAwesomeIcon icon={faFileText} className="section-icon" />
-            Your Source Texts ({sourceTexts.length})
+            Your Source Texts ({pagination.total_count})
           </h3>
           <div className="texts-table-container">
             <table className="texts-table">
@@ -166,6 +182,13 @@ function MySourceTexts() {
               </tbody>
             </table>
           </div>
+
+          <Pagination
+            currentPage={pagination.current_page}
+            totalPages={pagination.total_pages}
+            onPageChange={handlePageChange}
+            loading={loading}
+          />
         </div>
       )}
 
