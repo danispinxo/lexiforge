@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,34 +10,71 @@ import {
   faCalendar,
   faLock,
   faGlobe,
+  faSearch,
 } from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "./Pagination";
+import SortableHeader from "./SortableHeader";
 
 function MyPoems() {
   const [poems, setPoems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    total_count: 0,
+    per_page: 10,
+  });
+  const [searchOptions, setSearchOptions] = useState({
+    search: "",
+    sortBy: "created_at",
+    sortDirection: "desc",
+  });
   const { user } = useAuth();
+
+  const loadMyPoems = useCallback(
+    async (page = 1) => {
+      if (!user) return;
+      setLoading(true);
+      try {
+        const response = await poemsAPI.getMine(page, 10, searchOptions);
+        setPoems(response.data.poems);
+        setPagination(response.data.pagination);
+      } catch {
+        setError("Error loading your poems");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user, searchOptions]
+  );
 
   useEffect(() => {
     if (user) {
-      loadMyPoems();
+      loadMyPoems(currentPage);
     } else {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, currentPage, loadMyPoems]);
 
-  const loadMyPoems = async () => {
-    try {
-      const response = await poemsAPI.getMine();
-      setPoems(response.data);
-    } catch {
-      setError("Error loading your poems");
-    } finally {
-      setLoading(false);
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSearch = (e) => {
+    const search = e.target.value;
+    setSearchOptions((prev) => ({ ...prev, search }));
+    setCurrentPage(1);
+  };
+
+  const handleSort = (sortBy, sortDirection) => {
+    setSearchOptions((prev) => ({ ...prev, sortBy, sortDirection }));
+    setCurrentPage(1);
   };
 
   const handleDeletePoem = async (poemId, poemTitle) => {
@@ -55,8 +92,8 @@ function MyPoems() {
     try {
       const response = await poemsAPI.delete(poemId);
       if (response.data.success) {
-        // Remove the deleted poem from the list
-        setPoems((prevPoems) => prevPoems.filter((poem) => poem.id !== poemId));
+        // Reload the current page to refresh the list
+        loadMyPoems(currentPage);
       } else {
         setError(response.data.message || "Failed to delete poem");
       }
@@ -94,6 +131,21 @@ function MyPoems() {
         <h1>My Generated Poems</h1>
       </div>
 
+      <div className="search-and-filter">
+        <div className="search-controls">
+          <div className="search-box">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search your poems by title or content..."
+              value={searchOptions.search}
+              onChange={handleSearch}
+              className="search-input"
+            />
+          </div>
+        </div>
+      </div>
+
       {error && (
         <div className="message error">
           <FontAwesomeIcon icon={faExclamationTriangle} className="message-icon" />
@@ -101,25 +153,44 @@ function MyPoems() {
         </div>
       )}
 
-      {poems.length === 0 ? (
+      {poems.length === 0 && !loading ? (
         <div className="empty-state">
           <p>
             <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
-            You haven't generated any poems yet.
+            {searchOptions.search
+              ? "No poems found matching your search criteria."
+              : "You haven't generated any poems yet."}
           </p>
         </div>
       ) : (
         <>
-          <p className="poems-count">Found {poems.length} generated poems</p>
+          <p className="poems-count">
+            Found {pagination.total_count} generated poems
+            {searchOptions.search && ` matching "${searchOptions.search}"`}
+          </p>
           <div className="poems-table-container">
             <table className="poems-table">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Technique</th>
+                  <SortableHeader sortKey="title" currentSort={searchOptions} onSort={handleSort}>
+                    Title
+                  </SortableHeader>
+                  <SortableHeader
+                    sortKey="technique_used"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Technique
+                  </SortableHeader>
                   <th>Source Text</th>
                   <th>Privacy</th>
-                  <th>Date Created</th>
+                  <SortableHeader
+                    sortKey="created_at"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Date Created
+                  </SortableHeader>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -184,6 +255,12 @@ function MyPoems() {
               </tbody>
             </table>
           </div>
+
+          <Pagination
+            currentPage={pagination.current_page}
+            totalPages={pagination.total_pages}
+            onPageChange={handlePageChange}
+          />
         </>
       )}
     </div>
