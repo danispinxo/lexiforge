@@ -7,11 +7,11 @@ import {
   faFileText,
   faCheckCircle,
   faExclamationTriangle,
+  faSearch,
 } from "../config/fontawesome";
 import { sourceTextsAPI } from "../services/api";
 import SourceTextImportModal from "./SourceTextImportModal";
 import Pagination from "./Pagination";
-import SearchAndFilter from "./SearchAndFilter";
 import SortableHeader from "./SortableHeader";
 
 function SourceTexts() {
@@ -30,9 +30,6 @@ function SourceTexts() {
     search: "",
     sortBy: "created_at",
     sortDirection: "desc",
-    textType: "",
-    minWordCount: "",
-    maxWordCount: "",
   });
 
   const loadSourceTexts = useCallback(
@@ -65,13 +62,9 @@ function SourceTexts() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSearch = (search) => {
+  const handleSearch = (e) => {
+    const search = e.target.value;
     setSearchOptions((prev) => ({ ...prev, search }));
-    setCurrentPage(1);
-  };
-
-  const handleFilter = (filters) => {
-    setSearchOptions((prev) => ({ ...prev, ...filters }));
     setCurrentPage(1);
   };
 
@@ -96,7 +89,20 @@ function SourceTexts() {
         </div>
       )}
 
-      <SearchAndFilter onSearch={handleSearch} onFilter={handleFilter} showTextTypeFilter={false} />
+      <div className="search-and-filter">
+        <div className="search-controls">
+          <div className="search-box">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search source texts by title or content..."
+              value={searchOptions.search}
+              onChange={handleSearch}
+              className="search-input"
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="texts-section">
         <h3>
