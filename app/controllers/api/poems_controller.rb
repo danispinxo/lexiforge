@@ -6,8 +6,8 @@ class Api::PoemsController < ApiController
   before_action :set_source_text, only: %i[generate_poem]
 
   def index
-    @poems = Poem.public_poems.includes(:source_text).order(created_at: :desc)
-    render json: @poems, each_serializer: PoemSerializer
+    @poems = build_poems_query(Poem.public_poems)
+    render_paginated_poems
   end
 
   def show
@@ -16,8 +16,8 @@ class Api::PoemsController < ApiController
 
   def my_poems
     current_user = current_api_user || current_admin_user
-    @poems = Poem.for_author(current_user).includes(:source_text).order(created_at: :desc)
-    render json: @poems, each_serializer: PoemSerializer
+    @poems = build_poems_query(Poem.for_author(current_user))
+    render_paginated_poems
   end
 
   def new
@@ -93,6 +93,69 @@ class Api::PoemsController < ApiController
   end
 
   private
+
+  def apply_search(scope, search_term)
+    return scope if search_term.blank?
+
+    scope.where(
+      'title ILIKE ? OR content ILIKE ?',
+      "%#{search_term}%", "%#{search_term}%"
+    )
+  end
+
+  def apply_sorting(scope, sort_by, sort_direction)
+    sort_by ||= 'created_at'
+    sort_direction ||= 'desc'
+
+    sort_direction = 'desc' unless %w[asc desc].include?(sort_direction.downcase)
+
+    case sort_by
+    when 'title'
+      scope.order(title: sort_direction)
+    when 'technique_used'
+      scope.order(technique_used: sort_direction)
+    when 'word_count'
+      scope.order(Arel.sql("LENGTH(content) #{sort_direction}"))
+    when 'created_at'
+      scope.order(created_at: sort_direction)
+    when 'author'
+      scope.joins("LEFT JOIN users ON poems.author_type = 'User' AND poems.author_id = users.id")
+           .joins("LEFT JOIN admin_users ON poems.author_type = 'AdminUser' AND poems.author_id = admin_users.id")
+           .order(Arel.sql("COALESCE(users.username, admin_users.email) #{sort_direction}"))
+    else
+      scope.order(created_at: :desc)
+    end
+  end
+
+  def build_poems_query(base_scope)
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+
+    scope = base_scope.includes(:source_text, :author)
+    scope = apply_search(scope, params[:search])
+    scope = apply_sorting(scope, params[:sort_by], params[:sort_direction])
+    scope.page(page).per(per_page)
+  end
+
+  def render_paginated_poems
+    render json: {
+      poems: ActiveModel::Serializer::CollectionSerializer.new(
+        @poems, serializer: PoemSerializer
+      ),
+      pagination: pagination_metadata
+    }
+  end
+
+  def pagination_metadata
+    {
+      current_page: @poems.current_page,
+      total_pages: @poems.total_pages,
+      total_count: @poems.total_count,
+      per_page: @poems.limit_value,
+      next_page: @poems.next_page,
+      prev_page: @poems.prev_page
+    }
+  end
 
   def determine_technique
     permitted_params = generation_params
