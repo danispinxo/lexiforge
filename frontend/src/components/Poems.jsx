@@ -1,27 +1,68 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faExclamationTriangle, faInfoCircle, faCalendar } from "../config/fontawesome";
+import {
+  faEye,
+  faExclamationTriangle,
+  faInfoCircle,
+  faCalendar,
+  faSearch,
+} from "../config/fontawesome";
 import { poemsAPI } from "../services/api";
+import Pagination from "./Pagination";
+import SortableHeader from "./SortableHeader";
 
 function Poems() {
   const [poems, setPoems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    total_count: 0,
+    per_page: 10,
+  });
+  const [searchOptions, setSearchOptions] = useState({
+    search: "",
+    sortBy: "created_at",
+    sortDirection: "desc",
+  });
+
+  const loadPoems = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await poemsAPI.getAll(page, 10, searchOptions);
+        setPoems(response.data.poems);
+        setPagination(response.data.pagination);
+      } catch {
+        setError("Error loading poems");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [searchOptions]
+  );
 
   useEffect(() => {
-    loadPoems();
-  }, []);
+    loadPoems(currentPage);
+  }, [currentPage, loadPoems]);
 
-  const loadPoems = async () => {
-    try {
-      const response = await poemsAPI.getAll();
-      setPoems(response.data);
-    } catch {
-      setError("Error loading poems");
-    } finally {
-      setLoading(false);
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSearch = (e) => {
+    const search = e.target.value;
+    setSearchOptions((prev) => ({ ...prev, search }));
+    setCurrentPage(1);
+  };
+
+  const handleSort = (sortBy, sortDirection) => {
+    setSearchOptions((prev) => ({ ...prev, sortBy, sortDirection }));
+    setCurrentPage(1);
   };
 
   if (loading) return <div className="loading">Loading poems...</div>;
@@ -32,6 +73,21 @@ function Poems() {
         <h1>Public Generated Poems</h1>
       </div>
 
+      <div className="search-and-filter">
+        <div className="search-controls">
+          <div className="search-box">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search poems by title or content..."
+              value={searchOptions.search}
+              onChange={handleSearch}
+              className="search-input"
+            />
+          </div>
+        </div>
+      </div>
+
       {error && (
         <div className="message error">
           <FontAwesomeIcon icon={faExclamationTriangle} className="message-icon" />
@@ -39,29 +95,48 @@ function Poems() {
         </div>
       )}
 
-      {poems.length === 0 ? (
+      {poems.length === 0 && !loading ? (
         <div className="empty-state">
           <p>
             <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />
-            No poems generated yet.
+            No poems found.
           </p>
           <p>
-            <Link to="/source-texts">Import some source texts</Link> and generate cut-up poems!
+            <Link to="/source-texts">Import some source texts</Link> and generate poems!
           </p>
         </div>
       ) : (
         <>
-          <p className="poems-count">Found {poems.length} generated poems</p>
+          <p className="poems-count">
+            Found {pagination.total_count} generated poems
+            {searchOptions.search && ` matching "${searchOptions.search}"`}
+          </p>
 
           <div className="poems-table-container">
             <table className="poems-table">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Technique</th>
+                  <SortableHeader sortKey="title" currentSort={searchOptions} onSort={handleSort}>
+                    Title
+                  </SortableHeader>
+                  <SortableHeader
+                    sortKey="technique_used"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Technique
+                  </SortableHeader>
                   <th>Source Text</th>
-                  <th>Author</th>
-                  <th>Date Created</th>
+                  <SortableHeader sortKey="author" currentSort={searchOptions} onSort={handleSort}>
+                    Author
+                  </SortableHeader>
+                  <SortableHeader
+                    sortKey="created_at"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Date Created
+                  </SortableHeader>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -102,6 +177,12 @@ function Poems() {
               </tbody>
             </table>
           </div>
+
+          <Pagination
+            currentPage={pagination.current_page}
+            totalPages={pagination.total_pages}
+            onPageChange={handlePageChange}
+          />
         </>
       )}
     </div>
