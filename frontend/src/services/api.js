@@ -39,9 +39,6 @@ export const sourceTextsAPI = {
       ...(options.search && { search: options.search }),
       ...(options.sortBy && { sort_by: options.sortBy }),
       ...(options.sortDirection && { sort_direction: options.sortDirection }),
-      ...(options.textType && { text_type: options.textType }),
-      ...(options.minWordCount && { min_word_count: options.minWordCount }),
-      ...(options.maxWordCount && { max_word_count: options.maxWordCount }),
     };
     return api.get("/source_texts", { params });
   },
@@ -52,9 +49,6 @@ export const sourceTextsAPI = {
       ...(options.search && { search: options.search }),
       ...(options.sortBy && { sort_by: options.sortBy }),
       ...(options.sortDirection && { sort_direction: options.sortDirection }),
-      ...(options.textType && { text_type: options.textType }),
-      ...(options.minWordCount && { min_word_count: options.minWordCount }),
-      ...(options.maxWordCount && { max_word_count: options.maxWordCount }),
     };
     return api.get("/source_texts/my_source_texts", { params });
   },
@@ -72,8 +66,26 @@ export const sourceTextsAPI = {
 };
 
 export const poemsAPI = {
-  getAll: () => api.get("/poems"),
-  getMine: () => api.get("/poems/my_poems"),
+  getAll: (page = 1, perPage = 10, options = {}) => {
+    const params = {
+      page,
+      per_page: perPage,
+      ...(options.search && { search: options.search }),
+      ...(options.sortBy && { sort_by: options.sortBy }),
+      ...(options.sortDirection && { sort_direction: options.sortDirection }),
+    };
+    return api.get("/poems", { params });
+  },
+  getMine: (page = 1, perPage = 10, options = {}) => {
+    const params = {
+      page,
+      per_page: perPage,
+      ...(options.search && { search: options.search }),
+      ...(options.sortBy && { sort_by: options.sortBy }),
+      ...(options.sortDirection && { sort_direction: options.sortDirection }),
+    };
+    return api.get("/poems/my_poems", { params });
+  },
   getById: (id) => api.get(`/poems/${id}`),
   generatePoem: (sourceTextId, options) =>
     api.post(`/source_texts/${sourceTextId}/generate_poem`, options),
