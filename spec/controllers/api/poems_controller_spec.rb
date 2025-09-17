@@ -18,12 +18,14 @@ RSpec.describe Api::PoemsController, type: :controller do
 
     it 'returns all poems in JSON format' do
       json_response = response.parsed_body
-      expect(json_response.length).to eq(3)
+      expect(json_response).to have_key('poems')
+      expect(json_response).to have_key('pagination')
+      expect(json_response['poems'].length).to eq(3)
     end
 
     it 'includes required poem attributes' do
       json_response = response.parsed_body
-      poem_data = json_response.first
+      poem_data = json_response['poems'].first
 
       expect(poem_data).to have_key('id')
       expect(poem_data).to have_key('title')
@@ -35,7 +37,7 @@ RSpec.describe Api::PoemsController, type: :controller do
 
     it 'includes source text information' do
       json_response = response.parsed_body
-      poem_data = json_response.first
+      poem_data = json_response['poems'].first
 
       expect(poem_data['source_text']).to have_key('id')
       expect(poem_data['source_text']).to have_key('title')
@@ -47,16 +49,75 @@ RSpec.describe Api::PoemsController, type: :controller do
       get :index
 
       json_response = response.parsed_body
-      long_poem_data = json_response.find { |p| p['id'] == long_poem.id }
+      long_poem_data = json_response['poems'].find { |p| p['id'] == long_poem.id }
 
       expect(long_poem_data['content_preview'].length).to be <= 200
     end
 
     it 'orders poems by creation date descending' do
       json_response = response.parsed_body
-      created_dates = json_response.map { |p| Time.zone.parse(p['created_at']) }
+      created_dates = json_response['poems'].map { |p| Time.zone.parse(p['created_at']) }
 
       expect(created_dates).to eq(created_dates.sort.reverse)
+    end
+
+    it 'includes pagination metadata' do
+      json_response = response.parsed_body
+      pagination = json_response['pagination']
+
+      expect(pagination).to have_key('current_page')
+      expect(pagination).to have_key('total_pages')
+      expect(pagination).to have_key('total_count')
+      expect(pagination).to have_key('per_page')
+      expect(pagination['total_count']).to eq(3)
+    end
+
+    context 'with search parameter' do
+      before do
+        Poem.destroy_all
+        create(:poem, title: 'Searching for Love', source_text: source_text)
+        create(:poem, title: 'Finding Peace', source_text: source_text)
+        create(:poem, title: 'Lost in Time', source_text: source_text)
+        get :index, params: { search: 'Love' }
+      end
+
+      it 'filters poems by search term' do
+        json_response = response.parsed_body
+        expect(json_response['poems'].length).to eq(1)
+        expect(json_response['poems'].first['title']).to eq('Searching for Love')
+      end
+    end
+
+    context 'with pagination parameters' do
+      before do
+        Poem.destroy_all
+        create_list(:poem, 15, source_text: source_text)
+        get :index, params: { page: 2, per_page: 5 }
+      end
+
+      it 'paginates results correctly' do
+        json_response = response.parsed_body
+        expect(json_response['poems'].length).to eq(5)
+        expect(json_response['pagination']['current_page']).to eq(2)
+        expect(json_response['pagination']['per_page']).to eq(5)
+        expect(json_response['pagination']['total_count']).to eq(15)
+        expect(json_response['pagination']['total_pages']).to eq(3)
+      end
+    end
+
+    context 'with sorting parameters' do
+      before do
+        Poem.destroy_all
+        @poem_a = create(:poem, title: 'Alpha Poem', source_text: source_text)
+        @poem_z = create(:poem, title: 'Zulu Poem', source_text: source_text)
+        get :index, params: { sort_by: 'title', sort_direction: 'asc' }
+      end
+
+      it 'sorts poems by title ascending' do
+        json_response = response.parsed_body
+        titles = json_response['poems'].pluck('title')
+        expect(titles).to eq(['Alpha Poem', 'Zulu Poem'])
+      end
     end
   end
 

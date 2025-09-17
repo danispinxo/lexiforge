@@ -9,13 +9,13 @@ import {
   faExclamationTriangle,
   faCheckCircle,
   faPlus,
+  faSearch,
 } from "../config/fontawesome";
 import { sourceTextsAPI } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import SourceTextImportModal from "./SourceTextImportModal";
 import CustomSourceTextModal from "./CustomSourceTextModal";
 import Pagination from "./Pagination";
-import SearchAndFilter from "./SearchAndFilter";
 import SortableHeader from "./SortableHeader";
 
 function MySourceTexts() {
@@ -35,9 +35,6 @@ function MySourceTexts() {
     search: "",
     sortBy: "created_at",
     sortDirection: "desc",
-    textType: "",
-    minWordCount: "",
-    maxWordCount: "",
   });
   const { user } = useAuth();
 
@@ -78,13 +75,9 @@ function MySourceTexts() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSearch = (search) => {
+  const handleSearch = (e) => {
+    const search = e.target.value;
     setSearchOptions((prev) => ({ ...prev, search }));
-    setCurrentPage(1);
-  };
-
-  const handleFilter = (filters) => {
-    setSearchOptions((prev) => ({ ...prev, ...filters }));
     setCurrentPage(1);
   };
 
@@ -132,7 +125,20 @@ function MySourceTexts() {
         </div>
       )}
 
-      <SearchAndFilter onSearch={handleSearch} onFilter={handleFilter} showTextTypeFilter={true} />
+      <div className="search-and-filter">
+        <div className="search-controls">
+          <div className="search-box">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search your source texts by title or content..."
+              value={searchOptions.search}
+              onChange={handleSearch}
+              className="search-input"
+            />
+          </div>
+        </div>
+      </div>
 
       {loading ? (
         <div className="loading">Loading your source texts...</div>

@@ -62,40 +62,12 @@ class Api::SourceTextsController < ApiController
     )
   end
 
-  def apply_filters(scope, filter_params)
-    # Filter by Gutenberg vs Custom texts
-    if filter_params[:text_type].present?
-      case filter_params[:text_type]
-      when 'gutenberg'
-        scope = scope.where.not(gutenberg_id: nil)
-      when 'custom'
-        scope = scope.where(gutenberg_id: nil)
-      end
-    end
-
-    # Filter by word count ranges (using content length as proxy)
-    if filter_params[:min_word_count].present?
-      # Approximate: assume average word length of 5 characters + 1 space = 6 chars per word
-      min_chars = filter_params[:min_word_count].to_i * 6
-      scope = scope.where('LENGTH(content) >= ?', min_chars)
-    end
-
-    if filter_params[:max_word_count].present?
-      # Approximate: assume average word length of 5 characters + 1 space = 6 chars per word
-      max_chars = filter_params[:max_word_count].to_i * 6
-      scope = scope.where('LENGTH(content) <= ?', max_chars)
-    end
-
-    scope
-  end
-
   def build_source_texts_query(base_scope)
     page = params[:page] || 1
     per_page = params[:per_page] || 10
 
     scope = base_scope.includes(:owner)
     scope = apply_search(scope, params[:search])
-    scope = apply_filters(scope, params)
     scope = apply_sorting(scope, params[:sort_by], params[:sort_direction])
     scope.page(page).per(per_page)
   end
@@ -124,14 +96,12 @@ class Api::SourceTextsController < ApiController
     sort_by ||= 'created_at'
     sort_direction ||= 'desc'
 
-    # Ensure valid sort direction
     sort_direction = 'desc' unless %w[asc desc].include?(sort_direction.downcase)
 
     case sort_by
     when 'title'
       scope.order("title #{sort_direction}")
     when 'word_count'
-      # Sort by content length as a proxy for word count
       scope.order("LENGTH(content) #{sort_direction}")
     when 'created_at'
       scope.order("created_at #{sort_direction}")
