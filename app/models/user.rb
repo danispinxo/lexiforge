@@ -13,9 +13,9 @@ class User < ApplicationRecord
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
   validates :bio, length: { maximum: 500 }
-  validates :gravatar_type, presence: true, inclusion: { 
+  validates :gravatar_type, presence: true, inclusion: {
     in: %w[404 mp identicon monsterid wavatar retro robohash blank],
-    message: "%{value} is not a valid gravatar type" 
+    message: '%<value>s is not a valid gravatar type'
   }
 
   before_validation :downcase_username

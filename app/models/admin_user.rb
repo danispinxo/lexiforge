@@ -14,9 +14,9 @@ class AdminUser < ApplicationRecord
   validates :first_name, length: { maximum: 50 }, allow_blank: true
   validates :last_name, length: { maximum: 50 }, allow_blank: true
   validates :bio, length: { maximum: 500 }
-  validates :gravatar_type, presence: true, inclusion: { 
+  validates :gravatar_type, presence: true, inclusion: {
     in: %w[404 mp identicon monsterid wavatar retro robohash blank],
-    message: "%{value} is not a valid gravatar type" 
+    message: '%<value>s is not a valid gravatar type'
   }
 
   before_validation :downcase_username
