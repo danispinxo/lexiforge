@@ -114,7 +114,8 @@
     }
 
     input,
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: $spacing-md;
       border: 2px solid $medium-gray;
@@ -134,6 +135,14 @@
 
       &:disabled {
         background-color: $parchment;
+        cursor: not-allowed;
+      }
+    }
+
+    select {
+      cursor: pointer;
+
+      &:disabled {
         cursor: not-allowed;
       }
     }
@@ -179,6 +188,14 @@
     margin-bottom: 0;
     clear: both;
     float: none;
+  }
+
+  .gravatar-help {
+    display: block;
+    font-size: $font-size-sm;
+    color: $medium-gray;
+    margin-top: $spacing-sm;
+    font-style: italic;
   }
 
   .password-input-container {
