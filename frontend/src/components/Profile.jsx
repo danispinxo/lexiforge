@@ -17,6 +17,19 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import { authAPI } from "../services/api";
 
+const generateGravatarPreview = (currentGravatarUrl, gravatarType = "retro") => {
+  if (!currentGravatarUrl) return null;
+
+  const urlParts = currentGravatarUrl.split("?");
+  if (urlParts.length !== 2) return currentGravatarUrl;
+
+  const baseUrl = urlParts[0];
+  const params = new URLSearchParams(urlParts[1]);
+  params.set("d", gravatarType);
+
+  return `${baseUrl}?${params.toString()}`;
+};
+
 function Profile() {
   const { user, updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -33,6 +46,7 @@ function Profile() {
     first_name: "",
     last_name: "",
     bio: "",
+    gravatar_type: "retro",
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -48,6 +62,7 @@ function Profile() {
         first_name: user.first_name || "",
         last_name: user.last_name || "",
         bio: user.bio || "",
+        gravatar_type: user.gravatar_type || "retro",
       });
     }
   }, [user]);
@@ -135,7 +150,11 @@ function Profile() {
 
         <div className="profile-header">
           <div className="avatar-section">
-            <img src={user.gravatar_url} alt={`${user.full_name} avatar`} className="user-avatar" />
+            <img
+              src={generateGravatarPreview(user.gravatar_url, profileData.gravatar_type)}
+              alt={`${user.full_name} avatar`}
+              className="user-avatar"
+            />
             <div className="avatar-info">
               <h2>{user.full_name}</h2>
               <p className="user-email">
@@ -171,6 +190,27 @@ function Profile() {
           )}
 
           <form onSubmit={handleProfileSubmit} className="profile-form">
+            <div className="form-group">
+              <label htmlFor="gravatar_type">
+                <FontAwesomeIcon icon={faImage} /> <span>Avatar Style</span>
+              </label>
+              <select
+                id="gravatar_type"
+                name="gravatar_type"
+                value={profileData.gravatar_type}
+                onChange={(e) => handleProfileChange("gravatar_type", e.target.value)}
+                disabled={loading}
+                className="gravatar-type-select"
+              >
+                <option value="retro">Retro (8-bit style)</option>
+                <option value="identicon">Identicon (geometric pattern)</option>
+                <option value="monsterid">Monster ID (colorful monster)</option>
+                <option value="wavatar">Wavatar (generated face)</option>
+                <option value="robohash">Robohash (robot avatar)</option>
+                <option value="mp">Mystery Person (gray silhouette)</option>
+                <option value="blank">Blank (transparent)</option>
+              </select>
+            </div>
             <div className="form-group">
               <label htmlFor="username">
                 <FontAwesomeIcon icon={faUser} /> <span>Username</span>
