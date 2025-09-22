@@ -83,7 +83,7 @@ class Api::UsersController < ApiController
   private
 
   def profile_params
-    params.expect(user: %i[username first_name last_name bio])
+    params.expect(user: %i[username first_name last_name bio gravatar_type])
   end
 
   def password_params

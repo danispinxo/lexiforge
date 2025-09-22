@@ -13,6 +13,10 @@ class User < ApplicationRecord
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
   validates :bio, length: { maximum: 500 }
+  validates :gravatar_type, presence: true, inclusion: {
+    in: %w[404 mp identicon monsterid wavatar retro robohash blank],
+    message: :invalid_gravatar_type
+  }
 
   before_validation :downcase_username
 
@@ -31,7 +35,8 @@ class User < ApplicationRecord
     return nil if email.blank?
 
     email_hash = Digest::MD5.hexdigest(email.downcase.strip)
-    "https://www.gravatar.com/avatar/#{email_hash}?s=#{size}&d=retro"
+    gravatar_default = gravatar_type.presence || 'retro'
+    "https://www.gravatar.com/avatar/#{email_hash}?s=#{size}&d=#{gravatar_default}"
   end
 
   def self.ransackable_attributes(_auth_object = nil)

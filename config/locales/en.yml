@@ -1,6 +1,18 @@
 en:
   hello: "Hello world"
 
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            gravatar_type:
+              invalid_gravatar_type: "%<value>s is not a valid gravatar type"
+        admin_user:
+          attributes:
+            gravatar_type:
+              invalid_gravatar_type: "%<value>s is not a valid gravatar type"
+
   poems:
     notices:
       updated: "Poem was successfully updated."
