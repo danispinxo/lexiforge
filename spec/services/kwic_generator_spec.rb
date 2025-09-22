@@ -38,6 +38,40 @@ RSpec.describe KwicGenerator do
         expect(lines.length).to be <= 5
       end
 
+      it 'shows all appearances when use_all_appearances is true' do
+        result = generator.generate(keyword: 'wind', use_all_appearances: true)
+        lines = result.split("\n")
+
+        # Count all unique occurrences of 'wind' in the sample content
+        # The sample content has 10 occurrences of 'wind'
+        expect(lines.length).to eq(10)
+        lines.each do |line|
+          expect(line.downcase).to include('wind')
+        end
+      end
+
+      it 'ignores num_lines when use_all_appearances is true' do
+        result = generator.generate(keyword: 'wind', num_lines: 3, use_all_appearances: true)
+        lines = result.split("\n")
+
+        # Should return all occurrences, not just 3
+        expect(lines.length).to eq(10)
+        lines.each do |line|
+          expect(line.downcase).to include('wind')
+        end
+      end
+
+      it 'defaults to use_all_appearances: false when not specified' do
+        result = generator.generate(keyword: 'wind', num_lines: 3)
+        lines = result.split("\n")
+
+        # Should respect num_lines when use_all_appearances is false (default)
+        expect(lines.length).to eq(3)
+        lines.each do |line|
+          expect(line.downcase).to include('wind')
+        end
+      end
+
       it 'uses the context_window parameter' do
         result = generator.generate(keyword: 'wind', context_window: 2)
         lines = result.split("\n")
