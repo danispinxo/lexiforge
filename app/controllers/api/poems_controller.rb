@@ -214,6 +214,7 @@ class Api::PoemsController < ApiController
     options[:keyword] = permitted_params[:keyword] if permitted_params[:keyword].present?
     options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
     options[:context_window] = (permitted_params[:context_window] || 3).to_i
+    options[:use_all_appearances] = ['true', true].include?(permitted_params[:use_all_appearances])
   end
 
   def build_prisoners_constraint_options(options, permitted_params)
@@ -354,7 +355,7 @@ class Api::PoemsController < ApiController
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
                   :section_length, :words_to_replace, :line_length, :keyword, :context_window,
-                  :num_words, :constraint_type, :hidden_word, :lines_per_stanza, :letters_to_omit)
+                  :use_all_appearances, :num_words, :constraint_type, :hidden_word, :lines_per_stanza, :letters_to_omit)
   end
 
   def authenticate_any_user!

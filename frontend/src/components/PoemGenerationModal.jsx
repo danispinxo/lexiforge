@@ -33,6 +33,9 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
   const [keyword, setKeyword] = useState(POEM_GENERATION_DEFAULTS.KWIC.KEYWORD);
   const [kwicLines, setKwicLines] = useState(POEM_GENERATION_DEFAULTS.KWIC.NUM_LINES);
   const [contextWindow, setContextWindow] = useState(POEM_GENERATION_DEFAULTS.KWIC.CONTEXT_WINDOW);
+  const [useAllAppearances, setUseAllAppearances] = useState(
+    POEM_GENERATION_DEFAULTS.KWIC.USE_ALL_APPEARANCES
+  );
   const [prisonersWords, setPrisonersWords] = useState(
     POEM_GENERATION_DEFAULTS.PRISONERS_CONSTRAINT.NUM_WORDS
   );
@@ -126,6 +129,7 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.keyword = keyword;
           options.num_lines = kwicLines;
           options.context_window = contextWindow;
+          options.use_all_appearances = useAllAppearances;
           break;
         case "prisoners_constraint":
           options.num_words = prisonersWords;
@@ -528,11 +532,12 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
               <>
                 <div className="form-description">
                   <p className="technique-description">
-                    KWIC (KeyWord In Context) poetry creates a poem by finding all instances of a
-                    chosen keyword in the source text and displaying each occurrence with its
-                    surrounding context. Each line shows the keyword with a few words before and
-                    after it, creating a unique perspective on how that word is used throughout the
-                    text.
+                    KWIC (KeyWord In Context) poetry creates a poem by finding instances of a chosen
+                    keyword in the source text and displaying each occurrence with its surrounding
+                    context. Each line shows the keyword with a few words before and after it,
+                    creating a unique perspective on how that word is used throughout the text. You
+                    can choose to show a limited number of random appearances or all appearances of
+                    the keyword.
                   </p>
                 </div>
 
@@ -573,6 +578,18 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     max="10"
                     disabled={generating}
                   />
+                </div>
+
+                <div className="form-group">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={useAllAppearances}
+                      onChange={(e) => setUseAllAppearances(e.target.checked)}
+                      disabled={generating}
+                    />
+                    Show ALL appearances of the keyword (overrides "Number of Lines" limit)
+                  </label>
                 </div>
               </>
             )}

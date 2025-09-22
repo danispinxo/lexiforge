@@ -32,7 +32,8 @@ module PoemGenerationConstants
     kwic: {
       num_lines: 10,
       context_window: 3,
-      keyword: ""
+      keyword: "",
+      use_all_appearances: false
     },
     prisoners_constraint: {
       num_words: 20,
