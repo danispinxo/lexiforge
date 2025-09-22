@@ -14,6 +14,7 @@ class KwicGenerator < BaseGenerator
     defaults = PoemGenerationConstants::DEFAULTS[:kwic]
     num_lines = options[:num_lines] || defaults[:num_lines]
     context_window = options[:context_window] || defaults[:context_window]
+    use_all_appearances = options[:use_all_appearances] || defaults[:use_all_appearances]
 
     validation_error = validate_required_param(keyword, 'keyword')
     return validation_error if validation_error
@@ -25,7 +26,7 @@ class KwicGenerator < BaseGenerator
 
     return "Keyword '#{keyword}' not found in source text. Try a different word." if kwic_lines.empty?
 
-    selected_lines = kwic_lines.sample(num_lines)
+    selected_lines = use_all_appearances ? kwic_lines : kwic_lines.sample(num_lines)
     selected_lines.join("\n")
   end
 
