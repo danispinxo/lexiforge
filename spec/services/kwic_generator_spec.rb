@@ -42,8 +42,6 @@ RSpec.describe KwicGenerator do
         result = generator.generate(keyword: 'wind', use_all_appearances: true)
         lines = result.split("\n")
 
-        # Count all unique occurrences of 'wind' in the sample content
-        # The sample content has 10 occurrences of 'wind'
         expect(lines.length).to eq(10)
         lines.each do |line|
           expect(line.downcase).to include('wind')
@@ -54,7 +52,6 @@ RSpec.describe KwicGenerator do
         result = generator.generate(keyword: 'wind', num_lines: 3, use_all_appearances: true)
         lines = result.split("\n")
 
-        # Should return all occurrences, not just 3
         expect(lines.length).to eq(10)
         lines.each do |line|
           expect(line.downcase).to include('wind')
@@ -65,7 +62,6 @@ RSpec.describe KwicGenerator do
         result = generator.generate(keyword: 'wind', num_lines: 3)
         lines = result.split("\n")
 
-        # Should respect num_lines when use_all_appearances is false (default)
         expect(lines.length).to eq(3)
         lines.each do |line|
           expect(line.downcase).to include('wind')
