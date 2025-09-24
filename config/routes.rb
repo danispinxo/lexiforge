@@ -19,12 +19,16 @@ Rails.application.routes.draw do
       end
       member do
         post :generate_poem, to: 'poems#generate_poem'
+        get :download
       end
     end
 
     resources :poems do
       collection do
         get :my_poems
+      end
+      member do
+        get :download
       end
     end
     get 'user/current', to: 'users#current_user_info'

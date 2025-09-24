@@ -10,17 +10,6 @@
   }
 }
 
-@keyframes fadeInText {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes slideUpFadeIn {
   from {
     opacity: 0;
@@ -59,10 +48,6 @@
 
 .fade-in {
   animation: fadeIn 0.5s ease-out;
-}
-
-.fade-in-text {
-  @include mixins.text-fade-in;
 }
 
 .slide-up {

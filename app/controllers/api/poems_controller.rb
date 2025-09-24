@@ -1,7 +1,7 @@
 class Api::PoemsController < ApiController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_any_user!, only: %i[generate_poem my_poems update destroy]
-  before_action :set_poem, only: %i[show edit update destroy]
+  before_action :authenticate_any_user!, only: %i[generate_poem my_poems update destroy download]
+  before_action :set_poem, only: %i[show edit update destroy download]
   before_action :authorize_poem_owner!, only: %i[update destroy]
   before_action :set_source_text, only: %i[generate_poem]
 
@@ -90,6 +90,16 @@ class Api::PoemsController < ApiController
     else
       render_poem_save_error
     end
+  end
+
+  def download
+    content = extract_plain_text_content(@poem.content)
+    filename = sanitize_filename("#{@poem.title}.txt")
+
+    send_data content,
+              filename: filename,
+              type: 'text/plain; charset=utf-8',
+              disposition: 'attachment'
   end
 
   private
@@ -421,5 +431,35 @@ class Api::PoemsController < ApiController
         .gsub(/█+/, '')
         .squeeze(' ')
         .strip
+  end
+
+  def extract_plain_text_content(content)
+    # Handle different poem formats
+    if content.strip.start_with?('{') && content.strip.end_with?('}')
+      begin
+        parsed_json = JSON.parse(content)
+        if parsed_json.is_a?(Hash) && parsed_json['pages']
+          # For erasure/blackout poems, extract text from pages
+          parsed_json['pages'].map do |page|
+            page_content = page['content']
+            # Remove HTML tags and blackout characters
+            clean_content = strip_html_tags(page_content)
+            "Page #{page['number']}\n\n#{clean_content}"
+          end.join("\n\n#{'=' * 50}\n\n")
+        else
+          content
+        end
+      rescue JSON::ParserError
+        content
+      end
+    else
+      # Regular lineated poems
+      content
+    end
+  end
+
+  def sanitize_filename(filename)
+    # Remove or replace invalid characters for filenames
+    filename.gsub(/[^\w\-_.]/, '_').squeeze('_')
   end
 end
