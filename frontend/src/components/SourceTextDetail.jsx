@@ -18,8 +18,7 @@ function SourceTextDetail() {
     try {
       const response = await sourceTextsAPI.getById(id);
       setSourceText(response.data);
-    } catch (error) {
-      console.error("Error loading source text:", error);
+    } catch {
       setMessage("Error loading source text");
     } finally {
       setLoading(false);
@@ -56,8 +55,7 @@ function SourceTextDetail() {
       window.URL.revokeObjectURL(url);
 
       setMessage("Source text downloaded successfully!");
-    } catch (error) {
-      console.error("Error downloading source text:", error);
+    } catch {
       setMessage("Error downloading source text");
     }
   };

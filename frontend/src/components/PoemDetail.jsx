@@ -54,8 +54,7 @@ function PoemDetail() {
       window.URL.revokeObjectURL(url);
 
       setMessage("Poem downloaded successfully!");
-    } catch (error) {
-      console.error("Error downloading poem:", error);
+    } catch {
       setMessage("Error downloading poem");
     }
   };
