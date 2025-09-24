@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       member do
         post :generate_poem, to: 'poems#generate_poem'
         get :download
+        put :update
       end
     end
 

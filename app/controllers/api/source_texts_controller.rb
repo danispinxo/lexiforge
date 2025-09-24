@@ -50,7 +50,7 @@ class Api::SourceTextsController < ApiController
 
   def download
     filename = sanitize_filename("#{@source_text.title}.txt")
-    
+
     send_data @source_text.content,
               filename: filename,
               type: 'text/plain; charset=utf-8',
@@ -253,7 +253,7 @@ class Api::SourceTextsController < ApiController
   end
 
   def source_text_params
-    params.require(:source_text).permit(:title, :content, :is_public)
+    params.expect(source_text: %i[title content is_public])
   end
 
   def authenticate_admin_user!
