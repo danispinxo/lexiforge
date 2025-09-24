@@ -11,6 +11,7 @@ function PoemDetail() {
   const [poem, setPoem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const loadPoem = async () => {
@@ -33,6 +34,32 @@ function PoemDetail() {
 
   const canEdit = user && poem && poem.author_id === user.id && poem.author_type === user.type;
 
+  const handleDownload = async () => {
+    if (!user) {
+      setMessage("You must be logged in to download poems");
+      return;
+    }
+
+    try {
+      const response = await poemsAPI.download(id);
+
+      const blob = new Blob([response.data], { type: "text/plain" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${poem.title}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      setMessage("Poem downloaded successfully!");
+    } catch (error) {
+      console.error("Error downloading poem:", error);
+      setMessage("Error downloading poem");
+    }
+  };
+
   return (
     <div className="poem-detail">
       <div className="header">
@@ -48,6 +75,11 @@ function PoemDetail() {
           <Link to={`/source-texts/${poem.source_text.id}`} className="btn btn-secondary">
             View Source Text
           </Link>
+          {user && (
+            <button onClick={handleDownload} className="btn btn-secondary">
+              Download as TXT
+            </button>
+          )}
         </div>
       </div>
 
@@ -72,6 +104,12 @@ function PoemDetail() {
             </Link>
           </p>
         </div>
+
+        {message && (
+          <div className={`message ${message.includes("Error") ? "error" : "success"}`}>
+            {message}
+          </div>
+        )}
       </div>
 
       <div className="poem-content">
