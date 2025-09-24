@@ -63,6 +63,7 @@ export const sourceTextsAPI = {
       title: title,
       content: content,
     }),
+  download: (id) => api.get(`/source_texts/${id}/download`, { responseType: "blob" }),
 };
 
 export const poemsAPI = {
@@ -91,6 +92,7 @@ export const poemsAPI = {
     api.post(`/source_texts/${sourceTextId}/generate_poem`, options),
   update: (id, poemData) => api.put(`/poems/${id}`, { poem: poemData }),
   delete: (id) => api.delete(`/poems/${id}`),
+  download: (id) => api.get(`/poems/${id}/download`, { responseType: "blob" }),
 };
 
 export const authAPI = {
