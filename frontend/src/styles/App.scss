@@ -44,4 +44,6 @@
 @include meta.load-css("pages/import");
 @include meta.load-css("pages/source-texts");
 @include meta.load-css("pages/source-text-detail");
+@include meta.load-css("pages/poem-detail");
 @include meta.load-css("pages/poem-edit");
+@include meta.load-css("pages/profile");

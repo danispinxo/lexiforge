@@ -1,0 +1,89 @@
+@use "sass:color";
+@use "../variables";
+@use "../mixins";
+
+.poem-detail {
+  .header .actions {
+    display: flex;
+    gap: variables.$spacing-md;
+    align-items: center;
+
+    .btn {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: variables.$spacing-sm variables.$spacing-lg !important;
+      font-size: variables.$font-size-sm !important;
+      font-weight: variables.$weight-medium !important;
+      line-height: 1 !important;
+      text-decoration: none;
+      white-space: nowrap;
+      box-sizing: border-box !important;
+      border-width: 1px !important;
+    }
+  }
+
+  .poem-info {
+    h1 {
+      color: variables.$text-primary;
+    }
+
+    .metadata {
+      .technique,
+      .author,
+      .date,
+      .privacy-status {
+        @include mixins.library-label;
+        background: rgba(variables.$medium-gray, 0.2);
+        color: variables.$text-secondary;
+        border-color: rgba(variables.$medium-gray, 0.3);
+      }
+
+      .privacy-status {
+        &.public {
+          background: rgba(variables.$library-green, 0.15);
+          color: variables.$library-green;
+          border-color: rgba(variables.$library-green, 0.3);
+        }
+
+        &.private {
+          background: variables.$primary-color;
+          color: variables.$black;
+          border-color: variables.$primary-dark;
+        }
+      }
+    }
+  }
+
+  .message {
+    &.success {
+      background: rgba(variables.$library-green, 0.1);
+      border: 1px solid rgba(variables.$library-green, 0.3);
+      color: variables.$library-green;
+      padding: variables.$spacing-md;
+      border-radius: variables.$border-radius-md;
+      margin: variables.$spacing-md 0;
+      font-weight: variables.$weight-medium;
+    }
+
+    &.error {
+      background: rgba(variables.$accent-color, 0.1);
+      border: 1px solid rgba(variables.$accent-color, 0.3);
+      color: variables.$accent-color;
+      padding: variables.$spacing-md;
+      border-radius: variables.$border-radius-md;
+      margin: variables.$spacing-md 0;
+      font-weight: variables.$weight-medium;
+    }
+  }
+
+  .poem-content {
+    margin-top: variables.$spacing-xl;
+
+    h3 {
+      color: variables.$text-primary;
+      margin-bottom: variables.$spacing-lg;
+    }
+  }
+}

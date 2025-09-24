@@ -62,12 +62,6 @@
     );
     pointer-events: none;
   }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none !important;
-  }
 }
 
 @mixin button-primary {
@@ -82,12 +76,7 @@
       color.adjust(variables.$primary-color, $lightness: 10%) 0%,
       variables.$primary-color 100%
     );
-    transform: translateY(-2px);
     box-shadow: variables.$shadow-heavy, variables.$glow-gold;
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 }
 
@@ -101,7 +90,6 @@
   &:hover:not(:disabled) {
     background: variables.$primary-color;
     color: variables.$black;
-    transform: translateY(-1px);
     box-shadow: variables.$shadow-medium, variables.$glow-gold;
   }
 }
@@ -122,7 +110,6 @@
       color.adjust(variables.$accent-color, $lightness: 10%) 0%,
       variables.$accent-color 100%
     );
-    transform: translateY(-2px);
     box-shadow: variables.$shadow-heavy, variables.$glow-red;
   }
 }
@@ -223,10 +210,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-@mixin text-fade-in {
-  animation: fadeInText 0.8s variables.$ease-out-expo;
 }
 
 @mixin manuscript-style {
@@ -364,17 +347,6 @@
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes fadeInText {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
