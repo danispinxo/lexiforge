@@ -37,6 +37,31 @@ function SourceTextDetail() {
 
   const handleNavigateToPoem = (poemId) => navigate(`/poems/${poemId}`);
 
+  const handleDownload = async () => {
+    if (!user) {
+      setMessage("You must be logged in to download source texts");
+      return;
+    }
+
+    try {
+      const response = await sourceTextsAPI.download(id);
+      const blob = new Blob([response.data], { type: "text/plain" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${sourceText.title}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      setMessage("Source text downloaded successfully!");
+    } catch (error) {
+      console.error("Error downloading source text:", error);
+      setMessage("Error downloading source text");
+    }
+  };
+
   if (loading) return <div className="loading">Loading...</div>;
   if (!sourceText) return <div className="error">Source text not found</div>;
 
@@ -48,9 +73,14 @@ function SourceTextDetail() {
         </Link>
         <div className="actions">
           {user ? (
-            <button onClick={() => setShowModal(true)} className="btn btn-primary">
-              Generate Poem
-            </button>
+            <>
+              <button onClick={() => setShowModal(true)} className="btn btn-primary">
+                Generate Poem
+              </button>
+              <button onClick={handleDownload} className="btn btn-primary">
+                Download as TXT
+              </button>
+            </>
           ) : (
             <div className="auth-required-message">
               <Link to="/login" className="btn btn-secondary">
