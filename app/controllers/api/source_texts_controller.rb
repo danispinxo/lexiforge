@@ -1,7 +1,7 @@
 class Api::SourceTextsController < ApiController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_any_user!, only: %i[my_source_texts import_from_gutenberg create_custom]
-  before_action :set_source_text, only: [:show]
+  before_action :authenticate_any_user!, only: %i[my_source_texts import_from_gutenberg create_custom download]
+  before_action :set_source_text, only: [:show, :download]
 
   def index
     @source_texts = build_source_texts_query(SourceText.public_texts)
@@ -45,6 +45,15 @@ class Api::SourceTextsController < ApiController
     else
       render_upload_error(source_text)
     end
+  end
+
+  def download
+    filename = sanitize_filename("#{@source_text.title}.txt")
+    
+    send_data @source_text.content,
+              filename: filename,
+              type: 'text/plain; charset=utf-8',
+              disposition: 'attachment'
   end
 
   private
@@ -219,5 +228,10 @@ class Api::SourceTextsController < ApiController
       owner: user,
       is_public: false
     )
+  end
+
+  def sanitize_filename(filename)
+    # Remove or replace invalid characters for filenames
+    filename.gsub(/[^\w\-_\.]/, '_').squeeze('_')
   end
 end
