@@ -19,7 +19,7 @@ import SortableHeader from "./SortableHeader";
 
 function MyPoems() {
   const [poems, setPoems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
