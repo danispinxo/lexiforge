@@ -11,11 +11,10 @@ function Pagination({ currentPage, totalPages, onPageChange, loading = false }) 
   };
 
   const getVisiblePages = () => {
-    const delta = 2; // Number of pages to show on each side of current page
+    const delta = 2;
     const range = [];
     const rangeWithDots = [];
 
-    // Calculate range
     const start = Math.max(1, currentPage - delta);
     const end = Math.min(totalPages, currentPage + delta);
 
@@ -23,22 +22,16 @@ function Pagination({ currentPage, totalPages, onPageChange, loading = false }) 
       range.push(i);
     }
 
-    // Add first page and dots if needed
     if (start > 1) {
       rangeWithDots.push(1);
-      if (start > 2) {
-        rangeWithDots.push("...");
-      }
+      if (start > 2) rangeWithDots.push("...");
     }
 
-    // Add visible pages
     rangeWithDots.push(...range);
 
-    // Add last page and dots if needed
     if (end < totalPages) {
-      if (end < totalPages - 1) {
-        rangeWithDots.push("...");
-      }
+      if (end < totalPages - 1) rangeWithDots.push("...");
+
       rangeWithDots.push(totalPages);
     }
 
