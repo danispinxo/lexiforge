@@ -95,7 +95,7 @@ class Api::PoemsController < ApiController
   def download
     content = extract_plain_text_content(@poem.content)
     filename = sanitize_filename("#{@poem.title}.txt")
-    
+
     send_data content,
               filename: filename,
               type: 'text/plain; charset=utf-8',
@@ -445,7 +445,7 @@ class Api::PoemsController < ApiController
             # Remove HTML tags and blackout characters
             clean_content = strip_html_tags(page_content)
             "Page #{page['number']}\n\n#{clean_content}"
-          end.join("\n\n" + "="*50 + "\n\n")
+          end.join("\n\n#{'=' * 50}\n\n")
         else
           content
         end
@@ -460,6 +460,6 @@ class Api::PoemsController < ApiController
 
   def sanitize_filename(filename)
     # Remove or replace invalid characters for filenames
-    filename.gsub(/[^\w\-_\.]/, '_').squeeze('_')
+    filename.gsub(/[^\w\-_.]/, '_').squeeze('_')
   end
 end
