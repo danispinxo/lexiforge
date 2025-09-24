@@ -248,12 +248,11 @@ class Api::SourceTextsController < ApiController
   end
 
   def sanitize_filename(filename)
-    # Remove or replace invalid characters for filenames
     filename.gsub(/[^\w\-_.]/, '_').squeeze('_')
   end
 
   def source_text_params
-    params.expect(source_text: %i[title content is_public])
+    params.expect(source_text: %i[title content])
   end
 
   def authenticate_admin_user!
