@@ -28,7 +28,6 @@ export default defineConfig({
           launchOptions.args.push("--disable-features=TranslateUI");
           launchOptions.args.push("--disable-ipc-flooding-protection");
         }
-        // Electron doesn't need these args, so we skip it
         return launchOptions;
       });
     },

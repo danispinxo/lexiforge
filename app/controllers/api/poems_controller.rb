@@ -434,15 +434,12 @@ class Api::PoemsController < ApiController
   end
 
   def extract_plain_text_content(content)
-    # Handle different poem formats
     if content.strip.start_with?('{') && content.strip.end_with?('}')
       begin
         parsed_json = JSON.parse(content)
         if parsed_json.is_a?(Hash) && parsed_json['pages']
-          # For erasure/blackout poems, extract text from pages
           parsed_json['pages'].map do |page|
             page_content = page['content']
-            # Remove HTML tags and blackout characters
             clean_content = strip_html_tags(page_content)
             "Page #{page['number']}\n\n#{clean_content}"
           end.join("\n\n#{'=' * 50}\n\n")
@@ -453,13 +450,11 @@ class Api::PoemsController < ApiController
         content
       end
     else
-      # Regular lineated poems
       content
     end
   end
 
   def sanitize_filename(filename)
-    # Remove or replace invalid characters for filenames
     filename.gsub(/[^\w\-_.]/, '_').squeeze('_')
   end
 end

@@ -19,7 +19,7 @@ import SortableHeader from "./SortableHeader";
 
 function MyPoems() {
   const [poems, setPoems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,11 +78,7 @@ function MyPoems() {
   };
 
   const handleDeletePoem = async (poemId, poemTitle) => {
-    if (
-      !window.confirm(
-        `Are you sure you want to delete "${poemTitle}"? This action cannot be undone.`
-      )
-    ) {
+    if (!window.confirm(`Are you sure you want to delete "${poemTitle}"? This cannot be undone.`)) {
       return;
     }
 
@@ -92,7 +88,6 @@ function MyPoems() {
     try {
       const response = await poemsAPI.delete(poemId);
       if (response.data.success) {
-        // Reload the current page to refresh the list
         loadMyPoems(currentPage);
       } else {
         setError(response.data.message || "Failed to delete poem");

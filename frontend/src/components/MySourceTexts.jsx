@@ -20,7 +20,7 @@ import SortableHeader from "./SortableHeader";
 
 function MySourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -57,6 +57,8 @@ function MySourceTexts() {
   useEffect(() => {
     if (user) {
       loadMySourceTexts(currentPage);
+    } else {
+      setLoading(false);
     }
   }, [user, currentPage, loadMySourceTexts]);
 

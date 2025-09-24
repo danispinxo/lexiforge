@@ -1,4 +1,4 @@
-# LexiForge - Cut-up Poetry Generator
+# LexiForge - Experimental Poetry Generator
 # Allow search engines to crawl and index the app
 User-agent: *
 Allow: /

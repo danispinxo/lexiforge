@@ -72,6 +72,11 @@ function SourceTextDetail() {
         <div className="actions">
           {user ? (
             <>
+              {user.admin && (
+                <Link to={`/source-texts/${id}/edit`} className="btn btn-secondary">
+                  Edit Source Text
+                </Link>
+              )}
               <button onClick={() => setShowModal(true)} className="btn btn-primary">
                 Generate Poem
               </button>

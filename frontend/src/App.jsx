@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import SourceTexts from "./components/SourceTexts";
 import SourceTextDetail from "./components/SourceTextDetail";
+import SourceTextEdit from "./components/SourceTextEdit";
 import Poems from "./components/Poems";
 import PoemDetail from "./components/PoemDetail";
 import PoemEdit from "./components/PoemEdit";
@@ -56,6 +57,7 @@ function AppContent() {
           <Route path="/" element={<SourceTexts />} />
           <Route path="/source-texts" element={<SourceTexts />} />
           <Route path="/source-texts/:id" element={<SourceTextDetail />} />
+          <Route path="/source-texts/:id/edit" element={<SourceTextEdit />} />
           <Route path="/my-source-texts" element={<MySourceTexts />} />
           <Route path="/poems" element={<Poems />} />
           <Route path="/poems/:id" element={<PoemDetail />} />

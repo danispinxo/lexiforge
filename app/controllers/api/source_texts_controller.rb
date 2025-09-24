@@ -1,7 +1,8 @@
 class Api::SourceTextsController < ApiController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_any_user!, only: %i[my_source_texts import_from_gutenberg create_custom download]
-  before_action :set_source_text, only: %i[show download]
+  before_action :authenticate_any_user!, only: %i[my_source_texts import_from_gutenberg create_custom download update]
+  before_action :authenticate_admin_user!, only: %i[update]
+  before_action :set_source_text, only: %i[show download update]
 
   def index
     @source_texts = build_source_texts_query(SourceText.public_texts)
@@ -54,6 +55,22 @@ class Api::SourceTextsController < ApiController
               filename: filename,
               type: 'text/plain; charset=utf-8',
               disposition: 'attachment'
+  end
+
+  def update
+    if @source_text.update(source_text_params)
+      render json: {
+        success: true,
+        message: 'Source text updated successfully',
+        source_text: SourceTextDetailSerializer.new(@source_text).as_json
+      }
+    else
+      render json: {
+        success: false,
+        message: 'Failed to update source text.',
+        errors: @source_text.errors.full_messages
+      }, status: :unprocessable_content
+    end
   end
 
   private
@@ -231,7 +248,19 @@ class Api::SourceTextsController < ApiController
   end
 
   def sanitize_filename(filename)
-    # Remove or replace invalid characters for filenames
     filename.gsub(/[^\w\-_.]/, '_').squeeze('_')
+  end
+
+  def source_text_params
+    params.expect(source_text: %i[title content])
+  end
+
+  def authenticate_admin_user!
+    return if current_admin_user
+
+    render json: {
+      success: false,
+      message: 'Admin access required'
+    }, status: :forbidden
   end
 end

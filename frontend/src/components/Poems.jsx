@@ -14,7 +14,7 @@ import SortableHeader from "./SortableHeader";
 
 function Poems() {
   const [poems, setPoems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({
@@ -65,8 +65,6 @@ function Poems() {
     setCurrentPage(1);
   };
 
-  if (loading) return <div className="loading">Loading poems...</div>;
-
   return (
     <div className="poems">
       <div className="header">
@@ -95,7 +93,9 @@ function Poems() {
         </div>
       )}
 
-      {poems.length === 0 && !loading ? (
+      {loading ? (
+        <div className="loading">Loading poems...</div>
+      ) : poems.length === 0 ? (
         <div className="empty-state">
           <p>
             <FontAwesomeIcon icon={faInfoCircle} className="empty-icon" />

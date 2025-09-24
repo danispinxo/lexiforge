@@ -64,6 +64,7 @@ export const sourceTextsAPI = {
       content: content,
     }),
   download: (id) => api.get(`/source_texts/${id}/download`, { responseType: "blob" }),
+  update: (id, sourceTextData) => api.put(`/source_texts/${id}`, { source_text: sourceTextData }),
 };
 
 export const poemsAPI = {

@@ -16,7 +16,7 @@ import SortableHeader from "./SortableHeader";
 
 function SourceTexts() {
   const [sourceTexts, setSourceTexts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
