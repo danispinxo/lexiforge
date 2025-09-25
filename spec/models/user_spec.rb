@@ -124,7 +124,7 @@ RSpec.describe User, type: :model do
   end
 
   describe 'authentication' do
-    let(:user) { create(:user, email: 'test@example.com', password: 'password123') }
+    let(:user) { create(:user, email: 'test@example.com', password: 'password123456') }
 
     it 'can authenticate with valid credentials' do
       expect(user.valid_password?('password123')).to be true
