@@ -9,6 +9,7 @@ import {
   faChevronDown,
   faUserEdit,
   faCog,
+  faUsers,
 } from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 
@@ -56,6 +57,11 @@ function AuthWrapper() {
     setIsDropdownOpen(false);
   };
 
+  const handleUsersClick = () => {
+    navigate("/users");
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className="auth-dropdown" ref={dropdownRef}>
       <button className="auth-dropdown-toggle" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
@@ -92,6 +98,10 @@ function AuthWrapper() {
               <button onClick={handleProfileClick} className="dropdown-item">
                 <FontAwesomeIcon icon={faUserEdit} />
                 <span>Edit Profile</span>
+              </button>
+              <button onClick={handleUsersClick} className="dropdown-item">
+                <FontAwesomeIcon icon={faUsers} />
+                <span>Community</span>
               </button>
               {user.admin && (
                 <button onClick={handleAdminPanelClick} className="dropdown-item">

@@ -43,6 +43,9 @@ import {
   faSort,
   faSortUp,
   faSortDown,
+  faUsers,
+  faCalendarAlt,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -88,7 +91,10 @@ library.add(
   faFilter,
   faSort,
   faSortUp,
-  faSortDown
+  faSortDown,
+  faUsers,
+  faCalendarAlt,
+  faSpinner
 );
 
 export {
@@ -135,4 +141,7 @@ export {
   faSort,
   faSortUp,
   faSortDown,
+  faUsers,
+  faCalendarAlt,
+  faSpinner,
 };

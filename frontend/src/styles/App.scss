@@ -40,6 +40,7 @@
 @include meta.load-css("components/modals");
 @include meta.load-css("components/messages");
 @include meta.load-css("components/poetry");
+@include meta.load-css("components/users");
 
 @include meta.load-css("pages/import");
 @include meta.load-css("pages/source-texts");

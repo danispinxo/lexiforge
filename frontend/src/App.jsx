@@ -15,6 +15,7 @@ import PoemEdit from "./components/PoemEdit";
 import MySourceTexts from "./components/MySourceTexts";
 import MyPoems from "./components/MyPoems";
 import Profile from "./components/Profile";
+import Users from "./components/Users";
 import NotFound from "./components/NotFound";
 import "./styles/App.scss";
 
@@ -64,6 +65,7 @@ function AppContent() {
           <Route path="/poems/:id/edit" element={<PoemEdit />} />
           <Route path="/my-poems" element={<MyPoems />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/users" element={<Users />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />

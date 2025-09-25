@@ -3,7 +3,7 @@ class Api::UsersController < ApiController
   include Devise::Controllers::SignInOut
 
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_any_user!, except: [:current_user_info]
+  before_action :authenticate_any_user!, except: %i[current_user_info index]
 
   def current_user_info
     if current_api_user
@@ -48,6 +48,42 @@ class Api::UsersController < ApiController
     }, status: :internal_server_error
   end
 
+  def index
+    return render_unauthorized unless current_api_user || current_admin_user
+
+    users = User.includes(:authored_poems, :source_texts)
+                .order(:username)
+                .limit(50)
+
+    admin_users = AdminUser.includes(:authored_poems, :source_texts)
+                           .order(:email)
+                           .limit(50)
+
+    all_users_data = users.map do |user|
+      create_user_data(user)
+    end
+
+    admin_users.each do |admin_user|
+      admin_user_data = create_admin_user_data(admin_user)
+      all_users_data << admin_user_data
+    end
+
+    all_users_data.sort_by! { |user| user[:username].downcase }
+
+    render json: {
+      success: true,
+      users: all_users_data,
+      total_count: all_users_data.length,
+      regular_users_count: users.length,
+      admin_users_count: admin_users.length
+    }
+  rescue StandardError => e
+    render json: {
+      success: false,
+      message: "Failed to load users: #{e.message}"
+    }, status: :internal_server_error
+  end
+
   def change_password
     user = current_api_user || current_admin_user
 
@@ -81,6 +117,39 @@ class Api::UsersController < ApiController
   end
 
   private
+
+  def create_user_data(user)
+    {
+      id: user.id,
+      username: user.username,
+      full_name: user.full_name,
+      gravatar_url: user.gravatar_url,
+      source_texts_count: user.source_texts.count,
+      poems_count: user.authored_poems.count,
+      created_at: user.created_at,
+      user_type: 'user'
+    }
+  end
+
+  def create_admin_user_data(admin_user)
+    {
+      id: admin_user.id,
+      username: admin_user.username,
+      full_name: admin_user.full_name,
+      gravatar_url: admin_user.gravatar_url,
+      source_texts_count: admin_user.source_texts.count,
+      poems_count: admin_user.authored_poems.count,
+      created_at: admin_user.created_at,
+      user_type: 'admin'
+    }
+  end
+
+  def render_unauthorized
+    render json: {
+      success: false,
+      message: 'Authentication required to view users list'
+    }, status: :unauthorized
+  end
 
   def profile_params
     params.expect(user: %i[username first_name last_name bio gravatar_type])

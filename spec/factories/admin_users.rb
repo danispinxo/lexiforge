@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :admin_user do
     email { Faker::Internet.unique.email(domain: 'admin.com') }
-    password { Faker::Internet.password(min_length: 10) }
+    password { Faker::Internet.password(min_length: 12, max_length: 20) }
     password_confirmation { password }
 
     trait :super_admin do

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   get 'up' => 'rails/health#show', as: :rails_health_check
+  post 'csp-violation-report-endpoint', to: 'csp_violations#create'
 
   root 'admin/dashboard#index'
 
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
     get 'user/current', to: 'users#current_user_info'
     put 'user/profile', to: 'users#update_profile'
     put 'user/password', to: 'users#change_password'
+    get 'users', to: 'users#index'
   end
 
   match '*path', to: 'application#handle_options_request', via: :options

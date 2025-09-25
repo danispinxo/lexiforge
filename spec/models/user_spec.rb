@@ -110,24 +110,24 @@ RSpec.describe User, type: :model do
       expect(user.errors[:password]).to include("can't be blank")
     end
 
-    it 'is not valid with a password shorter than 6 characters' do
-      user = build(:user, password: '12345')
+    it 'is not valid with a password shorter than 12 characters' do
+      user = build(:user, password: '12345678901') # 11 characters
       expect(user).not_to be_valid
-      expect(user.errors[:password]).to include('is too short (minimum is 6 characters)')
+      expect(user.errors[:password]).to include('is too short (minimum is 12 characters)')
     end
 
     it 'is not valid with mismatched password confirmation' do
-      user = build(:user, password: 'password123', password_confirmation: 'different123')
+      user = build(:user, password: 'password123456', password_confirmation: 'different123456')
       expect(user).not_to be_valid
       expect(user.errors[:password_confirmation]).to include("doesn't match Password")
     end
   end
 
   describe 'authentication' do
-    let(:user) { create(:user, email: 'test@example.com', password: 'password123') }
+    let(:user) { create(:user, email: 'test@example.com', password: 'password123456') }
 
     it 'can authenticate with valid credentials' do
-      expect(user.valid_password?('password123')).to be true
+      expect(user.valid_password?('password123456')).to be true
     end
 
     it 'cannot authenticate with invalid password' do
