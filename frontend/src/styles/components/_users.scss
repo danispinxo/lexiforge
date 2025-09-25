@@ -65,119 +65,142 @@
     }
   }
 
-  .users-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: variables.$spacing-lg;
+  .users-table-container {
     margin-bottom: variables.$spacing-xl;
+    background: variables.$bg-secondary;
+    border-radius: variables.$border-radius-md;
+    border: 1px solid rgba(variables.$primary-color, 0.2);
+    overflow: hidden;
 
-    .user-card {
-      background: variables.$bg-secondary;
-      border: 1px solid rgba(variables.$primary-color, 0.2);
-      border-radius: variables.$border-radius-md;
-      padding: variables.$spacing-lg;
-      transition: all variables.$transition-normal;
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
 
-      &:hover {
-        transform: translateY(-2px);
-        border-color: rgba(variables.$primary-color, 0.4);
-        box-shadow: 0 8px 32px rgba(variables.$primary-color, 0.2);
-      }
+      thead {
+        background: rgba(variables.$primary-color, 0.1);
 
-      .user-avatar-container {
-        position: relative;
-        width: 80px;
-        height: 80px;
-        margin: 0 auto variables.$spacing-md auto;
-
-        .user-avatar {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          border: 2px solid rgba(variables.$primary-color, 0.3);
-          object-fit: cover;
-        }
-
-        .user-avatar-fallback {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: rgba(variables.$primary-color, 0.1);
-          border: 2px solid rgba(variables.$primary-color, 0.3);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: variables.$primary-color;
-          font-size: 2rem;
-        }
-      }
-
-      .user-info {
-        text-align: center;
-        margin-bottom: variables.$spacing-lg;
-
-        .user-name {
+        th {
+          padding: variables.$spacing-lg variables.$spacing-md;
+          text-align: left;
+          font-weight: variables.$weight-semibold;
           color: variables.$text-primary;
-          margin: 0 0 variables.$spacing-xs 0;
-          font-size: variables.$font-size-lg;
-          @include mixins.heading-serif;
-        }
-
-        .user-username {
-          color: variables.$text-muted;
-          margin: 0;
-          font-size: variables.$font-size-sm;
           @include mixins.small-caps;
+          border-bottom: 1px solid rgba(variables.$primary-color, 0.2);
+
+          &:first-child {
+            padding-left: variables.$spacing-lg;
+          }
+
+          &:last-child {
+            padding-right: variables.$spacing-lg;
+          }
         }
       }
 
-      .user-stats {
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: variables.$spacing-lg;
+      tbody {
+        tr {
+          border-bottom: 1px solid rgba(variables.$primary-color, 0.1);
+          transition: background-color variables.$transition-normal;
 
-        .stat-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: variables.$spacing-xs;
-
-          .stat-icon {
-            color: variables.$primary-color;
-            font-size: variables.$font-size-lg;
+          &:hover {
+            background: rgba(variables.$primary-color, 0.05);
           }
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+
+        td {
+          padding: variables.$spacing-md;
+          vertical-align: middle;
+
+          &:first-child {
+            padding-left: variables.$spacing-lg;
+          }
+
+          &:last-child {
+            padding-right: variables.$spacing-lg;
+          }
+        }
+
+        .user-cell {
+          .user-info {
+            display: flex;
+            align-items: center;
+            gap: variables.$spacing-md;
+
+            .user-avatar-container {
+              position: relative;
+              width: 40px;
+              height: 40px;
+              flex-shrink: 0;
+
+              .user-avatar {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                border: 2px solid rgba(variables.$primary-color, 0.3);
+                object-fit: cover;
+              }
+
+              .user-avatar-fallback {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: rgba(variables.$primary-color, 0.1);
+                border: 2px solid rgba(variables.$primary-color, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: variables.$primary-color;
+                font-size: 1rem;
+              }
+            }
+
+            .user-details {
+              .user-name {
+                color: variables.$text-primary;
+                font-weight: variables.$weight-semibold;
+                margin-bottom: variables.$spacing-xs;
+                display: flex;
+                align-items: center;
+                gap: variables.$spacing-sm;
+
+                .admin-badge {
+                  background: variables.$primary-color;
+                  color: variables.$black;
+                  font-size: variables.$font-size-xs;
+                  font-weight: variables.$weight-medium;
+                  padding: 2px variables.$spacing-xs;
+                  border-radius: variables.$border-radius-sm;
+                  @include mixins.small-caps;
+                }
+              }
+
+              .user-username {
+                color: variables.$text-muted;
+                font-size: variables.$font-size-sm;
+                @include mixins.small-caps;
+              }
+            }
+          }
+        }
+
+        .stat-cell {
+          text-align: center;
 
           .stat-count {
-            font-size: variables.$font-size-xl;
-            font-weight: bold;
-            color: variables.$text-primary;
-          }
-
-          .stat-text {
-            font-size: variables.$font-size-xs;
-            color: variables.$text-muted;
-            @include mixins.small-caps;
+            font-size: variables.$font-size-lg;
+            font-weight: variables.$weight-semibold;
+            color: variables.$primary-color;
           }
         }
-      }
 
-      .user-meta {
-        border-top: 1px solid rgba(variables.$primary-color, 0.1);
-        padding-top: variables.$spacing-md;
-
-        .join-date {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: variables.$spacing-sm;
+        .date-cell {
           color: variables.$text-muted;
           font-size: variables.$font-size-sm;
           @include mixins.small-caps;
-
-          .meta-icon {
-            color: variables.$primary-color;
-            opacity: 0.7;
-          }
         }
       }
     }

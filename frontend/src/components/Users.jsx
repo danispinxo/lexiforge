@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUsers,
-  faBook,
-  faPenNib,
-  faCalendarAlt,
-  faSpinner,
-  faExclamationTriangle,
-} from "../config/fontawesome";
+import { faUsers, faSpinner, faExclamationTriangle } from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
 import api from "../services/api";
 
@@ -29,14 +22,13 @@ function Users() {
         setLoading(true);
         setError("");
         const response = await api.get("/users");
-        
+
         if (response.data.success) {
           setUsers(response.data.users);
         } else {
           setError(response.data.message || "Failed to load users");
         }
       } catch (error) {
-        console.error("Error fetching users:", error);
         if (error.response?.status === 401) {
           setError("Authentication required to view users list.");
         } else if (error.response?.status === 429) {
@@ -86,9 +78,6 @@ function Users() {
           <FontAwesomeIcon icon={faUsers} className="page-icon" />
           <div>
             <h1>Community Members</h1>
-            <p className="page-subtitle">
-              Discover the creative minds contributing to LexiForge
-            </p>
           </div>
         </div>
       </div>
@@ -112,61 +101,66 @@ function Users() {
         </div>
       </div>
 
-      <div className="users-grid">
-        {users.map((userData) => (
-          <div key={userData.id} className="user-card">
-            <div className="user-avatar-container">
-              {userData.gravatar_url ? (
-                <img
-                  src={userData.gravatar_url}
-                  alt={`${userData.username}'s avatar`}
-                  className="user-avatar"
-                  onError={(e) => {
-                    e.target.style.display = "none";
-                    e.target.nextElementSibling.style.display = "flex";
-                  }}
-                />
-              ) : null}
-              <div
-                className="user-avatar-fallback"
-                style={{
-                  display: userData.gravatar_url ? "none" : "flex",
-                }}
-              >
-                <FontAwesomeIcon icon={faUsers} />
-              </div>
-            </div>
-            
-            <div className="user-info">
-              <h3 className="user-name">
-                {userData.full_name || userData.username}
-              </h3>
-              {userData.full_name && userData.full_name !== userData.username && (
-                <p className="user-username">@{userData.username}</p>
-              )}
-            </div>
-
-            <div className="user-stats">
-              <div className="stat-item">
-                <FontAwesomeIcon icon={faBook} className="stat-icon" />
-                <span className="stat-count">{userData.source_texts_count}</span>
-                <span className="stat-text">Source Texts</span>
-              </div>
-              <div className="stat-item">
-                <FontAwesomeIcon icon={faPenNib} className="stat-icon" />
-                <span className="stat-count">{userData.poems_count}</span>
-                <span className="stat-text">Poems</span>
-              </div>
-            </div>
-
-            <div className="user-meta">
-              <div className="join-date">
-                <FontAwesomeIcon icon={faCalendarAlt} className="meta-icon" />
-                <span>Joined {formatDate(userData.created_at)}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="users-table-container">
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Source Texts</th>
+              <th>Poems</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((userData) => (
+              <tr key={userData.id}>
+                <td className="user-cell">
+                  <div className="user-info">
+                    <div className="user-avatar-container">
+                      {userData.gravatar_url ? (
+                        <img
+                          src={userData.gravatar_url}
+                          alt={`${userData.username}'s avatar`}
+                          className="user-avatar"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            e.target.nextElementSibling.style.display = "flex";
+                          }}
+                        />
+                      ) : null}
+                      <div
+                        className="user-avatar-fallback"
+                        style={{
+                          display: userData.gravatar_url ? "none" : "flex",
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faUsers} />
+                      </div>
+                    </div>
+                    <div className="user-details">
+                      <div className="user-name">
+                        {userData.full_name || userData.username}
+                        {userData.user_type === "admin" && (
+                          <span className="admin-badge">Admin</span>
+                        )}
+                      </div>
+                      {userData.full_name && userData.full_name !== userData.username && (
+                        <div className="user-username">@{userData.username}</div>
+                      )}
+                    </div>
+                  </div>
+                </td>
+                <td className="stat-cell">
+                  <span className="stat-count">{userData.source_texts_count}</span>
+                </td>
+                <td className="stat-cell">
+                  <span className="stat-count">{userData.poems_count}</span>
+                </td>
+                <td className="date-cell">{formatDate(userData.created_at)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {users.length === 0 && (
