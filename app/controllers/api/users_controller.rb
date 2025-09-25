@@ -60,29 +60,12 @@ class Api::UsersController < ApiController
                            .limit(50)
 
     all_users_data = users.map do |user|
-      {
-        id: user.id,
-        username: user.username,
-        full_name: user.full_name,
-        gravatar_url: user.gravatar_url,
-        source_texts_count: user.source_texts.count,
-        poems_count: user.authored_poems.count,
-        created_at: user.created_at,
-        user_type: 'user'
-      }
+      create_user_data(user)
     end
 
     admin_users.each do |admin_user|
-      all_users_data << {
-        id: admin_user.id,
-        username: admin_user.username || admin_user.email.split('@').first,
-        full_name: admin_user.full_name,
-        gravatar_url: admin_user.gravatar_url,
-        source_texts_count: admin_user.source_texts.count,
-        poems_count: admin_user.authored_poems.count,
-        created_at: admin_user.created_at,
-        user_type: 'admin'
-      }
+      admin_user_data = create_admin_user_data(admin_user)
+      all_users_data << admin_user_data
     end
 
     all_users_data.sort_by! { |user| user[:username].downcase }
@@ -134,6 +117,32 @@ class Api::UsersController < ApiController
   end
 
   private
+
+  def create_user_data(user)
+    {
+      id: user.id,
+      username: user.username,
+      full_name: user.full_name,
+      gravatar_url: user.gravatar_url,
+      source_texts_count: user.source_texts.count,
+      poems_count: user.authored_poems.count,
+      created_at: user.created_at,
+      user_type: 'user'
+    }
+  end
+
+  def create_admin_user_data(admin_user)
+    {
+      id: admin_user.id,
+      username: admin_user.username,
+      full_name: admin_user.full_name,
+      gravatar_url: admin_user.gravatar_url,
+      source_texts_count: admin_user.source_texts.count,
+      poems_count: admin_user.authored_poems.count,
+      created_at: admin_user.created_at,
+      user_type: 'admin'
+    }
+  end
 
   def render_unauthorized
     render json: {
