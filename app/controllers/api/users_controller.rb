@@ -3,7 +3,7 @@ class Api::UsersController < ApiController
   include Devise::Controllers::SignInOut
 
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_any_user!, except: [:current_user_info]
+  before_action :authenticate_any_user!, except: %i[current_user_info index]
 
   def current_user_info
     if current_api_user
@@ -48,6 +48,37 @@ class Api::UsersController < ApiController
     }, status: :internal_server_error
   end
 
+  def index
+    return render_unauthorized unless current_api_user || current_admin_user
+
+    users = User.includes(:authored_poems, :source_texts)
+                .order(:username)
+                .limit(100)
+
+    users_data = users.map do |user|
+      {
+        id: user.id,
+        username: user.username,
+        full_name: user.full_name,
+        gravatar_url: user.gravatar_url,
+        source_texts_count: user.source_texts.count,
+        poems_count: user.authored_poems.count,
+        created_at: user.created_at
+      }
+    end
+
+    render json: {
+      success: true,
+      users: users_data,
+      total_count: users.length
+    }
+  rescue StandardError => e
+    render json: {
+      success: false,
+      message: "Failed to load users: #{e.message}"
+    }, status: :internal_server_error
+  end
+
   def change_password
     user = current_api_user || current_admin_user
 
@@ -81,6 +112,13 @@ class Api::UsersController < ApiController
   end
 
   private
+
+  def render_unauthorized
+    render json: {
+      success: false,
+      message: 'Authentication required to view users list'
+    }, status: :unauthorized
+  end
 
   def profile_params
     params.expect(user: %i[username first_name last_name bio gravatar_type])
