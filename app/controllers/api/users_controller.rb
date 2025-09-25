@@ -51,26 +51,56 @@ class Api::UsersController < ApiController
   def index
     return render_unauthorized unless current_api_user || current_admin_user
 
+    # Get regular users
     users = User.includes(:authored_poems, :source_texts)
                 .order(:username)
-                .limit(100)
-
-    users_data = users.map do |user|
-      {
+                .limit(50) # Reduced to make room for admin users
+                
+    # Get admin users  
+    admin_users = AdminUser.includes(:authored_poems, :source_texts)
+                          .order(:email) # Admin users use email, not username
+                          .limit(50)
+                
+    # Combine and format user data
+    all_users_data = []
+    
+    # Add regular users
+    users.each do |user|
+      all_users_data << {
         id: user.id,
         username: user.username,
         full_name: user.full_name,
         gravatar_url: user.gravatar_url,
         source_texts_count: user.source_texts.count,
         poems_count: user.authored_poems.count,
-        created_at: user.created_at
+        created_at: user.created_at,
+        user_type: 'user'
       }
     end
+    
+    # Add admin users
+    admin_users.each do |admin_user|
+      all_users_data << {
+        id: admin_user.id,
+        username: admin_user.username || admin_user.email.split('@').first,
+        full_name: admin_user.full_name,
+        gravatar_url: admin_user.gravatar_url,
+        source_texts_count: admin_user.source_texts.count,
+        poems_count: admin_user.authored_poems.count,
+        created_at: admin_user.created_at,
+        user_type: 'admin'
+      }
+    end
+    
+    # Sort combined results by username/email
+    all_users_data.sort_by! { |user| user[:username].downcase }
 
     render json: {
       success: true,
-      users: users_data,
-      total_count: users.length
+      users: all_users_data,
+      total_count: all_users_data.length,
+      regular_users_count: users.length,
+      admin_users_count: admin_users.length
     }
   rescue StandardError => e
     render json: {
