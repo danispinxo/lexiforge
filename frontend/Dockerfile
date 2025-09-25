@@ -1,20 +1,20 @@
-FROM node:22-alpine
+FROM node:22-slim
 
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     chromium \
-    nss \
-    freetype \
-    freetype-dev \
-    harfbuzz \
     ca-certificates \
-    ttf-freefont \
-    xvfb \
-    dbus \
-    ttf-dejavu \
-    ttf-droid \
-    ttf-liberation \
-    gcompat \
-    libc6-compat
+    fonts-liberation \
+    libappindicator3-1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libxss1 \
+    libxtst6 \
+    xdg-utils \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
