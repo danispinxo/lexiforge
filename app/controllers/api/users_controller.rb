@@ -51,22 +51,16 @@ class Api::UsersController < ApiController
   def index
     return render_unauthorized unless current_api_user || current_admin_user
 
-    # Get regular users
     users = User.includes(:authored_poems, :source_texts)
                 .order(:username)
-                .limit(50) # Reduced to make room for admin users
-                
-    # Get admin users  
+                .limit(50)
+
     admin_users = AdminUser.includes(:authored_poems, :source_texts)
-                          .order(:email) # Admin users use email, not username
-                          .limit(50)
-                
-    # Combine and format user data
-    all_users_data = []
-    
-    # Add regular users
-    users.each do |user|
-      all_users_data << {
+                           .order(:email)
+                           .limit(50)
+
+    all_users_data = users.map do |user|
+      {
         id: user.id,
         username: user.username,
         full_name: user.full_name,
@@ -77,8 +71,7 @@ class Api::UsersController < ApiController
         user_type: 'user'
       }
     end
-    
-    # Add admin users
+
     admin_users.each do |admin_user|
       all_users_data << {
         id: admin_user.id,
@@ -91,8 +84,7 @@ class Api::UsersController < ApiController
         user_type: 'admin'
       }
     end
-    
-    # Sort combined results by username/email
+
     all_users_data.sort_by! { |user| user[:username].downcase }
 
     render json: {

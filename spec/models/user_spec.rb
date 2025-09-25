@@ -111,7 +111,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'is not valid with a password shorter than 12 characters' do
-      user = build(:user, password: '12345678901')  # 11 characters
+      user = build(:user, password: '12345678901') # 11 characters
       expect(user).not_to be_valid
       expect(user.errors[:password]).to include('is too short (minimum is 12 characters)')
     end
