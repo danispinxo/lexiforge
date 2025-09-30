@@ -60,6 +60,15 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
   const [letterToOmit, setLetterToOmit] = useState(
     POEM_GENERATION_DEFAULTS.LIPOGRAM.LETTER_TO_OMIT
   );
+  const [reverseLipogramNumWords, setReverseLipogramNumWords] = useState(
+    POEM_GENERATION_DEFAULTS.REVERSE_LIPOGRAM.NUM_WORDS
+  );
+  const [reverseLipogramLineLength, setReverseLipogramLineLength] = useState(
+    POEM_GENERATION_DEFAULTS.REVERSE_LIPOGRAM.LINE_LENGTH
+  );
+  const [lettersToUse, setLettersToUse] = useState(
+    POEM_GENERATION_DEFAULTS.REVERSE_LIPOGRAM.LETTERS_TO_USE
+  );
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -88,6 +97,12 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
 
     if (technique === "lipogram" && !letterToOmit.trim()) {
       setError("Letter to omit is required for lipogram poetry");
+      setGenerating(false);
+      return;
+    }
+
+    if (technique === "reverse_lipogram" && !lettersToUse.trim()) {
+      setError("Letters to use is required for reverse lipogram poetry");
       setGenerating(false);
       return;
     }
@@ -144,6 +159,11 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.num_words = lipogramNumWords;
           options.line_length = lipogramLineLength;
           options.letters_to_omit = letterToOmit;
+          break;
+        case "reverse_lipogram":
+          options.num_words = reverseLipogramNumWords;
+          options.line_length = reverseLipogramLineLength;
+          options.letters_to_use = lettersToUse;
           break;
       }
 
@@ -208,6 +228,7 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 <option value="mesostic">Mesostic</option>
                 <option value="n_plus_seven">N+7</option>
                 <option value="prisoners_constraint">Prisoner's Constraint</option>
+                <option value="reverse_lipogram">Reverse Lipogram</option>
                 <option value="snowball">Snowball</option>
               </select>
             </div>
@@ -738,6 +759,60 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     id="lipogram-line-length"
                     value={lipogramLineLength}
                     onChange={(e) => setLipogramLineLength(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="short">Short (3-4 words)</option>
+                    <option value="medium">Medium (5-7 words)</option>
+                    <option value="long">Long (8-10 words)</option>
+                  </select>
+                </div>
+              </>
+            )}
+
+            {technique === "reverse_lipogram" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    A reverse lipogram is a text that uses only specific letters of the alphabet.
+                    This is the opposite of a regular lipogram - instead of avoiding certain
+                    letters, you can only use the letters you specify. This creates highly
+                    constrained poetry with a unique sound and rhythm.
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="letters-to-use">Letters to Use:</label>
+                  <input
+                    type="text"
+                    id="letters-to-use"
+                    value={lettersToUse}
+                    onChange={(e) => setLettersToUse(e.target.value)}
+                    placeholder="e.g., 'aeiou', 'rst', 'abcde'"
+                    disabled={generating}
+                    pattern="[a-zA-Z]+"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="reverse-lipogram-num-words">Number of Words:</label>
+                  <input
+                    type="number"
+                    id="reverse-lipogram-num-words"
+                    value={reverseLipogramNumWords}
+                    onChange={(e) => setReverseLipogramNumWords(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="100"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="reverse-lipogram-line-length">Line Length:</label>
+                  <select
+                    id="reverse-lipogram-line-length"
+                    value={reverseLipogramLineLength}
+                    onChange={(e) => setReverseLipogramLineLength(e.target.value)}
                     disabled={generating}
                   >
                     <option value="short">Short (3-4 words)</option>

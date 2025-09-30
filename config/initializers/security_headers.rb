@@ -4,16 +4,14 @@ Rails.application.configure do
   config.force_ssl = true if Rails.env.production?
   
   # Add security headers
-  config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
+  config.middleware.use Rack::Deflater
   
   # Set secure headers
   config.middleware.use(Rack::Protection, 
     use: %i[
-      authenticity_token
       escaped_params
       form_token
       frame_options
-      json_csrf
       path_traversal
       remote_referrer
       remote_token
@@ -21,7 +19,8 @@ Rails.application.configure do
       xss_header
     ],
     frame_options: :deny,
-    xss_header: :block
+    xss_header: :block,
+    except: lambda { |env| env['PATH_INFO'].start_with?('/api') }
   )
 end
 
