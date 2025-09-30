@@ -244,6 +244,22 @@ class Api::PoemsController < ApiController
     options[:letters_to_omit] = permitted_params[:letters_to_omit] if permitted_params[:letters_to_omit].present?
   end
 
+  def build_reverse_lipogram_options(options, permitted_params)
+    options[:num_words] = (permitted_params[:num_words] || 20).to_i
+    options[:line_length] = permitted_params[:line_length] || 'medium'
+    options[:letters_to_use] = permitted_params[:letters_to_use] if permitted_params[:letters_to_use].present?
+  end
+
+  def build_abecedarian_options(options, permitted_params)
+    options[:words_per_line] = (permitted_params[:words_per_line] || 5).to_i
+  end
+
+  def build_univocal_options(options, permitted_params)
+    options[:num_words] = (permitted_params[:num_words] || 30).to_i
+    options[:line_length] = permitted_params[:line_length] || 'medium'
+    options[:vowel_to_use] = permitted_params[:vowel_to_use] if permitted_params[:vowel_to_use].present?
+  end
+
   def generate_content(technique, options)
     generator_class = technique_to_generator_class(technique)
     generator = generator_class.new(@source_text)
@@ -262,7 +278,10 @@ class Api::PoemsController < ApiController
       'kwic' => KwicGenerator,
       'prisoners_constraint' => PrisonersConstraintGenerator,
       'beautiful_outlaw' => BeautifulOutlawGenerator,
-      'lipogram' => LipogramGenerator
+      'lipogram' => LipogramGenerator,
+      'reverse_lipogram' => ReverseLipogramGenerator,
+      'abecedarian' => AbecedarianGenerator,
+      'univocal' => UnivocalGenerator
     }
 
     technique_generators[technique] || raise("Unknown technique: #{technique}")
@@ -365,7 +384,8 @@ class Api::PoemsController < ApiController
                   :num_pages, :words_per_page, :words_to_keep, :is_blackout,
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
                   :section_length, :words_to_replace, :line_length, :keyword, :context_window,
-                  :use_all_appearances, :num_words, :constraint_type, :hidden_word, :lines_per_stanza, :letters_to_omit)
+                  :use_all_appearances, :num_words, :constraint_type, :hidden_word, :lines_per_stanza,
+                  :letters_to_omit, :letters_to_use, :vowel_to_use)
   end
 
   def authenticate_any_user!
