@@ -69,6 +69,16 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
   const [lettersToUse, setLettersToUse] = useState(
     POEM_GENERATION_DEFAULTS.REVERSE_LIPOGRAM.LETTERS_TO_USE
   );
+  const [abecedarianWordsPerLine, setAbecedarianWordsPerLine] = useState(
+    POEM_GENERATION_DEFAULTS.ABECEDARIAN.WORDS_PER_LINE
+  );
+  const [univocalNumWords, setUnivocalNumWords] = useState(
+    POEM_GENERATION_DEFAULTS.UNIVOCAL.NUM_WORDS
+  );
+  const [univocalLineLength, setUnivocalLineLength] = useState(
+    POEM_GENERATION_DEFAULTS.UNIVOCAL.LINE_LENGTH
+  );
+  const [vowelToUse, setVowelToUse] = useState(POEM_GENERATION_DEFAULTS.UNIVOCAL.VOWEL_TO_USE);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -103,6 +113,12 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
 
     if (technique === "reverse_lipogram" && !lettersToUse.trim()) {
       setError("Letters to use is required for reverse lipogram poetry");
+      setGenerating(false);
+      return;
+    }
+
+    if (technique === "univocal" && !vowelToUse.trim()) {
+      setError("Vowel to use is required for univocal poetry");
       setGenerating(false);
       return;
     }
@@ -165,6 +181,14 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.line_length = reverseLipogramLineLength;
           options.letters_to_use = lettersToUse;
           break;
+        case "abecedarian":
+          options.words_per_line = abecedarianWordsPerLine;
+          break;
+        case "univocal":
+          options.num_words = univocalNumWords;
+          options.line_length = univocalLineLength;
+          options.vowel_to_use = vowelToUse;
+          break;
       }
 
       options.is_public = isPublic;
@@ -218,6 +242,7 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 onChange={(e) => setTechnique(e.target.value)}
                 disabled={generating}
               >
+                <option value="abecedarian">Abecedarian</option>
                 <option value="beautiful_outlaw">Beautiful Outlaw</option>
                 <option value="cut_up">Cut-Up</option>
                 <option value="definitional">Definitional</option>
@@ -230,6 +255,7 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 <option value="prisoners_constraint">Prisoner's Constraint</option>
                 <option value="reverse_lipogram">Reverse Lipogram</option>
                 <option value="snowball">Snowball</option>
+                <option value="univocal">Univocal</option>
               </select>
             </div>
 
@@ -813,6 +839,88 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     id="reverse-lipogram-line-length"
                     value={reverseLipogramLineLength}
                     onChange={(e) => setReverseLipogramLineLength(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="short">Short (3-4 words)</option>
+                    <option value="medium">Medium (5-7 words)</option>
+                    <option value="long">Long (8-10 words)</option>
+                  </select>
+                </div>
+              </>
+            )}
+
+            {technique === "abecedarian" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    An abecedarian poem follows the alphabetical order, with each line or stanza
+                    beginning with successive letters of the alphabet. Starting with 'A', then 'B',
+                    and so on. If no words are found for a particular letter, empty lines can be
+                    included to maintain the alphabetical structure.
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="abecedarian-words-per-line">Words per Line:</label>
+                  <input
+                    type="number"
+                    id="abecedarian-words-per-line"
+                    value={abecedarianWordsPerLine}
+                    onChange={(e) => setAbecedarianWordsPerLine(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="15"
+                    disabled={generating}
+                  />
+                </div>
+              </>
+            )}
+
+            {technique === "univocal" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Univocal poetry uses only words that contain a single type of vowel. For
+                    example, a poem using only the vowel 'a' might include words like 'cat', 'hat',
+                    'sang', but would exclude words with other vowels like 'dog' or 'tree'. This
+                    creates a distinctive sound pattern and phonetic unity.
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="vowel-to-use">Vowel to Use:</label>
+                  <select
+                    id="vowel-to-use"
+                    value={vowelToUse}
+                    onChange={(e) => setVowelToUse(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="a">A</option>
+                    <option value="e">E</option>
+                    <option value="i">I</option>
+                    <option value="o">O</option>
+                    <option value="u">U</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="univocal-num-words">Number of Words:</label>
+                  <input
+                    type="number"
+                    id="univocal-num-words"
+                    value={univocalNumWords}
+                    onChange={(e) => setUnivocalNumWords(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="100"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="univocal-line-length">Line Length:</label>
+                  <select
+                    id="univocal-line-length"
+                    value={univocalLineLength}
+                    onChange={(e) => setUnivocalLineLength(e.target.value)}
                     disabled={generating}
                   >
                     <option value="short">Short (3-4 words)</option>
