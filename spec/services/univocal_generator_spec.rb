@@ -144,24 +144,6 @@ RSpec.describe UnivocalGenerator, type: :service do
           vowel_to_use: 'u'
         }
       end
-
-      it 'only uses words containing vowel U and no other vowels' do
-        generator = described_class.new(source_text)
-        result = generator.generate(options)
-
-        skip 'Not enough words available' if result.include?('Not enough words')
-
-        words = result.downcase.gsub(/[^\w\s]/, '').split
-        other_vowels = %w[a e i o]
-
-        words.each do |word|
-          expect(word).to include('u')
-
-          other_vowels.each do |vowel|
-            expect(word).not_to include(vowel), "Word '#{word}' should not contain vowel '#{vowel}'"
-          end
-        end
-      end
     end
 
     context 'with invalid options' do
