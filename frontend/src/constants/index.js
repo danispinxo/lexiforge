@@ -66,6 +66,19 @@ export const POEM_GENERATION_DEFAULTS = {
     LINE_LENGTH: "medium",
     LETTER_TO_OMIT: "e",
   },
+  REVERSE_LIPOGRAM: {
+    NUM_WORDS: 20,
+    LINE_LENGTH: "medium",
+    LETTERS_TO_USE: "aeiou",
+  },
+  ABECEDARIAN: {
+    WORDS_PER_LINE: 5,
+  },
+  UNIVOCAL: {
+    NUM_WORDS: 30,
+    LINE_LENGTH: "medium",
+    VOWEL_TO_USE: "a",
+  },
 };
 
 export const INPUT_LIMITS = {
@@ -87,6 +100,7 @@ export const CONTENT_DISPLAY = {
   PREVIEW_LENGTH: 9990,
   PARAGRAPH_TRUNCATE_LENGTH: 500,
   POEM_TECHNIQUES: {
+    ABECEDARIAN: "abecedarian",
     BEAUTIFUL_OUTLAW: "beautiful_outlaw",
     CUT_UP: "cut_up",
     DEFINITIONAL: "definitional",
@@ -97,7 +111,9 @@ export const CONTENT_DISPLAY = {
     MESOSTIC: "mesostic",
     N_PLUS_SEVEN: "n_plus_seven",
     PRISONERS_CONSTRAINT: "prisoners_constraint",
+    REVERSE_LIPOGRAM: "reverse_lipogram",
     SNOWBALL: "snowball",
+    UNIVOCAL: "univocal",
   },
   LINE_LENGTH_OPTIONS: {
     SHORT: "short",
