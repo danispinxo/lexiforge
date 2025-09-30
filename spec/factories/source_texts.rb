@@ -5,7 +5,8 @@ FactoryBot.define do
     gutenberg_id { nil }
 
     trait :with_gutenberg_id do
-      gutenberg_id { Faker::Number.between(from: 1000, to: 99_999) }
+      sequence(:gutenberg_id) { |n| n + 10_000 }
+      is_public { false }  # Set to private to avoid uniqueness conflicts with Gutenberg IDs
     end
 
     trait :short_content do
@@ -24,7 +25,8 @@ FactoryBot.define do
     trait :classic_literature do
       title { Faker::Book.title }
       content { Faker::Lorem.paragraphs(number: 10).join("\n\n") }
-      gutenberg_id { Faker::Number.between(from: 1000, to: 99_999) }
+      sequence(:gutenberg_id) { |n| n + 20_000 }
+      is_public { false }  # Set to private to avoid uniqueness conflicts with Gutenberg IDs
     end
 
     trait :poetry do
