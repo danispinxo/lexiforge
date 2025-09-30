@@ -44,22 +44,20 @@ class AbecedarianGenerator < BaseGenerator
     alphabet.each do |letter|
       line = find_line_starting_with_letter(words, letter, config[:words_per_line], used_positions)
 
-      if line.empty?
-        lines << ''
-      else
-        lines << line.join(' ').capitalize
-      end
+      lines << if line.empty?
+                 ''
+               else
+                 line.join(' ').capitalize
+               end
     end
 
-    while lines.length < 26
-      lines << ''
-    end
+    lines << '' while lines.length < 26
 
     lines[0..25]
   end
 
   def find_line_starting_with_letter(words, target_letter, words_per_line, used_positions)
-    matching_positions = words.each_with_index.select do |word, index|  
+    matching_positions = words.each_with_index.select do |word, index|
       word[0] == target_letter && used_positions.exclude?(index)
     end.map(&:last)
 
