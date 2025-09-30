@@ -13,7 +13,6 @@ class AbecedarianGenerator < BaseGenerator
     config = extract_abecedarian_config(options)
     words = extract_words_in_order
 
-    # Always generate 26 lines, even if there are few words
     lines = generate_abecedarian_lines(words, config)
 
     lines.join("\n")
@@ -22,9 +21,9 @@ class AbecedarianGenerator < BaseGenerator
   def extract_abecedarian_config(options)
     defaults = PoemGenerationConstants::DEFAULTS[:abecedarian]
     {
-      num_lines: 26, # Always 26 lines (one for each letter)
+      num_lines: 26,
       words_per_line: options[:words_per_line] || defaults[:words_per_line],
-      allow_empty_lines: true # Always allow empty lines
+      allow_empty_lines: true
     }
   end
 

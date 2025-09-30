@@ -36,10 +36,8 @@ RSpec.describe UnivocalGenerator, type: :service do
         other_vowels = %w[e i o u]
 
         words.each do |word|
-          # Must contain 'a'
           expect(word).to include('a'), "Word '#{word}' should contain vowel 'a'"
 
-          # Must not contain other vowels
           other_vowels.each do |vowel|
             expect(word).not_to include(vowel), "Word '#{word}' should not contain vowel '#{vowel}'"
           end
@@ -151,7 +149,6 @@ RSpec.describe UnivocalGenerator, type: :service do
         generator = described_class.new(source_text)
         result = generator.generate(options)
 
-        # Skip if not enough words found
         skip 'Not enough words available' if result.include?('Not enough words')
 
         words = result.downcase.gsub(/[^\w\s]/, '').split
@@ -195,7 +192,6 @@ RSpec.describe UnivocalGenerator, type: :service do
       end
 
       it 'returns error when not enough matching words available' do
-        # Use content with very few words containing only 'u'
         limited_source = create(:source_text, content: 'The cat sat on a mat')
         options = {
           method: 'univocal',

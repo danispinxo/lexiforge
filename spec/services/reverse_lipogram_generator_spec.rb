@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe ReverseLipogramGenerator, type: :service do
   let(:source_text) { create(:source_text, content: sample_content) }
   let(:sample_content) do
-    'Aaa eee iii ooo uuu area idea audio. ' \
-      'Eau eau eau eau eau eau eau eau eau eau. ' \
-      'Oui oui oui oui oui oui oui oui oui oui.'
+    'Aaa eee iii ooo uuu eau oui aie eua iou. ' \
+      'Aea eie ioi uou aou eou iea uea aeu eiu. ' \
+      'Oua eia iua eoa aoa eea iia uua aaa eee.'
   end
 
   describe '#generate' do

@@ -6,7 +6,7 @@ FactoryBot.define do
 
     trait :with_gutenberg_id do
       sequence(:gutenberg_id) { |n| n + 10_000 }
-      is_public { false }  # Set to private to avoid uniqueness conflicts with Gutenberg IDs
+      is_public { false }
     end
 
     trait :short_content do
@@ -26,7 +26,7 @@ FactoryBot.define do
       title { Faker::Book.title }
       content { Faker::Lorem.paragraphs(number: 10).join("\n\n") }
       sequence(:gutenberg_id) { |n| n + 20_000 }
-      is_public { false }  # Set to private to avoid uniqueness conflicts with Gutenberg IDs
+      is_public { false }
     end
 
     trait :poetry do
