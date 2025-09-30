@@ -33,7 +33,7 @@ class Rack::Attack
 
   blocklist('block suspicious IPs') do |req|
     req.user_agent =~ /curl|wget|python|ruby|java|php/i && 
-    !req.path.start_with?('/api/') # Allow legitimate API usage
+    !req.path.start_with?('/api/')
   end
 
   self.throttled_responder = lambda do |env|

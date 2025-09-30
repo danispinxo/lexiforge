@@ -218,6 +218,12 @@ The application implements multiple experimental poetry techniques from the 20th
 
 **Literary Significance**: Elevates non-literary text to poetic status through selection and framing, questioning traditional notions of authorship and originality. The technique demonstrates that poetry exists latently in all forms of language.
 
+### Reverse Lipogram
+
+**Origins**: An inverse variation of the traditional lipogram constraint, where instead of avoiding specific letters, the text is restricted to using only a defined set of letters from the alphabet.
+
+**Literary Significance**: Creates extreme linguistic constraints that force radical compression of vocabulary and meaning. The technique explores the boundaries of expression within severely limited phonetic palettes, often producing texts with unique sonic qualities and rhythmic patterns. By reversing the lipogram's logic of exclusion to one of inclusion, it demonstrates how creative constraints can generate unexpected linguistic possibilities.
+
 ---
 
 Each technique implemented in LexiForge respects its original literary principles while leveraging computational capabilities for automated generation and analysis. The platform serves as both a creative tool and a digital archive of experimental poetry techniques, making these avant-garde methods accessible to contemporary writers and researchers.

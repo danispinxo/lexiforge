@@ -47,6 +47,19 @@ module PoemGenerationConstants
       num_words: 20,
       line_length: "medium",
       letter_to_omit: "e"
+    },
+    reverse_lipogram: {
+      num_words: 20,
+      line_length: "medium",
+      letters_to_use: "aeiou"
+    },
+    abecedarian: {
+      words_per_line: 5
+    },
+    univocal: {
+      num_words: 30,
+      line_length: "medium",
+      vowel_to_use: "a"
     }
   }.freeze
 
