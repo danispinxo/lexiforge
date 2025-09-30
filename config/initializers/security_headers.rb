@@ -2,22 +2,6 @@ Rails.application.configure do
   config.force_ssl = true if Rails.env.production?
   
   config.middleware.use Rack::Deflater
-  
-  config.middleware.use(Rack::Protection, 
-    use: %i[
-      escaped_params
-      form_token
-      frame_options
-      path_traversal
-      remote_referrer
-      remote_token
-      session_hijacking
-      xss_header
-    ],
-    frame_options: :deny,
-    xss_header: :block,
-    except: lambda { |env| env['PATH_INFO'].start_with?('/api') }
-  )
 end
 
 class SecurityHeadersMiddleware
