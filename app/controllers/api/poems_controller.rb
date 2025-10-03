@@ -260,6 +260,21 @@ class Api::PoemsController < ApiController
     options[:vowel_to_use] = permitted_params[:vowel_to_use] if permitted_params[:vowel_to_use].present?
   end
 
+  def build_aleatory_options(options, permitted_params)
+    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
+    options[:line_length] = permitted_params[:line_length] || 'medium'
+    options[:randomness_factor] = (permitted_params[:randomness_factor] || 0.7).to_f
+  end
+
+  def build_alliterative_options(options, permitted_params)
+    options[:num_lines] = (permitted_params[:num_lines] || 8).to_i
+    options[:line_length] = permitted_params[:line_length] || 'medium'
+    return if permitted_params[:alliteration_letter].blank?
+
+    options[:alliteration_letter] =
+      permitted_params[:alliteration_letter]
+  end
+
   def generate_content(technique, options)
     generator_class = technique_to_generator_class(technique)
     generator = generator_class.new(@source_text)
@@ -281,7 +296,9 @@ class Api::PoemsController < ApiController
       'lipogram' => LipogramGenerator,
       'reverse_lipogram' => ReverseLipogramGenerator,
       'abecedarian' => AbecedarianGenerator,
-      'univocal' => UnivocalGenerator
+      'univocal' => UnivocalGenerator,
+      'aleatory' => AleatoryGenerator,
+      'alliterative' => AlliterativeGenerator
     }
 
     technique_generators[technique] || raise("Unknown technique: #{technique}")
@@ -385,7 +402,7 @@ class Api::PoemsController < ApiController
                   :min_word_length, :offset, :words_to_select, :preserve_structure,
                   :section_length, :words_to_replace, :line_length, :keyword, :context_window,
                   :use_all_appearances, :num_words, :constraint_type, :hidden_word, :lines_per_stanza,
-                  :letters_to_omit, :letters_to_use, :vowel_to_use)
+                  :letters_to_omit, :letters_to_use, :vowel_to_use, :alliteration_letter, :randomness_factor)
   end
 
   def authenticate_any_user!
