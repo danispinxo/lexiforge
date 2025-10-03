@@ -79,6 +79,22 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
     POEM_GENERATION_DEFAULTS.UNIVOCAL.LINE_LENGTH
   );
   const [vowelToUse, setVowelToUse] = useState(POEM_GENERATION_DEFAULTS.UNIVOCAL.VOWEL_TO_USE);
+  const [aleatoryLines, setAleatoryLines] = useState(POEM_GENERATION_DEFAULTS.ALEATORY.NUM_LINES);
+  const [aleatoryLineLength, setAleatoryLineLength] = useState(
+    POEM_GENERATION_DEFAULTS.ALEATORY.LINE_LENGTH
+  );
+  const [randomnessFactor, setRandomnessFactor] = useState(
+    POEM_GENERATION_DEFAULTS.ALEATORY.RANDOMNESS_FACTOR
+  );
+  const [alliterativeNumLines, setAlliterativeNumLines] = useState(
+    POEM_GENERATION_DEFAULTS.ALLITERATIVE.NUM_LINES
+  );
+  const [alliterativeLineLength, setAlliterativeLineLength] = useState(
+    POEM_GENERATION_DEFAULTS.ALLITERATIVE.LINE_LENGTH
+  );
+  const [alliterationLetter, setAlliterationLetter] = useState(
+    POEM_GENERATION_DEFAULTS.ALLITERATIVE.ALLITERATION_LETTER
+  );
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -189,6 +205,16 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
           options.line_length = univocalLineLength;
           options.vowel_to_use = vowelToUse;
           break;
+        case "aleatory":
+          options.num_lines = aleatoryLines;
+          options.line_length = aleatoryLineLength;
+          options.randomness_factor = randomnessFactor;
+          break;
+        case "alliterative":
+          options.num_lines = alliterativeNumLines;
+          options.line_length = alliterativeLineLength;
+          options.alliteration_letter = alliterationLetter;
+          break;
       }
 
       options.is_public = isPublic;
@@ -243,6 +269,8 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                 disabled={generating}
               >
                 <option value="abecedarian">Abecedarian</option>
+                <option value="aleatory">Aleatory</option>
+                <option value="alliterative">Alliterative</option>
                 <option value="beautiful_outlaw">Beautiful Outlaw</option>
                 <option value="cut_up">Cut-Up</option>
                 <option value="definitional">Definitional</option>
@@ -927,6 +955,116 @@ function PoemGenerationModal({ sourceText, isOpen, onClose, onSuccess, onPoemGen
                     <option value="medium">Medium (5-7 words)</option>
                     <option value="long">Long (8-10 words)</option>
                   </select>
+                </div>
+              </>
+            )}
+
+            {technique === "aleatory" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Aleatory poetry uses chance operations and random selection to create verse.
+                    This technique embraces unpredictability and serendipity in poetic composition,
+                    allowing randomness to guide the creative process.
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="aleatory-lines">Number of Lines:</label>
+                  <input
+                    type="number"
+                    id="aleatory-lines"
+                    value={aleatoryLines}
+                    onChange={(e) => setAleatoryLines(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="50"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="aleatory-line-length">Line Length:</label>
+                  <select
+                    id="aleatory-line-length"
+                    value={aleatoryLineLength}
+                    onChange={(e) => setAleatoryLineLength(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="very_short">Very Short (1-2 words)</option>
+                    <option value="short">Short (3-4 words)</option>
+                    <option value="medium">Medium (5-7 words)</option>
+                    <option value="long">Long (8-10 words)</option>
+                    <option value="very_long">Very Long (10-15 words)</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="randomness-factor">Randomness Factor (0.0 - 1.0):</label>
+                  <input
+                    type="range"
+                    id="randomness-factor"
+                    value={randomnessFactor}
+                    onChange={(e) => setRandomnessFactor(parseFloat(e.target.value))}
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    disabled={generating}
+                  />
+                  <span className="range-value">{randomnessFactor}</span>
+                </div>
+              </>
+            )}
+
+            {technique === "alliterative" && (
+              <>
+                <div className="form-description">
+                  <p className="technique-description">
+                    Alliterative poetry uses words that begin with the same letter or sound. This
+                    technique creates rhythm and musicality through repeated initial sounds, a
+                    technique used in Old English poetry and modern verse.
+                  </p>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="alliterative-lines">Number of Lines:</label>
+                  <input
+                    type="number"
+                    id="alliterative-lines"
+                    value={alliterativeNumLines}
+                    onChange={(e) => setAlliterativeNumLines(parseInt(e.target.value) || 0)}
+                    min="1"
+                    max="50"
+                    disabled={generating}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="alliterative-line-length">Line Length:</label>
+                  <select
+                    id="alliterative-line-length"
+                    value={alliterativeLineLength}
+                    onChange={(e) => setAlliterativeLineLength(e.target.value)}
+                    disabled={generating}
+                  >
+                    <option value="very_short">Very Short (1-2 words)</option>
+                    <option value="short">Short (3-4 words)</option>
+                    <option value="medium">Medium (5-7 words)</option>
+                    <option value="long">Long (8-10 words)</option>
+                    <option value="very_long">Very Long (10-15 words)</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="alliteration-letter">Alliteration Letter:</label>
+                  <input
+                    type="text"
+                    id="alliteration-letter"
+                    value={alliterationLetter}
+                    onChange={(e) => setAlliterationLetter(e.target.value.toLowerCase())}
+                    maxLength="1"
+                    placeholder="a"
+                    disabled={generating}
+                  />
                 </div>
               </>
             )}

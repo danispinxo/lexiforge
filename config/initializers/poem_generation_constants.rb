@@ -60,6 +60,16 @@ module PoemGenerationConstants
       num_words: 30,
       line_length: "medium",
       vowel_to_use: "a"
+    },
+    aleatory: {
+      num_lines: 10,
+      line_length: "medium",
+      randomness_factor: 0.7
+    },
+    alliterative: {
+      num_lines: 8,
+      line_length: "medium",
+      alliteration_letter: "a"
     }
   }.freeze
 

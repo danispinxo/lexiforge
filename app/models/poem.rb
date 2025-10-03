@@ -4,7 +4,7 @@ class Poem < ApplicationRecord
 
   ALLOWED_TECHNIQUES = ['cutup', 'erasure', 'blackout', 'n+7', 'definitional', 'snowball', 'mesostic',
                         'found', 'kwic', 'prisoners_constraint', 'beautiful_outlaw', 'lipogram',
-                        'reverse_lipogram', 'abecedarian', 'univocal'].freeze
+                        'reverse_lipogram', 'abecedarian', 'univocal', 'aleatory', 'alliterative'].freeze
 
   validates :title, presence: true
   validates :content, presence: true
@@ -28,6 +28,8 @@ class Poem < ApplicationRecord
   scope :reverse_lipogram_poems, -> { where(technique_used: 'reverse_lipogram') }
   scope :abecedarian_poems, -> { where(technique_used: 'abecedarian') }
   scope :univocal_poems, -> { where(technique_used: 'univocal') }
+  scope :aleatory_poems, -> { where(technique_used: 'aleatory') }
+  scope :alliterative_poems, -> { where(technique_used: 'alliterative') }
 
   scope :recent, -> { order(created_at: :desc) }
   scope :public_poems, -> { where(is_public: true) }
