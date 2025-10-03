@@ -79,6 +79,16 @@ export const POEM_GENERATION_DEFAULTS = {
     LINE_LENGTH: "medium",
     VOWEL_TO_USE: "a",
   },
+  ALEATORY: {
+    NUM_LINES: 10,
+    LINE_LENGTH: "medium",
+    RANDOMNESS_FACTOR: 0.7,
+  },
+  ALLITERATIVE: {
+    NUM_LINES: 8,
+    LINE_LENGTH: "medium",
+    ALLITERATION_LETTER: "a",
+  },
 };
 
 export const INPUT_LIMITS = {
@@ -101,6 +111,8 @@ export const CONTENT_DISPLAY = {
   PARAGRAPH_TRUNCATE_LENGTH: 500,
   POEM_TECHNIQUES: {
     ABECEDARIAN: "abecedarian",
+    ALEATORY: "aleatory",
+    ALLITERATIVE: "alliterative",
     BEAUTIFUL_OUTLAW: "beautiful_outlaw",
     CUT_UP: "cut_up",
     DEFINITIONAL: "definitional",
