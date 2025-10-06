@@ -93,6 +93,83 @@ Implementation of the KWIC technique that creates poetry by showcasing a keyword
 - Generates poems that explore how a single word functions across different contexts
 - Supports case-insensitive keyword matching while preserving original text structure
 
+### Abecedarian Poetry
+
+Implementation of the abecedarian technique where each line begins with successive letters of the alphabet. The `AbecedarianGenerator` service:
+
+- Extracts words in order from source text for systematic processing
+- Generates 26 lines corresponding to each letter of the alphabet
+- Implements word position tracking to prevent repetition
+- Supports configurable words per line parameters
+- Creates structured alphabetical progression with randomized word selection
+- Handles empty lines gracefully when suitable words aren't available
+
+### Aleatory Poetry
+
+Implementation of chance-based poetry generation using random word selection. The `AleatoryGenerator` service:
+
+- Applies configurable randomness factors to word selection
+- Implements multiple line length categories (very_short, short, medium, long, very_long)
+- Uses Set data structures to prevent word repetition
+- Supports weighted randomness for controlled chaos
+- Generates poems through serendipitous word combinations
+- Balances randomness with text coherence through intelligent word selection
+
+### Alliterative Poetry
+
+Implementation of alliterative poetry where lines are structured around repeated initial consonant sounds. The `AlliterativeGenerator` service:
+
+- Filters words by specified alliteration letter
+- Validates source text contains sufficient alliterative words
+- Supports configurable line lengths and poem structure
+- Implements letter validation and error handling
+- Generates poems with consistent sonic patterns
+- Creates rhythmic unity through consonant repetition
+
+### Beautiful Outlaw Poetry
+
+Implementation of the Beautiful Outlaw constraint where each stanza avoids letters from a hidden word. The `BeautifulOutlawGenerator` service:
+
+- Requires a hidden word input for constraint generation
+- Creates stanzas that progressively exclude letters from the hidden word
+- Implements stanza-based structure with configurable lines per stanza
+- Validates sufficient vocabulary for constraint requirements
+- Generates poems through systematic letter exclusion
+- Creates progressive linguistic limitations across stanzas
+
+### Lipogram Poetry
+
+Implementation of lipogram poetry where specific letters are systematically excluded. The `LipogramGenerator` service:
+
+- Filters words by excluding specified letters
+- Validates sufficient vocabulary after letter exclusion
+- Supports configurable word counts and line lengths
+- Implements letter validation and error handling
+- Generates poems through systematic letter avoidance
+- Creates constraint-based poetry with linguistic limitations
+
+### Prisoners Constraint Poetry
+
+Implementation of the prisoners constraint where only letters without ascenders or descenders are used. The `PrisonersConstraintGenerator` service:
+
+- Filters words by typographic constraints (no ascenders/descenders)
+- Supports multiple constraint types (no_ascenders, no_descenders, full_constraint)
+- Implements probabilistic line length distribution
+- Uses constrained character sets for word filtering
+- Generates poems through extreme typographic limitations
+- Creates unique rhythmic patterns through character restrictions
+
+### Univocal Poetry
+
+Implementation of univocal poetry where only words containing a single vowel are used. The `UnivocalGenerator` service:
+
+- Filters words to contain only the specified vowel
+- Validates sufficient vocabulary for vowel constraint
+- Supports configurable word counts and line structures
+- Implements vowel validation and error handling
+- Generates poems through extreme phonetic limitations
+- Creates distinctive sonic textures through vowel restriction
+
 ## Data Models
 
 ### SourceText Model
@@ -223,6 +300,48 @@ The application implements multiple experimental poetry techniques from the 20th
 **Origins**: An inverse variation of the traditional lipogram constraint, where instead of avoiding specific letters, the text is restricted to using only a defined set of letters from the alphabet.
 
 **Literary Significance**: Creates extreme linguistic constraints that force radical compression of vocabulary and meaning. The technique explores the boundaries of expression within severely limited phonetic palettes, often producing texts with unique sonic qualities and rhythmic patterns. By reversing the lipogram's logic of exclusion to one of inclusion, it demonstrates how creative constraints can generate unexpected linguistic possibilities.
+
+### Abecedarian Poetry
+
+**Origins**: One of the oldest poetic forms, dating back to ancient Hebrew psalms and Greek poetry, where each line or stanza begins with successive letters of the alphabet.
+
+**Literary Significance**: Creates systematic structure through alphabetical progression, exploring the relationship between order and meaning. The technique demonstrates how formal constraints can generate both structure and surprise, as the alphabetical requirement forces unexpected word choices and line breaks. It bridges ancient poetic traditions with contemporary experimental practices.
+
+### Aleatory Poetry
+
+**Origins**: Rooted in the Dada and Surrealist movements of the early 20th century, where chance operations were used to generate art and literature.
+
+**Literary Significance**: Embraces randomness and chance as creative forces, challenging traditional notions of authorial control and intentional meaning. The technique explores how serendipitous word combinations can generate unexpected insights and emotional resonances, demonstrating that meaning can emerge from non-intentional processes.
+
+### Alliterative Poetry
+
+**Origins**: Ancient poetic tradition found in Old English, Old Norse, and other Germanic languages, where lines are structured around repeated initial consonant sounds.
+
+**Literary Significance**: Creates sonic unity and rhythmic patterns through consonant repetition, exploring the musical qualities of language. The technique demonstrates how sound patterns can generate meaning and emotional resonance independent of semantic content, bridging ancient oral traditions with contemporary experimental poetry.
+
+### Beautiful Outlaw Poetry
+
+**Origins**: A constraint-based technique where each stanza avoids using letters from a specific word, creating progressive linguistic limitations.
+
+**Literary Significance**: Explores how systematic letter exclusion creates increasingly constrained vocabulary, forcing creative adaptation and compression of expression. The technique demonstrates how formal constraints can generate both limitation and liberation, as the narrowing of available words forces more precise and unexpected language choices.
+
+### Lipogram Poetry
+
+**Origins**: Ancient Greek technique where entire works are written without using a specific letter, most famously exemplified by Georges Perec's novel "La Disparition" written without the letter 'e'.
+
+**Literary Significance**: Demonstrates how systematic letter exclusion creates both constraint and creativity, forcing writers to find alternative expressions and revealing the hidden dependencies of language. The technique explores the relationship between limitation and liberation in creative expression.
+
+### Prisoners Constraint Poetry
+
+**Origins**: Named after the constraint used by prisoners who could only write letters using letters that don't extend above or below the line (no ascenders or descenders).
+
+**Literary Significance**: Explores how extreme formal constraints can generate unique linguistic possibilities and rhythmic patterns. The technique demonstrates how physical limitations can become creative catalysts, forcing innovative approaches to language and meaning within severely restricted parameters.
+
+### Univocal Poetry
+
+**Origins**: A constraint where poems are written using only words containing a single vowel, creating extreme phonetic limitations.
+
+**Literary Significance**: Explores the sonic and rhythmic possibilities within severely limited phonetic palettes, demonstrating how constraint can generate unique musical qualities in language. The technique reveals the hidden musicality of words and creates distinctive sonic textures through vowel restriction.
 
 ---
 
