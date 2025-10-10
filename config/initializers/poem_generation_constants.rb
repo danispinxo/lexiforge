@@ -83,6 +83,24 @@ module PoemGenerationConstants
     minimum_beautiful_outlaw_words: 15
   }.freeze
 
+  MAX_LIMITS = {
+    num_lines: 100,
+    words_per_line: 50,
+    num_pages: 20,
+    words_per_page: 500,
+    words_to_keep: 100,
+    min_word_length: 20,
+    offset: 20,
+    words_to_select: 1000,
+    section_length: 2000,
+    words_to_replace: 500,
+    context_window: 50,
+    num_words: 500,
+    lines_per_stanza: 20,
+    words_per_line_beautiful_outlaw: 20,
+    randomness_factor: 1.0
+  }.freeze
+
   TEXT_PROCESSING = {
     sentence_min_length: 10,
     sentence_min_words: 3,
