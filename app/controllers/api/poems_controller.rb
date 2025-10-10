@@ -183,20 +183,20 @@ class Api::PoemsController < ApiController
   end
 
   def build_cut_up_options(options, permitted_params)
-    options[:num_lines] = (permitted_params[:num_lines] || 12).to_i
-    options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
+    options[:num_lines] = validate_and_clamp(permitted_params[:num_lines] || 12, :num_lines, 1, PoemGenerationConstants::MAX_LIMITS[:num_lines])
+    options[:words_per_line] = validate_and_clamp(permitted_params[:words_per_line] || 6, :words_per_line, 1, PoemGenerationConstants::MAX_LIMITS[:words_per_line])
   end
 
   def build_erasure_options(options, permitted_params)
-    options[:num_pages] = (permitted_params[:num_pages] || 3).to_i
-    options[:words_per_page] = (permitted_params[:words_per_page] || 50).to_i
-    options[:words_to_keep] = (permitted_params[:words_to_keep] || 8).to_i
+    options[:num_pages] = validate_and_clamp(permitted_params[:num_pages] || 3, :num_pages, 1, PoemGenerationConstants::MAX_LIMITS[:num_pages])
+    options[:words_per_page] = validate_and_clamp(permitted_params[:words_per_page] || 50, :words_per_page, 10, PoemGenerationConstants::MAX_LIMITS[:words_per_page])
+    options[:words_to_keep] = validate_and_clamp(permitted_params[:words_to_keep] || 8, :words_to_keep, 1, PoemGenerationConstants::MAX_LIMITS[:words_to_keep])
     options[:is_blackout] = ['true', true].include?(permitted_params[:is_blackout])
   end
 
   def build_snowball_options(options, permitted_params)
-    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
-    options[:min_word_length] = (permitted_params[:min_word_length] || 1).to_i
+    options[:num_lines] = validate_and_clamp(permitted_params[:num_lines] || 10, :num_lines, 1, PoemGenerationConstants::MAX_LIMITS[:num_lines])
+    options[:min_word_length] = validate_and_clamp(permitted_params[:min_word_length] || 1, :min_word_length, 1, PoemGenerationConstants::MAX_LIMITS[:min_word_length])
   end
 
   def build_mesostic_options(options, permitted_params)
@@ -204,70 +204,71 @@ class Api::PoemsController < ApiController
   end
 
   def build_n_plus_seven_options(options, permitted_params)
-    options[:offset] = (permitted_params[:offset] || 7).to_i
-    options[:words_to_select] = (permitted_params[:words_to_select] || 50).to_i
+    options[:offset] = validate_and_clamp(permitted_params[:offset] || 7, :offset, 1, PoemGenerationConstants::MAX_LIMITS[:offset])
+    options[:words_to_select] = validate_and_clamp(permitted_params[:words_to_select] || 50, :words_to_select, 1, PoemGenerationConstants::MAX_LIMITS[:words_to_select])
     options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
   end
 
   def build_definitional_options(options, permitted_params)
-    options[:section_length] = (permitted_params[:section_length] || 200).to_i
-    options[:words_to_replace] = (permitted_params[:words_to_replace] || 20).to_i
+    options[:section_length] = validate_and_clamp(permitted_params[:section_length] || 200, :section_length, 10, PoemGenerationConstants::MAX_LIMITS[:section_length])
+    options[:words_to_replace] = validate_and_clamp(permitted_params[:words_to_replace] || 20, :words_to_replace, 1, PoemGenerationConstants::MAX_LIMITS[:words_to_replace])
     options[:preserve_structure] = ['true', true].include?(permitted_params[:preserve_structure])
   end
 
   def build_found_poem_options(options, permitted_params)
-    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
+    options[:num_lines] = validate_and_clamp(permitted_params[:num_lines] || 10, :num_lines, 1, PoemGenerationConstants::MAX_LIMITS[:num_lines])
     options[:line_length] = permitted_params[:line_length] || 'medium'
   end
 
   def build_kwic_options(options, permitted_params)
     options[:keyword] = permitted_params[:keyword] if permitted_params[:keyword].present?
-    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
-    options[:context_window] = (permitted_params[:context_window] || 3).to_i
+    options[:num_lines] = validate_and_clamp(permitted_params[:num_lines] || 10, :num_lines, 1, PoemGenerationConstants::MAX_LIMITS[:num_lines])
+    options[:context_window] = validate_and_clamp(permitted_params[:context_window] || 3, :context_window, 1, PoemGenerationConstants::MAX_LIMITS[:context_window])
     options[:use_all_appearances] = ['true', true].include?(permitted_params[:use_all_appearances])
   end
 
   def build_prisoners_constraint_options(options, permitted_params)
-    options[:num_words] = (permitted_params[:num_words] || 20).to_i
+    options[:num_words] = validate_and_clamp(permitted_params[:num_words] || 20, :num_words, 1, PoemGenerationConstants::MAX_LIMITS[:num_words])
     options[:constraint_type] = permitted_params[:constraint_type] || 'full_constraint'
   end
 
   def build_beautiful_outlaw_options(options, permitted_params)
     options[:hidden_word] = permitted_params[:hidden_word] if permitted_params[:hidden_word].present?
-    options[:lines_per_stanza] = (permitted_params[:lines_per_stanza] || 4).to_i
-    options[:words_per_line] = (permitted_params[:words_per_line] || 6).to_i
+    options[:lines_per_stanza] = validate_and_clamp(permitted_params[:lines_per_stanza] || 4, :lines_per_stanza, 1, PoemGenerationConstants::MAX_LIMITS[:lines_per_stanza])
+    options[:words_per_line] = validate_and_clamp(permitted_params[:words_per_line] || 6, :words_per_line, 1, PoemGenerationConstants::MAX_LIMITS[:words_per_line_beautiful_outlaw])
   end
 
   def build_lipogram_options(options, permitted_params)
-    options[:num_words] = (permitted_params[:num_words] || 20).to_i
+    options[:num_words] = validate_and_clamp(permitted_params[:num_words] || 20, :num_words, 1, PoemGenerationConstants::MAX_LIMITS[:num_words])
     options[:line_length] = permitted_params[:line_length] || 'medium'
     options[:letters_to_omit] = permitted_params[:letters_to_omit] if permitted_params[:letters_to_omit].present?
   end
 
   def build_reverse_lipogram_options(options, permitted_params)
-    options[:num_words] = (permitted_params[:num_words] || 20).to_i
+    options[:num_words] = validate_and_clamp(permitted_params[:num_words] || 20, :num_words, 1, PoemGenerationConstants::MAX_LIMITS[:num_words])
     options[:line_length] = permitted_params[:line_length] || 'medium'
     options[:letters_to_use] = permitted_params[:letters_to_use] if permitted_params[:letters_to_use].present?
   end
 
   def build_abecedarian_options(options, permitted_params)
-    options[:words_per_line] = (permitted_params[:words_per_line] || 5).to_i
+    options[:words_per_line] = validate_and_clamp(permitted_params[:words_per_line] || 5, :words_per_line, 1, PoemGenerationConstants::MAX_LIMITS[:words_per_line])
   end
 
   def build_univocal_options(options, permitted_params)
-    options[:num_words] = (permitted_params[:num_words] || 30).to_i
+    options[:num_words] = validate_and_clamp(permitted_params[:num_words] || 30, :num_words, 1, PoemGenerationConstants::MAX_LIMITS[:num_words])
     options[:line_length] = permitted_params[:line_length] || 'medium'
     options[:vowel_to_use] = permitted_params[:vowel_to_use] if permitted_params[:vowel_to_use].present?
   end
 
   def build_aleatory_options(options, permitted_params)
-    options[:num_lines] = (permitted_params[:num_lines] || 10).to_i
+    options[:num_lines] = validate_and_clamp(permitted_params[:num_lines] || 10, :num_lines, 1, PoemGenerationConstants::MAX_LIMITS[:num_lines])
     options[:line_length] = permitted_params[:line_length] || 'medium'
-    options[:randomness_factor] = (permitted_params[:randomness_factor] || 0.7).to_f
+    options[:randomness_factor] =
+      validate_and_clamp_float(permitted_params[:randomness_factor] || 0.7, :randomness_factor, 0.0, PoemGenerationConstants::MAX_LIMITS[:randomness_factor])
   end
 
   def build_alliterative_options(options, permitted_params)
-    options[:num_lines] = (permitted_params[:num_lines] || 8).to_i
+    options[:num_lines] = validate_and_clamp(permitted_params[:num_lines] || 8, :num_lines, 1, PoemGenerationConstants::MAX_LIMITS[:num_lines])
     options[:line_length] = permitted_params[:line_length] || 'medium'
     return if permitted_params[:alliteration_letter].blank?
 
@@ -493,5 +494,25 @@ class Api::PoemsController < ApiController
 
   def sanitize_filename(filename)
     filename.gsub(/[^\w\-_.]/, '_').squeeze('_')
+  end
+
+  def validate_and_clamp(value, _param_name, min_val, max_val)
+    return min_val if value.nil?
+
+    int_value = value.to_i
+    return min_val if int_value < min_val
+    return max_val if int_value > max_val
+
+    int_value
+  end
+
+  def validate_and_clamp_float(value, _param_name, min_val, max_val)
+    return min_val if value.nil?
+
+    float_value = value.to_f
+    return min_val if float_value < min_val
+    return max_val if float_value > max_val
+
+    float_value
   end
 end
