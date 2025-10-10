@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faSpinner, faExclamationTriangle } from "../config/fontawesome";
 import { useAuth } from "../hooks/useAuth";
@@ -9,11 +10,11 @@ function Users() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
-      setError("You must be logged in to view the users list.");
-      setLoading(false);
+      navigate("/login");
       return;
     }
 
@@ -42,7 +43,7 @@ function Users() {
     };
 
     fetchUsers();
-  }, [user]);
+  }, [user, navigate]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
