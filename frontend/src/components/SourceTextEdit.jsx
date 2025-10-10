@@ -38,7 +38,7 @@ function SourceTextEdit() {
     loadSourceText();
   }, [id]);
 
-  const canEdit = user && user.admin;
+  const canEdit = user && (user.admin || user.user_type === "admin");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

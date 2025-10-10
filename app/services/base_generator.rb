@@ -99,6 +99,26 @@ class BaseGenerator
     nil
   end
 
+  def validate_max_limit(param, param_name, max_value)
+    return "#{param_name.humanize} cannot exceed #{max_value}" if param && param > max_value
+
+    nil
+  end
+
+  def validate_min_limit(param, param_name, min_value)
+    return "#{param_name.humanize} must be at least #{min_value}" if param && param < min_value
+
+    nil
+  end
+
+  def validate_range(param, param_name, min_value, max_value)
+    if param && (param < min_value || param > max_value)
+      return "#{param_name.humanize} must be between #{min_value} and #{max_value}"
+    end
+
+    nil
+  end
+
   def calculate_text_range(sorted_words)
     start_pos = sorted_words.first[:position]
     end_pos = sorted_words.last[:position] + sorted_words.last[:length]
