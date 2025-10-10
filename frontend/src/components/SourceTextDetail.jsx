@@ -72,7 +72,7 @@ function SourceTextDetail() {
         <div className="actions">
           {user ? (
             <>
-              {user.admin && (
+              {(user.admin || user.user_type === "admin") && (
                 <Link to={`/source-texts/${id}/edit`} className="btn btn-secondary">
                   Edit Source Text
                 </Link>
