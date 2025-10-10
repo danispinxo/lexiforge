@@ -103,7 +103,7 @@ function AuthWrapper() {
                 <FontAwesomeIcon icon={faUsers} />
                 <span>Community</span>
               </button>
-              {user.admin && (
+              {(user.admin || user.user_type === "admin") && (
                 <button onClick={handleAdminPanelClick} className="dropdown-item">
                   <FontAwesomeIcon icon={faCog} />
                   <span>Admin Panel</span>
