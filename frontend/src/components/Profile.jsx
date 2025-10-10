@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { VALIDATION } from "../constants";
 import {
@@ -32,6 +33,7 @@ const generateGravatarPreview = (currentGravatarUrl, gravatarType = "retro") => 
 
 function Profile() {
   const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [profileSuccess, setProfileSuccess] = useState("");
@@ -131,15 +133,11 @@ function Profile() {
     setPasswordData((prev) => ({ ...prev, [field]: value }));
   };
 
-  if (!user) {
-    return (
-      <div className="profile-page">
-        <div className="profile-container">
-          <p>Please log in to view your profile.</p>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
+
+  if (!user) return null;
 
   return (
     <div className="profile-page">
