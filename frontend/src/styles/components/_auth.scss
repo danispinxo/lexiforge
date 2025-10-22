@@ -93,13 +93,11 @@
       }
 
       &:first-child {
-        border-radius: variables.$border-radius-sm variables.$border-radius-sm 0
-          0;
+        border-radius: variables.$border-radius-sm variables.$border-radius-sm 0 0;
       }
 
       &:last-child {
-        border-radius: 0 0 variables.$border-radius-sm
-          variables.$border-radius-sm;
+        border-radius: 0 0 variables.$border-radius-sm variables.$border-radius-sm;
       }
     }
   }
@@ -385,13 +383,6 @@
       }
     }
   }
-}
-
-.admin-indicator {
-  margin-left: 6px;
-  font-size: 0.9em;
-  opacity: 0.8;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 @include mixins.tablet {
