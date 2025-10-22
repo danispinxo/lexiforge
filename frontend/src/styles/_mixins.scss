@@ -243,45 +243,6 @@
   border: 1px solid rgba(variables.$medium-gray, 0.3);
 }
 
-@mixin concert-poster {
-  background: linear-gradient(45deg, variables.$charcoal 0%, variables.$dark-gray 100%);
-  color: variables.$warm-white;
-  padding: variables.$spacing-xl;
-  border-radius: variables.$border-radius-lg;
-  box-shadow: variables.$shadow-dramatic;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(variables.$primary-color, 0.1) 0%, transparent 70%);
-    animation: rotate 20s linear infinite;
-  }
-}
-
-@mixin vinyl-texture {
-  background: radial-gradient(
-      circle at center,
-      transparent 20%,
-      rgba(variables.$black, 0.1) 21%,
-      rgba(variables.$black, 0.1) 22%,
-      transparent 23%
-    ),
-    conic-gradient(
-      from 0deg,
-      variables.$charcoal,
-      variables.$dark-gray,
-      variables.$charcoal,
-      variables.$dark-gray
-    );
-  border-radius: 50%;
-}
-
 @mixin modal-overlay {
   position: fixed;
   top: 0;
