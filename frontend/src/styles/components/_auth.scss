@@ -84,7 +84,13 @@
       transition: all variables.$transition-normal;
       display: flex;
       align-items: center;
-      gap: variables.$spacing-md;
+      justify-content: space-between;
+
+      svg {
+        font-size: 14px;
+        flex-shrink: 0;
+        color: inherit;
+      }
 
       &:hover {
         background: rgba(variables.$primary-color, 0.05);
