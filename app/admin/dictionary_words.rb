@@ -25,7 +25,7 @@ ActiveAdmin.register DictionaryWord do
       row :part_of_speech
       row :definition
       row :synsets do |dw|
-        dw.synsets.join(', ') if dw.synsets.present?
+        dw.synsets.presence&.join(', ')
       end
       row :created_at
       row :updated_at
