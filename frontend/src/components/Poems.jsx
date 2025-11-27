@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEye,
   faExclamationTriangle,
   faInfoCircle,
   faCalendar,
@@ -137,7 +136,6 @@ function Poems() {
                   >
                     Date Created
                   </SortableHeader>
-                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -166,11 +164,6 @@ function Poems() {
                     <td className="date-cell">
                       <FontAwesomeIcon icon={faCalendar} className="date-icon" />{" "}
                       {new Date(poem.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="actions-cell">
-                      <Link to={`/poems/${poem.id}`} className="btn btn-ghost btn-sm">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
                     </td>
                   </tr>
                 ))}

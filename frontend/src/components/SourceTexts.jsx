@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEye,
   faInfoCircle,
   faFileText,
   faCheckCircle,
   faExclamationTriangle,
   faSearch,
+  faCalendar,
 } from "../config/fontawesome";
 import { sourceTextsAPI } from "../services/api";
 import SourceTextImportModal from "./SourceTextImportModal";
@@ -141,7 +141,14 @@ function SourceTexts() {
                   >
                     Gutenberg ID
                   </SortableHeader>
-                  <th>Actions</th>
+                  <SortableHeader
+                    sortKey="created_at"
+                    currentSort={searchOptions}
+                    onSort={handleSort}
+                  >
+                    Date Added
+                  </SortableHeader>
+                  <th>Added By</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,10 +161,12 @@ function SourceTexts() {
                     </td>
                     <td className="word-count-cell">{(text.word_count || 0).toLocaleString()}</td>
                     <td className="gutenberg-id-cell">{text.gutenberg_id || "—"}</td>
-                    <td className="actions-cell">
-                      <Link to={`/source-texts/${text.id}`} className="btn btn-ghost btn-sm">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
+                    <td className="date-cell">
+                      <FontAwesomeIcon icon={faCalendar} className="date-icon" />{" "}
+                      {new Date(text.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="author-cell">
+                      {text.owner?.full_name || text.owner?.username || "System"}
                     </td>
                   </tr>
                 ))}
