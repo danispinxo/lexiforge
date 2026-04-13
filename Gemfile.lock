@@ -52,7 +52,7 @@ GEM
       activemodel (>= 4.1)
       case_transform (>= 0.2)
       jsonapi-renderer (>= 0.1.1.beta1, < 0.3)
-    activeadmin (3.5.0)
+    activeadmin (3.5.1)
       arbre (~> 1.2, >= 1.2.1)
       csv
       formtastic (>= 3.1)
