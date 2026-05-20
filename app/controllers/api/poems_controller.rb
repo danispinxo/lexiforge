@@ -386,11 +386,11 @@ class Api::PoemsController < ApiController
   end
 
   def set_poem
-    @poem = Poem.find(params[:id])
+    @poem = Poem.find(params.expect(:id))
   end
 
   def set_source_text
-    @source_text = SourceText.find(params[:id])
+    @source_text = SourceText.find(params.expect(:id))
   end
 
   def poem_params
