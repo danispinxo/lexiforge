@@ -76,7 +76,7 @@ class Api::SourceTextsController < ApiController
   private
 
   def set_source_text
-    @source_text = SourceText.find(params[:id])
+    @source_text = SourceText.find(params.expect(:id))
   end
 
   def apply_search(scope, search_term)
@@ -230,17 +230,17 @@ class Api::SourceTextsController < ApiController
   end
 
   def content_length_valid?
-    params[:content].strip.length >= 100
+    params.expect(:content).strip.length >= 100
   end
 
   def content_length_reasonable?
-    params[:content].strip.length <= 1_000_000
+    params.expect(:content).strip.length <= 1_000_000
   end
 
   def build_custom_source_text(user)
     SourceText.new(
-      title: params[:title].strip,
-      content: params[:content].strip,
+      title: params.expect(:title).strip,
+      content: params.expect(:content).strip,
       gutenberg_id: nil,
       owner: user,
       is_public: false
