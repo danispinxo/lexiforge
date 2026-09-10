@@ -168,7 +168,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    image_processing (2.0.3)
+    image_processing (2.1.0)
     inherited_resources (1.14.0)
       actionpack (>= 6.0)
       has_scope (>= 0.6)
@@ -473,7 +473,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   httparty
-  image_processing (~> 2.0)
+  image_processing (~> 2.1)
   jbuilder
   kaminari
   pg (~> 1.6)

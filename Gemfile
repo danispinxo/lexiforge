@@ -21,7 +21,7 @@ gem 'wordnet-defaultdb'
 
 gem 'activeadmin'
 gem 'devise'
-gem 'image_processing', '~> 2.0'
+gem 'image_processing', '~> 2.1'
 gem 'sassc-rails'
 gem 'sprockets-rails'
 
