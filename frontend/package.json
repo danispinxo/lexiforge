@@ -25,7 +25,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.1.0",
+    "@vitejs/plugin-react": "^6.1.1",
     "@types/react": "^19.2.18",
     "cypress": "^16.0.0",
     "eslint": "^10.10.0",
