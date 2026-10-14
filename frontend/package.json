@@ -19,12 +19,12 @@
     "@fortawesome/react-fontawesome": "^3.5.0",
     "axios": "^1.20.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8",
+    "react-dom": "19.3.0",
     "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@types/react-dom": "^19.2.3",
+    "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "@types/react": "^19.2.18",
     "cypress": "^16.1.1",
