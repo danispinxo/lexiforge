@@ -1,4 +1,4 @@
-ARG RUBY_VERSION=3.3.8
+ARG RUBY_VERSION=3.3.13
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 WORKDIR /rails
